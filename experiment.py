@@ -129,7 +129,7 @@ if __name__ == '__main__':
         workflow = wswift(ecfg["swift_template"], edir)
 
         # Start AIMES REST service
-        aendpoint = arest("start", acfg)
+        arest("start", acfg)
 
         # Execute Swift workflow
         run = "TODO"
@@ -139,3 +139,5 @@ if __name__ == '__main__':
             # reschedule once more
             run['rerun'] += 1
             queue.put(run_cfg)
+
+
