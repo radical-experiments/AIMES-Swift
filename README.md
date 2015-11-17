@@ -21,8 +21,8 @@ Measuring trade offs of AIMES and Swift integration.
   ```
   virtualenv ~/ve/aimes-swift-experiments
   . ~/ve/aimes-swift-experiments/bin/activate
-  cd aimes.emgr; pip install -U .
-  cd aimes.bundle; pip install -U .
+  cd aimes.emgr; pip install -U .; cd -
+  cd aimes.bundle; pip install -U .; cd -
   pip install pandas
   ```
 
@@ -31,11 +31,13 @@ Measuring trade offs of AIMES and Swift integration.
   ```
   cd swift-k/
   ant redist
-  export PATH=$PATH:$PWD/dist/swift-svn/bin
+  export PATH=$PWD/dist/swift-svn/bin:$PATH
+  cd -
   ```
 
 1. Move into the ```AIMES-Swift``` directory.
-1. Edit the file ```toc.swift``` or write a new Swift script describing the workflow you want to use for the experiment.
+1. Edit the file ```bag_of_tasks.swift``` or write a new Swift script describing the workflow you want to use for the experiment.
+1. Edit the file ```swift.conf``` to use the ```"local:aimes-emanager"``` jobManager.
 1. Edit the file ```experiment.json``` adding or removing unsupported resources:
 
   ```
@@ -61,17 +63,17 @@ Measuring trade offs of AIMES and Swift integration.
 
   If needed, write a file in ```conf/<name_resource>.json``` with the configuration options for the chosen resources.
 
-1. In a dedicated terminal: Start the AIMES rest interface:
+1. In a dedicated terminal, start the AIMES rest interface:
 
   ```
+  . ~/ve/aimes-swift-experiments/bin/activate
   cd AIMES-Swift/
-  ./aimes-emgr-rest
+  aimes-emgr-rest experiment.json
   ```
 
-1. In a dedicated terminal: Run the swift script:
+1. In the initial terminal, run the swift script:
 
   ```
-  cd AIMES-Swift/
   swift <experiment_script>.swift
   ```
 
