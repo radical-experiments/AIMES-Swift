@@ -124,5 +124,11 @@ Python 2.7; ant; pip; git
   * Durations are in minutes.
   * ```"cores"``` and ```"durations"``` are used to describe partions of the set of tasks. At the moment, we use just 1 core and 15 minutes duration for each task but we will have to use more complex distributions or cores and durations.
 
-1. Copy the ```data``` directory into ```run-n```.
+1. Cpy the Swift log file into data:
+ 
+  ```
+  cp run<nnn>/swift.log data/swift/emgr_sid.<nnnn>.<nnnn>/
+  ```
+  
+1. Copy the ```data``` directory into ```exp-n```.
 1. Pull and push the repository. 
