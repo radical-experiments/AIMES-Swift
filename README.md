@@ -89,8 +89,8 @@ Python 2.7; ant; pip; git
   aimes-emgr-rest-experiments experiment.json
   ```
 
-1. Upon success of the previous command, create a directory ```run-n``` where ```n``` uniquely and incrementally indicates the number of the experiment just run.
-1. Create a file inside ```run-n``` called ```metadata.json``` with the following information:
+1. Upon success of the previous command, create a directory ```exp-n``` where ```n``` uniquely and incrementally indicates the number of the experiment just run.
+1. Create a file inside ```exp-n``` called ```metadata.json``` with the following information:
 
   ```
   {
