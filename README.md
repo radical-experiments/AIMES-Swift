@@ -1,6 +1,10 @@
 # AIMES-Swift
 Measuring trade offs of AIMES and Swift integration.
 
+## Prerequisites
+
+Python 2.7; ant; pip; git
+
 ## Experimental Workflow
 1. Clone this repository:
 
