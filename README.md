@@ -86,7 +86,7 @@ Python 2.7; ant; pip; git
 1. Download session for the experiment:
 
   ```
-  aimes-emgr-rest-experiments
+  aimes-emgr-rest-experiments experiment.json
   ```
 
 1. Upon success of the previous command, create a directory ```run-n``` where ```n``` uniquely and incrementally indicates the number of the experiment just run.
