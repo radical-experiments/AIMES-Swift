@@ -9,7 +9,7 @@ Python 2.7; ant; pip; git
 1. Clone this repository:
 
   ```
-  git clone https://github.com/radical-experiments/AIMES-Swift
+  git clone git@github.com:radical-experiments/AIMES-Swift.git
   ```
 
 1. Clone AIMES and Swift software stack:
