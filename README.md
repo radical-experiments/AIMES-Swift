@@ -25,7 +25,7 @@ Python 2.7; ant; pip; git
   ```
   virtualenv ~/ve/aimes-swift-experiments
   . ~/ve/aimes-swift-experiments/bin/activate
-  cd aimes.emgr; pip install -U .; cd -
+  cd aimes.emgr; git checkout devel; pip install -U .; cd -
   cd aimes.bundle; pip install -U .; cd -
   pip install pandas
   ```
