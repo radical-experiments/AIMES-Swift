@@ -30,6 +30,7 @@ Measuring trade offs of AIMES and Swift integration.
 
   ```
   cd swift-k/
+  git checkout release-0.96-swift
   ant redist
   export PATH=$PWD/dist/swift-svn/bin:$PATH
   cd -
