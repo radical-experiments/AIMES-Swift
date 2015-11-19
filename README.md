@@ -1,6 +1,8 @@
 # AIMES-Swift
 Measuring trade offs of AIMES and Swift integration. A set of three experiments is planned to compare the time to completion of a set of workloads/workflows when executed via Swift, AIMES, or the integration of the two.
 
+Related paper at: https://bitbucket.org/shantenujha/aimes
+
 ## Prerequisites
 
 Python 2.7; ant; pip; git
