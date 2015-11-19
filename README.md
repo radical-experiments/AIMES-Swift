@@ -1,5 +1,5 @@
 # AIMES-Swift
-Measuring trade offs of AIMES and Swift integration.
+Measuring trade offs of AIMES and Swift integration. A set of three experiments is planned to compare the time to completion of a set of workloads/workflows when executed via Swift, AIMES, or the integration of the two.
 
 ## Prerequisites
 
@@ -9,7 +9,7 @@ Python 2.7; ant; pip; git
 1. Clone this repository:
 
   ```
-  git clone https://github.com/radical-experiments/AIMES-Swift
+  git clone git@github.com:radical-experiments/AIMES-Swift.git
   ```
 
 1. Clone AIMES and Swift software stack:
@@ -25,7 +25,7 @@ Python 2.7; ant; pip; git
   ```
   virtualenv ~/ve/aimes-swift-experiments
   . ~/ve/aimes-swift-experiments/bin/activate
-  cd aimes.emgr; pip install -U .; cd -
+  cd aimes.emgr; git checkout devel; pip install -U .; cd -
   cd aimes.bundle; pip install -U .; cd -
   pip install pandas
   ```
@@ -86,11 +86,11 @@ Python 2.7; ant; pip; git
 1. Download session for the experiment:
 
   ```
-  aimes-emgr-rest-experiments
+  aimes-emgr-rest-experiments experiment.json
   ```
 
-1. Upon success of the previous command, create a directory ```run-n``` where ```n``` uniquely and incrementally indicates the number of the experiment just run.
-1. Create a file inside ```run-n``` called ```metadata.json``` with the following information:
+1. Upon success of the previous command, create a directory ```exp-n``` where ```n``` uniquely and incrementally indicates the number of the experiment just run.
+1. Create a file inside ```exp-n``` called ```metadata.json``` with the following information:
 
   ```
   {
@@ -124,5 +124,11 @@ Python 2.7; ant; pip; git
   * Durations are in minutes.
   * ```"cores"``` and ```"durations"``` are used to describe partions of the set of tasks. At the moment, we use just 1 core and 15 minutes duration for each task but we will have to use more complex distributions or cores and durations.
 
-1. Copy the ```data``` directory into ```run-n```.
+1. Cpy the Swift log file into data:
+ 
+  ```
+  cp run<nnn>/swift.log data/swift/emgr_sid.<nnnn>.<nnnn>/
+  ```
+  
+1. Copy the ```data``` directory into ```exp-n```.
 1. Pull and push the repository. 
