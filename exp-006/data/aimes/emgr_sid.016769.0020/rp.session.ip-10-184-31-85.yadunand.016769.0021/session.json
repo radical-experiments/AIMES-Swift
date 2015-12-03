@@ -1,0 +1,4945 @@
+{
+    "pilot": [
+        {
+            "_id": "pilot.0012", 
+            "agent_config": {
+                "agent_launch_method": "SSH", 
+                "agent_layout": {
+                    "agent_0": {
+                        "bridges": [
+                            "agent_staging_input_queue", 
+                            "agent_scheduling_queue", 
+                            "agent_executing_queue", 
+                            "agent_staging_output_queue", 
+                            "agent_unschedule_pubsub", 
+                            "agent_reschedule_pubsub", 
+                            "agent_command_pubsub", 
+                            "agent_state_pubsub"
+                        ], 
+                        "components": {
+                            "AgentExecutingComponent": 1, 
+                            "AgentSchedulingComponent": 1, 
+                            "AgentStagingInputComponent": 1, 
+                            "AgentStagingOutputComponent": 1
+                        }, 
+                        "pull_units": true, 
+                        "sub_agents": [], 
+                        "target": "local"
+                    }
+                }, 
+                "bulk_collection_time": 1.0, 
+                "clone": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "cores": 20, 
+                "cores_per_node": 20, 
+                "db_poll_sleeptime": 0.1, 
+                "debug": 40, 
+                "drop": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "heartbeat_interval": 10, 
+                "lrms": "TORQUE", 
+                "max_io_loglength": 1024, 
+                "mongodb_url": "mongodb://54.221.194.147:24242/swift_aimes", 
+                "mpi_launch_method": "MPIEXEC", 
+                "pilot_id": "pilot.0012", 
+                "runtime": 61, 
+                "scheduler": "CONTINUOUS", 
+                "session_id": "rp.session.ip-10-184-31-85.yadunand.016769.0021", 
+                "spawner": "POPEN", 
+                "staging_area": "staging_area", 
+                "staging_scheme": "staging", 
+                "task_launch_method": "SSH"
+            }, 
+            "callbackhistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1448924808.807716
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1448924809.979407
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1448924819.251676
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1448924852.359399
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1448926018.134567
+                }
+            ], 
+            "commands": [], 
+            "cores_per_node": null, 
+            "description": {
+                "_config": null, 
+                "access_schema": null, 
+                "cleanup": true, 
+                "cores": 6, 
+                "exit_on_error": false, 
+                "memory": null, 
+                "project": "TG-MCB090174", 
+                "queue": null, 
+                "resource": "xsede.supermic", 
+                "runtime": 61, 
+                "sandbox": null
+            }, 
+            "finished": 1448926017.098773, 
+            "global_sandbox": "/work/yadunand/radical.pilot.sandbox", 
+            "heartbeat": null, 
+            "input_transfer_finished": null, 
+            "input_transfer_started": null, 
+            "log": [
+                {
+                    "message": "Using bootstrapper /home/yadunand/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/default_bootstrapper.sh", 
+                    "timestamp": 1448924811.474594
+                }, 
+                {
+                    "message": "Copying bootstrapper 'file://localhost/home/yadunand/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/default_bootstrapper.sh' to agent sandbox (<saga.filesystem.directory.Directory object at 0x7f95ed6a59d0>).", 
+                    "timestamp": 1448924811.476908
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/yadunand/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/utils/radical.utils-0.38.tar.gz' to sandbox (sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012/).", 
+                    "timestamp": 1448924812.135033
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/yadunand/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/saga/saga-python-0.38.1.tar.gz' to sandbox (sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012/).", 
+                    "timestamp": 1448924812.826385
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/yadunand/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/pilot/controller/..//radical.pilot-0.37.10.tar.gz' to sandbox (sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012/).", 
+                    "timestamp": 1448924813.629893
+                }, 
+                {
+                    "message": "Writing agent configuration to file '/tmp/rp_agent_cfg_f8b5fG.json'.", 
+                    "timestamp": 1448924814.25909
+                }, 
+                {
+                    "message": "Copying agent configuration file 'file://localhost/tmp/rp_agent_cfg_f8b5fG.json' to sandbox (sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012/).", 
+                    "timestamp": 1448924814.260626
+                }, 
+                {
+                    "message": "Submitting SAGA job with description: {'Project': 'TG-MCB090174', 'Executable': '/bin/bash', 'TotalPhysicalMemory': None, 'WorkingDirectory': '/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012/', 'Queue': 'workq', 'Environment': {}, 'WallTimeLimit': 61, 'Arguments': ['-l bootstrap_1.sh', \" -d 'radical.utils-0.38.tar.gz:saga-python-0.38.1.tar.gz:radical.pilot-0.37.10.tar.gz' -m 'create' -p 'pilot.0012' -r 'local' -s 'rp.session.ip-10-184-31-85.yadunand.016769.0021' -v '/work/yadunand/radical.pilot.sandbox/ve_supermic' -a 'multicore' -e 'module load python' -x 'lue'\"], 'ProcessesPerHost': 20, 'Error': 'bootstrap_1.err', 'Output': 'bootstrap_1.out', 'TotalCPUCount': 20}", 
+                    "timestamp": 1448924817.832736
+                }, 
+                {
+                    "message": "SAGA job submitted with job id [torque+ssh://supermic.cct-lsu.xsede.org]-[69892]", 
+                    "timestamp": 1448924818.477204
+                }, 
+                {
+                    "message": "CANCEL received. Terminating.", 
+                    "timestamp": 1448926017.098773
+                }, 
+                {
+                    "message": "real 1448926017.102284 sec | user 4.858 sec | system 0.997 sec | mem 46620.00 kB", 
+                    "timestamp": 1448926017.098773
+                }
+            ], 
+            "logfile": null, 
+            "nodes": null, 
+            "output_transfer_finished": null, 
+            "output_transfer_started": null, 
+            "pilotmanager": "pmgr.0004", 
+            "saga_job_id": "[torque+ssh://supermic.cct-lsu.xsede.org]-[69892]", 
+            "sagajobid": null, 
+            "sandbox": "sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012/", 
+            "started": 1448924852.268056, 
+            "state": "Canceled", 
+            "statehistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1448924808.701677
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1448924808.968242
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1448924818.477288
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1448924852.268056
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1448926017.098773
+                }
+            ], 
+            "stderr": null, 
+            "stdout": null, 
+            "submitted": 1448924808.701677, 
+            "unit_ids": [
+                "unit.000936", 
+                "unit.000930", 
+                "unit.000933", 
+                "unit.000932", 
+                "unit.000937", 
+                "unit.000931"
+            ], 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "_id": "pilot.0013", 
+            "agent_config": {
+                "agent_launch_method": "SSH", 
+                "agent_layout": {
+                    "agent_0": {
+                        "bridges": [
+                            "agent_staging_input_queue", 
+                            "agent_scheduling_queue", 
+                            "agent_executing_queue", 
+                            "agent_staging_output_queue", 
+                            "agent_unschedule_pubsub", 
+                            "agent_reschedule_pubsub", 
+                            "agent_command_pubsub", 
+                            "agent_state_pubsub"
+                        ], 
+                        "components": {
+                            "AgentExecutingComponent": 1, 
+                            "AgentSchedulingComponent": 1, 
+                            "AgentStagingInputComponent": 1, 
+                            "AgentStagingOutputComponent": 1
+                        }, 
+                        "pull_units": true, 
+                        "sub_agents": [], 
+                        "target": "local"
+                    }
+                }, 
+                "bulk_collection_time": 1.0, 
+                "clone": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "cores": 6, 
+                "db_poll_sleeptime": 0.1, 
+                "debug": 40, 
+                "drop": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "heartbeat_interval": 10, 
+                "lrms": "TORQUE", 
+                "max_io_loglength": 1024, 
+                "mongodb_url": "mongodb://54.221.194.147:24242/swift_aimes", 
+                "mpi_launch_method": "MPIRUN_RSH", 
+                "pilot_id": "pilot.0013", 
+                "runtime": 61, 
+                "scheduler": "CONTINUOUS", 
+                "session_id": "rp.session.ip-10-184-31-85.yadunand.016769.0021", 
+                "spawner": "POPEN", 
+                "staging_area": "staging_area", 
+                "staging_scheme": "staging", 
+                "task_launch_method": "SSH"
+            }, 
+            "callbackhistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1448924811.243188
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1448924823.269848
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1448924836.717088
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1448924885.04138
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1448926019.167466
+                }
+            ], 
+            "commands": [], 
+            "cores_per_node": null, 
+            "description": {
+                "_config": null, 
+                "access_schema": null, 
+                "cleanup": true, 
+                "cores": 6, 
+                "exit_on_error": false, 
+                "memory": null, 
+                "project": "unc101", 
+                "queue": null, 
+                "resource": "xsede.gordon", 
+                "runtime": 61, 
+                "sandbox": null
+            }, 
+            "finished": 1448926018.289996, 
+            "global_sandbox": "/home/yadunand/radical.pilot.sandbox", 
+            "heartbeat": null, 
+            "input_transfer_finished": null, 
+            "input_transfer_started": null, 
+            "log": [
+                {
+                    "message": "Using bootstrapper /home/yadunand/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/default_bootstrapper.sh", 
+                    "timestamp": 1448924823.874031
+                }, 
+                {
+                    "message": "Copying bootstrapper 'file://localhost/home/yadunand/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/default_bootstrapper.sh' to agent sandbox (<saga.filesystem.directory.Directory object at 0x7f95ed6a5ad0>).", 
+                    "timestamp": 1448924823.874287
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/yadunand/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/utils/radical.utils-0.38.tar.gz' to sandbox (sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013/).", 
+                    "timestamp": 1448924824.620097
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/yadunand/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/saga/saga-python-0.38.1.tar.gz' to sandbox (sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013/).", 
+                    "timestamp": 1448924825.43427
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/yadunand/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/pilot/controller/..//radical.pilot-0.37.10.tar.gz' to sandbox (sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013/).", 
+                    "timestamp": 1448924826.604392
+                }, 
+                {
+                    "message": "Writing agent configuration to file '/tmp/rp_agent_cfg_jvaz0h.json'.", 
+                    "timestamp": 1448924827.422927
+                }, 
+                {
+                    "message": "Copying agent configuration file 'file://localhost/tmp/rp_agent_cfg_jvaz0h.json' to sandbox (sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013/).", 
+                    "timestamp": 1448924827.424382
+                }, 
+                {
+                    "message": "Submitting SAGA job with description: {'Project': 'unc101', 'Executable': '/bin/bash', 'TotalPhysicalMemory': None, 'WorkingDirectory': '/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013/', 'Queue': 'normal', 'Environment': {}, 'WallTimeLimit': 61, 'Arguments': ['-l bootstrap_1.sh', \" -d 'radical.utils-0.38.tar.gz:saga-python-0.38.1.tar.gz:radical.pilot-0.37.10.tar.gz' -m 'create' -p 'pilot.0013' -r 'debug' -s 'rp.session.ip-10-184-31-85.yadunand.016769.0021' -v '/home/yadunand/radical.pilot.sandbox/ve_gordon' -a 'multicore' -e 'module purge' -e 'module load python intel mvapich2_ib gnubase' -x 'lue'\"], 'ProcessesPerHost': None, 'Error': 'bootstrap_1.err', 'Output': 'bootstrap_1.out', 'TotalCPUCount': 6}", 
+                    "timestamp": 1448924832.469378
+                }, 
+                {
+                    "message": "SAGA job submitted with job id [torque+ssh://gordon.sdsc.xsede.org/]-[2347750]", 
+                    "timestamp": 1448924836.193915
+                }, 
+                {
+                    "message": "CANCEL received. Terminating.", 
+                    "timestamp": 1448926018.289996
+                }, 
+                {
+                    "message": "real 1448926018.300458 sec | user 6.344 sec | system 1.484 sec | mem 45108.00 kB", 
+                    "timestamp": 1448926018.289996
+                }
+            ], 
+            "logfile": null, 
+            "nodes": null, 
+            "output_transfer_finished": null, 
+            "output_transfer_started": null, 
+            "pilotmanager": "pmgr.0004", 
+            "saga_job_id": "[torque+ssh://gordon.sdsc.xsede.org/]-[2347750]", 
+            "sagajobid": null, 
+            "sandbox": "sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013/", 
+            "started": 1448924884.844017, 
+            "state": "Canceled", 
+            "statehistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1448924811.235183
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1448924822.933414
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1448924836.194107
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1448924884.844017
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1448926018.289996
+                }
+            ], 
+            "stderr": null, 
+            "stdout": null, 
+            "submitted": 1448924811.235183, 
+            "unit_ids": [
+                "unit.000938", 
+                "unit.000928", 
+                "unit.000934", 
+                "unit.000939", 
+                "unit.000935", 
+                "unit.000929"
+            ], 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "_id": "pilot.0014", 
+            "agent_config": {
+                "agent_launch_method": "SSH", 
+                "agent_layout": {
+                    "agent_0": {
+                        "bridges": [
+                            "agent_staging_input_queue", 
+                            "agent_scheduling_queue", 
+                            "agent_executing_queue", 
+                            "agent_staging_output_queue", 
+                            "agent_unschedule_pubsub", 
+                            "agent_reschedule_pubsub", 
+                            "agent_command_pubsub", 
+                            "agent_state_pubsub"
+                        ], 
+                        "components": {
+                            "AgentExecutingComponent": 1, 
+                            "AgentSchedulingComponent": 1, 
+                            "AgentStagingInputComponent": 1, 
+                            "AgentStagingOutputComponent": 1
+                        }, 
+                        "pull_units": true, 
+                        "sub_agents": [], 
+                        "target": "local"
+                    }
+                }, 
+                "bulk_collection_time": 1.0, 
+                "clone": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "cores": 24, 
+                "cores_per_node": 24, 
+                "db_poll_sleeptime": 0.1, 
+                "debug": 40, 
+                "drop": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "heartbeat_interval": 10, 
+                "lrms": "SLURM", 
+                "max_io_loglength": 1024, 
+                "mongodb_url": "mongodb://54.221.194.147:24242/swift_aimes", 
+                "mpi_launch_method": "MPIRUN_RSH", 
+                "pilot_id": "pilot.0014", 
+                "runtime": 61, 
+                "scheduler": "CONTINUOUS", 
+                "session_id": "rp.session.ip-10-184-31-85.yadunand.016769.0021", 
+                "spawner": "POPEN", 
+                "staging_area": "staging_area", 
+                "staging_scheme": "staging", 
+                "task_launch_method": "SSH"
+            }, 
+            "callbackhistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1448924812.355503
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1448924840.735048
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1448924855.814791
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1448925086.748179
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1448926018.143127
+                }
+            ], 
+            "commands": [], 
+            "cores_per_node": null, 
+            "description": {
+                "_config": null, 
+                "access_schema": null, 
+                "cleanup": true, 
+                "cores": 6, 
+                "exit_on_error": false, 
+                "memory": null, 
+                "project": "TG-MCB090174", 
+                "queue": null, 
+                "resource": "xsede.comet", 
+                "runtime": 61, 
+                "sandbox": null
+            }, 
+            "finished": 1448926017.836988, 
+            "global_sandbox": "/home/yadunand/radical.pilot.sandbox", 
+            "heartbeat": null, 
+            "input_transfer_finished": null, 
+            "input_transfer_started": null, 
+            "log": [
+                {
+                    "message": "Using bootstrapper /home/yadunand/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/default_bootstrapper.sh", 
+                    "timestamp": 1448924841.533653
+                }, 
+                {
+                    "message": "Copying bootstrapper 'file://localhost/home/yadunand/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/default_bootstrapper.sh' to agent sandbox (<saga.filesystem.directory.Directory object at 0x7f95ed6a5ed0>).", 
+                    "timestamp": 1448924841.533904
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/yadunand/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/utils/radical.utils-0.38.tar.gz' to sandbox (sftp://comet.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0014/).", 
+                    "timestamp": 1448924842.272189
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/yadunand/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/saga/saga-python-0.38.1.tar.gz' to sandbox (sftp://comet.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0014/).", 
+                    "timestamp": 1448924843.362308
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/yadunand/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/pilot/controller/..//radical.pilot-0.37.10.tar.gz' to sandbox (sftp://comet.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0014/).", 
+                    "timestamp": 1448924844.387367
+                }, 
+                {
+                    "message": "Writing agent configuration to file '/tmp/rp_agent_cfg_XH1rJW.json'.", 
+                    "timestamp": 1448924845.133894
+                }, 
+                {
+                    "message": "Copying agent configuration file 'file://localhost/tmp/rp_agent_cfg_XH1rJW.json' to sandbox (sftp://comet.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0014/).", 
+                    "timestamp": 1448924845.135268
+                }, 
+                {
+                    "message": "Submitting SAGA job with description: {'Project': 'TG-MCB090174', 'Executable': '/bin/bash', 'TotalPhysicalMemory': None, 'WorkingDirectory': '/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0014/', 'Queue': 'compute', 'Environment': {}, 'WallTimeLimit': 61, 'Arguments': ['-l bootstrap_1.sh', \" -d 'radical.utils-0.38.tar.gz:saga-python-0.38.1.tar.gz:radical.pilot-0.37.10.tar.gz' -m 'create' -p 'pilot.0014' -r 'local' -s 'rp.session.ip-10-184-31-85.yadunand.016769.0021' -v '/home/yadunand/radical.pilot.sandbox/ve_comet' -a 'multicore' -e 'module load python' -w 'export PATH=$PATH' -w 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH' -x 'lue'\"], 'ProcessesPerHost': 24, 'Error': 'bootstrap_1.err', 'Output': 'bootstrap_1.out', 'TotalCPUCount': 24}", 
+                    "timestamp": 1448924848.079175
+                }, 
+                {
+                    "message": "SAGA job submitted with job id [slurm+ssh://comet.sdsc.xsede.org/]-[1323982]", 
+                    "timestamp": 1448924855.201589
+                }, 
+                {
+                    "message": "CANCEL received. Terminating.", 
+                    "timestamp": 1448926017.836988
+                }, 
+                {
+                    "message": "real 1448926017.846175 sec | user 5.727 sec | system 1.284 sec | mem 44996.00 kB", 
+                    "timestamp": 1448926017.836988
+                }
+            ], 
+            "logfile": null, 
+            "nodes": null, 
+            "output_transfer_finished": null, 
+            "output_transfer_started": null, 
+            "pilotmanager": "pmgr.0004", 
+            "saga_job_id": "[slurm+ssh://comet.sdsc.xsede.org/]-[1323982]", 
+            "sagajobid": null, 
+            "sandbox": "sftp://comet.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0014/", 
+            "started": 1448925086.608994, 
+            "state": "Canceled", 
+            "statehistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1448924812.350087
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1448924840.59724
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1448924855.201711
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1448925086.608994
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1448926017.836988
+                }
+            ], 
+            "stderr": null, 
+            "stdout": null, 
+            "submitted": 1448924812.350087, 
+            "unit_ids": [
+                "unit.000942", 
+                "unit.000941", 
+                "unit.000943", 
+                "unit.000940"
+            ], 
+            "unitmanager": "umgr.0004"
+        }
+    ], 
+    "pmgr": [
+        {
+            "_id": "pmgr.0004", 
+            "data": {}, 
+            "pilot_launcher_workers": 1
+        }
+    ], 
+    "session": {
+        "_id": "rp.session.ip-10-184-31-85.yadunand.016769.0021", 
+        "connected": 1448924806.103298, 
+        "created": 1448924806.103298, 
+        "name": "rp.session.ip-10-184-31-85.yadunand.016769.0021"
+    }, 
+    "umgr": [
+        {
+            "_id": "umgr.0004", 
+            "input_transfer_workers": 2, 
+            "output_transfer_workers": 2, 
+            "scheduler": "backfilling"
+        }
+    ], 
+    "unit": [
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0001.out", 
+                    "state": "Pending", 
+                    "target": "date0001.out"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000936", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.383822
+                }, 
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1448924853.596835
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924863.008579
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448924864.02161
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924865.034174
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925766.033819
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925777.316129
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0001.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0001.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000001", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0001.out", 
+                        "target": "date0001.out"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0012.", 
+                    "timestamp": 1448924852.417856
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448924863.1747
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448925776.617098
+                }
+            ], 
+            "pilot": "pilot.0012", 
+            "pilot_sandbox": "sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012/", 
+            "restartable": false, 
+            "sandbox": "sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012//unit.000936", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.953276
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924862.484009
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924862.484009
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924863.349825
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448924863.450547
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448924863.552452
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448924863.653683
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448924863.753862
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924863.855208
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925764.522196
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925764.62353
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925764.726477
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925765.789915
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925776.617098
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "", 
+            "submitted": 1448924812.953276, 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0010.out", 
+                    "state": "Pending", 
+                    "target": "date0010.out"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000930", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.383118
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924853.590379
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924863.007136
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924864.020673
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925763.999332
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925766.027067
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925779.341762
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0010.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0010.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000008", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0010.out", 
+                        "target": "date0010.out"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0012.", 
+                    "timestamp": 1448924852.416955
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448924862.481529
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448925778.590258
+                }
+            ], 
+            "pilot": "pilot.0012", 
+            "pilot_sandbox": "sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012/", 
+            "restartable": false, 
+            "sandbox": "sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012//unit.000930", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.9308
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924853.355496
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924853.355496
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924862.630668
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448924862.731818
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448924862.83315
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448924862.956327
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448924863.056753
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924863.158545
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925763.920897
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925764.022046
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925764.124939
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925765.78893
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925778.590258
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "", 
+            "submitted": 1448924812.9308, 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0012.out", 
+                    "state": "Pending", 
+                    "target": "date0012.out"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000933", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.380333
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924853.575878
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924865.03203
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924866.0428
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925768.075912
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925777.310783
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925780.354482
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0012.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0012.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000012", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0012.out", 
+                        "target": "date0012.out"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0012.", 
+                    "timestamp": 1448924852.415974
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448924864.728
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448925779.360004
+                }
+            ], 
+            "pilot": "pilot.0012", 
+            "pilot_sandbox": "sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012/", 
+            "restartable": false, 
+            "sandbox": "sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012//unit.000933", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.941983
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924853.354475
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924853.354475
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924865.047984
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448924865.148685
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448924865.249687
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448924865.351061
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448924865.450914
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924865.553095
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925766.227231
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925766.330719
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925766.433679
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925776.618466
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925779.360004
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "", 
+            "submitted": 1448924812.941983, 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0004.out", 
+                    "state": "Pending", 
+                    "target": "date0004.out"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000932", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.382337
+                }, 
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1448924853.584097
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924864.01854
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924865.032719
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924866.043461
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925767.059818
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925768.082287
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925780.356249
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925782.376007
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0004.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0004.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000003", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0004.out", 
+                        "target": "date0004.out"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0012.", 
+                    "timestamp": 1448924852.420167
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448924864.55968
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448925782.108411
+                }
+            ], 
+            "pilot": "pilot.0012", 
+            "pilot_sandbox": "sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012/", 
+            "restartable": false, 
+            "sandbox": "sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012//unit.000932", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.938303
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924863.869816
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924863.869816
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924864.787738
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448924864.888572
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448924864.989876
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448924865.090734
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448924865.191407
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924865.293572
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925766.025925
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925766.126967
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925766.230906
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925779.360996
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925782.108411
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "", 
+            "submitted": 1448924812.938303, 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0016.out", 
+                    "state": "Pending", 
+                    "target": "date0016.out"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000937", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.383472
+                }, 
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1448924853.594196
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924864.021161
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924865.033761
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925767.060593
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925779.343897
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925782.378331
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0016.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0016.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000014", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0016.out", 
+                        "target": "date0016.out"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0012.", 
+                    "timestamp": 1448924852.418785
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448924863.868523
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448925781.462556
+                }
+            ], 
+            "pilot": "pilot.0012", 
+            "pilot_sandbox": "sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012/", 
+            "restartable": false, 
+            "sandbox": "sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012//unit.000937", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.958969
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924863.176051
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924863.176051
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924864.068683
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448924864.169713
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448924864.270964
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448924864.371882
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448924864.47232
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924864.573863
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925765.2241
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925765.325026
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925765.427626
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925778.591658
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925781.462556
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "", 
+            "submitted": 1448924812.958969, 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0011.out", 
+                    "state": "Pending", 
+                    "target": "date0011.out"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000931", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.382761
+                }, 
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1448924853.587052
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924865.033305
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448924866.043909
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924867.054726
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925768.090446
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925782.377795
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925784.398535
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0011.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0011.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000009", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0011.out", 
+                        "target": "date0011.out"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0012.", 
+                    "timestamp": 1448924852.421024
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448924865.254156
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448925784.202989
+                }
+            ], 
+            "pilot": "pilot.0012", 
+            "pilot_sandbox": "sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012/", 
+            "restartable": false, 
+            "sandbox": "sftp://supermic.cct-lsu.xsede.org/work/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0012//unit.000931", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.932462
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924864.561008
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924864.561008
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924865.460765
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448924865.561595
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448924865.662648
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448924865.763871
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448924865.864328
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924865.965952
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925766.62804
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925766.729049
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925766.831933
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925781.463796
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925784.202989
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "", 
+            "submitted": 1448924812.932462, 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0015.out", 
+                    "state": "Pending", 
+                    "target": "date0015.out"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000938", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.389365
+                }, 
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1448924885.170642
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924886.370594
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924888.399767
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924891.430076
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925792.465737
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925793.515715
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925800.642267
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0015.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0015.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000015", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0015.out", 
+                        "target": "date0015.out"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924852.423145
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0013.", 
+                    "timestamp": 1448924885.083301
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448924887.417792
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448925799.871739
+                }
+            ], 
+            "pilot": "pilot.0013", 
+            "pilot_sandbox": "sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013/", 
+            "restartable": false, 
+            "sandbox": "sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013//unit.000938", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.960573
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924885.298472
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924885.298472
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924890.28542
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448924890.391849
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448924890.492482
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448924890.597478
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448924890.698316
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924890.80328
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925791.806858
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925791.91394
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925792.01639
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925793.133503
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925799.871739
+                }
+            ], 
+            "stderr": "TERM environment variable not set.\n", 
+            "stdout": "", 
+            "submitted": 1448924812.960573, 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0013.out", 
+                    "state": "Pending", 
+                    "target": "date0013.out"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000928", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.385132
+                }, 
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1448924885.167818
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924886.368327
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924888.398814
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924891.429151
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925793.504831
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925801.659172
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0013.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0013.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000011", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0013.out", 
+                        "target": "date0013.out"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924852.423145
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0013.", 
+                    "timestamp": 1448924885.084224
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448924887.725904
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448925801.57519
+                }
+            ], 
+            "pilot": "pilot.0013", 
+            "pilot_sandbox": "sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013/", 
+            "restartable": false, 
+            "sandbox": "sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013//unit.000928", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.919599
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924885.778154
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924885.778154
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924890.387234
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448924890.592761
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448924890.693434
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448924890.798432
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448924890.899238
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924891.005157
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925791.907706
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925792.117481
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925792.219363
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925793.259166
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925801.57519
+                }
+            ], 
+            "stderr": "error: could not lock config file /home/yadunand/.gitconfig: File exists\nTERM environment variable not set.\n", 
+            "stdout": "", 
+            "submitted": 1448924812.919599, 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0007.out", 
+                    "state": "Pending", 
+                    "target": "date0007.out"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000934", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.384512
+                }, 
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1448924885.167335
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924888.398229
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924891.428712
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925793.498372
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925800.639282
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925803.690577
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0007.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0007.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000006", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0007.out", 
+                        "target": "date0007.out"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924852.423145
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0013.", 
+                    "timestamp": 1448924885.085123
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448924888.208919
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448925803.001982
+                }
+            ], 
+            "pilot": "pilot.0013", 
+            "pilot_sandbox": "sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013/", 
+            "restartable": false, 
+            "sandbox": "sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013//unit.000934", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.944915
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924887.418985
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924887.418985
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924890.487762
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448924890.79375
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448924890.89438
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448924891.000306
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448924891.101211
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924891.206911
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925792.209311
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925792.320394
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925792.422473
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925799.872889
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925803.001982
+                }
+            ], 
+            "stderr": "TERM environment variable not set.\n", 
+            "stdout": "", 
+            "submitted": 1448924812.944915, 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0014.out", 
+                    "state": "Pending", 
+                    "target": "date0014.out"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000939", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.389004
+                }, 
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1448924885.170196
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924888.399284
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924889.412524
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448924891.429621
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924892.439383
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925793.509195
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925801.662275
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925805.721814
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0014.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0014.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000013", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0014.out", 
+                        "target": "date0014.out"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924852.423145
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0013.", 
+                    "timestamp": 1448924885.086049
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448924888.515872
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448925804.732514
+                }
+            ], 
+            "pilot": "pilot.0013", 
+            "pilot_sandbox": "sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013/", 
+            "restartable": false, 
+            "sandbox": "sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013//unit.000939", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.966514
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924887.727076
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924887.727076
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924890.588166
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448924890.995606
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448924891.09638
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448924891.202087
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448924891.37677
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924891.403932
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925792.410531
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925792.523435
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925792.625568
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925801.576428
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925804.732514
+                }
+            ], 
+            "stderr": "TERM environment variable not set.\n", 
+            "stdout": "", 
+            "submitted": 1448924812.966514, 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0002.out", 
+                    "state": "Pending", 
+                    "target": "date0002.out"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000935", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.384164
+                }, 
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1448924885.166783
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924888.392571
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924889.411173
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448924891.42808
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924892.438227
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925793.493202
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925803.687877
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925806.73493
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0002.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0002.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000002", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0002.out", 
+                        "target": "date0002.out"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924852.423145
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0013.", 
+                    "timestamp": 1448924885.086946
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448924889.000607
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448925806.135885
+                }
+            ], 
+            "pilot": "pilot.0013", 
+            "pilot_sandbox": "sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013/", 
+            "restartable": false, 
+            "sandbox": "sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013//unit.000935", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.951696
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924888.210155
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924888.210155
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924890.688733
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448924891.197387
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448924891.298155
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448924891.408647
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448924891.5052
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924891.607012
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925792.611681
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925792.7266
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925792.829082
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925803.003197
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925806.135885
+                }
+            ], 
+            "stderr": "TERM environment variable not set.\n", 
+            "stdout": "", 
+            "submitted": 1448924812.951696, 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0005.out", 
+                    "state": "Pending", 
+                    "target": "date0005.out"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000929", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.388628
+                }, 
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1448924885.168254
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924889.411923
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924892.438889
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925793.508602
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925794.559332
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925805.71936
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925808.75398
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0005.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0005.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000004", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0005.out", 
+                        "target": "date0005.out"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924852.423145
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0013.", 
+                    "timestamp": 1448924885.087809
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448924889.299916
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448925807.854111
+                }
+            ], 
+            "pilot": "pilot.0013", 
+            "pilot_sandbox": "sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013/", 
+            "restartable": false, 
+            "sandbox": "sftp://gordon.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0013//unit.000929", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.92751
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448924888.517095
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924888.517095
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448924890.789154
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448924891.399084
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448924891.500334
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448924891.602173
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448924891.70262
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448924891.804358
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925792.712543
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925792.930314
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925793.03243
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925804.733697
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448925807.854111
+                }
+            ], 
+            "stderr": "error: could not lock config file /home/yadunand/.gitconfig: File exists\nTERM environment variable not set.\n", 
+            "stdout": "", 
+            "submitted": 1448924812.92751, 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0003.out", 
+                    "state": "Pending", 
+                    "target": "date0003.out"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000942", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.389717
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448925087.559417
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448925089.606561
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448925093.644627
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925994.16651
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925995.222412
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448926003.393477
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0003.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0003.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000000", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0003.out", 
+                        "target": "date0003.out"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924852.423145
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924885.089728
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0014.", 
+                    "timestamp": 1448925086.766668
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448925089.215817
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448926003.265751
+                }
+            ], 
+            "pilot": "pilot.0014", 
+            "pilot_sandbox": "sftp://comet.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0014/", 
+            "restartable": false, 
+            "sandbox": "sftp://comet.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0014//unit.000942", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.975258
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448925087.450188
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448925087.450188
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448925091.94613
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448925092.049921
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448925092.150958
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448925092.254897
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448925092.355614
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448925092.459208
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925993.299822
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925993.40645
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925993.508598
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925994.624046
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448926003.265751
+                }
+            ], 
+            "stderr": "TERM environment variable not set.\n", 
+            "stdout": "", 
+            "submitted": 1448924812.975258, 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0009.out", 
+                    "state": "Pending", 
+                    "target": "date0009.out"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000941", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.390874
+                }, 
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1448925087.560912
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448925088.578876
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448925089.608182
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448925093.650216
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925995.235519
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925996.283897
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448926005.427579
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0009.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0009.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000010", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0009.out", 
+                        "target": "date0009.out"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924852.423145
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924885.089728
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0014.", 
+                    "timestamp": 1448925086.767668
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448925089.437016
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448926004.691646
+                }
+            ], 
+            "pilot": "pilot.0014", 
+            "pilot_sandbox": "sftp://comet.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0014/", 
+            "restartable": false, 
+            "sandbox": "sftp://comet.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0014//unit.000941", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.971478
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448925087.766345
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448925087.766345
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448925092.047308
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448925092.252368
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448925092.352994
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448925092.456628
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448925092.557465
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448925092.661165
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925993.500862
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925993.60987
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925993.711935
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448925995.308567
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448926004.691646
+                }
+            ], 
+            "stderr": "TERM environment variable not set.\n", 
+            "stdout": "", 
+            "submitted": 1448924812.971478, 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0006.out", 
+                    "state": "Pending", 
+                    "target": "date0006.out"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000943", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.39009
+                }, 
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1448925087.560073
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448925089.607286
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448925090.619567
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448925093.647245
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925995.23025
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448926003.398244
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448926006.444618
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0006.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0006.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000005", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0006.out", 
+                        "target": "date0006.out"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924852.423145
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924885.089728
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0014.", 
+                    "timestamp": 1448925086.768614
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448925090.006918
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448926006.419001
+                }
+            ], 
+            "pilot": "pilot.0014", 
+            "pilot_sandbox": "sftp://comet.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0014/", 
+            "restartable": false, 
+            "sandbox": "sftp://comet.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0014//unit.000943", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.979221
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448925089.21739
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448925089.21739
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448925092.147624
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448925092.454076
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448925092.554876
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448925092.658558
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448925092.759337
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448925092.861172
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925993.702155
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925993.813165
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925993.915084
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448926003.267043
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448926006.419001
+                }
+            ], 
+            "stderr": "TERM environment variable not set.\n", 
+            "stdout": "", 
+            "submitted": 1448924812.979221, 
+            "unitmanager": "umgr.0004"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                    "state": "Pending", 
+                    "target": "_swiftwrap.staging"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "date0008.out", 
+                    "state": "Pending", 
+                    "target": "date0008.out"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "wrapper.log", 
+                    "state": "Pending", 
+                    "target": "wrapper.log"
+                }, 
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "stderr.txt", 
+                    "state": "Pending", 
+                    "target": "stderr.txt"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.000940", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1448924813.390531
+                }, 
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1448925087.560516
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448925089.607764
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448925090.620217
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448925093.647713
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448925094.661955
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925995.23284
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448926005.426898
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448926008.466965
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "_swiftwrap.staging", 
+                    "-e", 
+                    "/bin/sleep", 
+                    "-out", 
+                    "date0008.out", 
+                    "-err", 
+                    "stderr.txt", 
+                    "-i", 
+                    "-d", 
+                    "", 
+                    "-if", 
+                    "", 
+                    "-of", 
+                    "date0008.out", 
+                    "-cf", 
+                    "", 
+                    "-cdmfile", 
+                    "", 
+                    "-status", 
+                    "provider", 
+                    "-a", 
+                    "900"
+                ], 
+                "cleanup": false, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "/bin/bash", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "/home/yadunand/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                        "target": "_swiftwrap.staging"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "emgr_sid.016769.0020:task.000007", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "date0008.out", 
+                        "target": "date0008.out"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "wrapper.log", 
+                        "target": "wrapper.log"
+                    }, 
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "stderr.txt", 
+                        "target": "stderr.txt"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": null, 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924812.994227
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924852.423145
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1448924885.089728
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0014.", 
+                    "timestamp": 1448925086.769473
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1448925090.221011
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1448926007.809899
+                }
+            ], 
+            "pilot": "pilot.0014", 
+            "pilot_sandbox": "sftp://comet.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0014/", 
+            "restartable": false, 
+            "sandbox": "sftp://comet.sdsc.xsede.org/home/yadunand/radical.pilot.sandbox/rp.session.ip-10-184-31-85.yadunand.016769.0021-pilot.0014//unit.000940", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1448924812.968076
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1448925089.438364
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448925089.438364
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1448925092.248073
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1448925092.656049
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1448925092.756705
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1448925092.858301
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1448925092.958628
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1448925093.060303
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1448925993.803563
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1448925994.016168
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1448925994.118653
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1448926004.692907
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1448926007.809899
+                }
+            ], 
+            "stderr": "TERM environment variable not set.\n", 
+            "stdout": "", 
+            "submitted": 1448924812.968076, 
+            "unitmanager": "umgr.0004"
+        }
+    ]
+}

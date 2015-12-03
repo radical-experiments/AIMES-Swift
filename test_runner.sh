@@ -22,10 +22,12 @@ EOF
 arg_generate_test()
 {
 cat <<EOF | shuf &> task.count
-1
-2
-3
-4
+64
+128
+256
+512
+1024
+2048
 EOF
 }
 
@@ -73,13 +75,22 @@ EOF
 
 }
 
-#arg_generate_test
-arg_generate_full
+arg_generate_test
+#arg_generate_full
 echo "Task counts : $(cat task.count)"
 
 #execute_swift "swift.conf" "bag_of_tasks.swift" 4 10
 #exit 0
-for task_count in $(cat task.count):
+for task_count in $(cat task.count)
 do
     execute_swift "swift.conf" "bag_of_tasks.swift" $task_count $SLEEPDUR | tee -a $TESTLOG
 done
+
+
+export PATH=$HOME/notify:$PATH
+
+cat<<EOF > message.txt
+Experiment on RP server complete.
+EOF
+
+notify.py < message.txt

@@ -16,6 +16,6 @@ int count = toInt(arg("N", "1"));
 int sleep = toInt(arg("sleep", "100"));
 
 foreach i in [1:count] {
-    //driver_out[i] = remote_driver(sleep);
-    driver_out[i] = remote_shuf(sleep);
+    driver_out[i] = remote_driver(sleep);
+    //driver_out[i] = remote_shuf(sleep);
 }

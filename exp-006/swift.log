@@ -1,0 +1,1620 @@
+2015-11-30 23:26:56,490+0000 INFO  Loader JAVA Oracle Corporation OpenJDK 64-Bit Server VM 1.7.0_91
+2015-11-30 23:26:56,495+0000 INFO  Loader VERSION Swift 0.96.2 git-rev: 9fb7d710a1c67d9b0479d1ff803a199281c8961b heads/release-0.96-swift 6305 (modified locally)
+2015-11-30 23:26:56,495+0000 INFO  Loader RUN_ID run006
+2015-11-30 23:26:56,495+0000 INFO  Loader ARGUMENTS [-runid, run006, -logfile, /home/yadunand/AIMES-Swift/run006/swift.log, -config, swift.conf, bag_of_tasks.swift, -N=8, -sleep=900]
+2015-11-30 23:26:56,496+0000 INFO  Loader MAX_HEAP 1037959168
+2015-11-30 23:26:56,496+0000 INFO  Loader GLOBUS_HOSTNAME ip-10-184-31-85
+2015-11-30 23:26:56,496+0000 INFO  Loader CWD /home/yadunand/AIMES-Swift/.
+2015-11-30 23:26:56,506+0000 DEBUG Loader SWIFT_CONFIGURATION 
+[D] /home/yadunand/swift-k/dist/swift-svn/etc/swift.conf
+[R] swift.conf
+[C] <Command Line>
+{
+	TCPPortRange: "50000,51000"                                # [R] line 62
+	alwaysTransferWrapperLog: true                             # [R] line 67
+	executionRetries: 0                                        # [R] line 64
+	fileOperationsThrottle: 8                                  # [D] line 121
+	fileTransfersThrottle: 4                                   # [D] line 107
+	hostJobSubmitThrottle: 10                                  # [R] line 59
+	jobSubmitThrottle: 10                                      # [R] line 60
+	keepSiteDir: true                                          # [R] line 65
+	lazyErrors: false                                          # [R] line 63
+	logProvenance: false                                       # [D] line 200
+	maxForeachThreads: 16384                                   # [D] line 194
+	providerStagingPinSwiftFiles: false                        # [R] line 66
+	replicationEnabled: false                                  # [D] line 146
+	replicationLimit: 3                                        # [D] line 157
+	replicationMinQueueTime: 60                                # [D] line 153
+	site {
+		aimes_emgr {
+			app {
+				bash {
+					executable: "/bin/bash"                                # [R] line 24
+					maxWallTime: "00:01:00"                                # [R] line 25
+				}
+				shuf {
+					env.cores: "1"                                         # [R] line 20
+					executable: "/usr/bin/shuf"                            # [R] line 18
+					maxWallTime: "00:3:00"                                 # [R] line 19
+				}
+				sleep {
+					env.cores: "1"                                         # [R] line 15
+					executable: "/bin/sleep"                               # [R] line 13
+					maxWallTime: "00:15:00"                                # [R] line 14
+				}
+			}
+			execution {
+				URL: "127.0.0.1"                                        # [R] line 5
+				jobManager: "local:aimes-emanager"                      # [R] line 6
+				options.maxJobs: 100                                    # [R] line 9
+				type: "aimes-emanager"                                  # [R] line 7
+			}
+			initialParallelTasks: 5000                               # [R] line 27
+			maxParallelTasks: 5000                                   # [R] line 28
+			staging: "local"                                         # [R] line 29
+			workDirectory: "/tmp/swift-trunk-test"                   # [R] line 30
+		}
+		local {
+			app.ALL.executable: "*"                                  # [D] line 232
+			execution.type: "local"                                  # [D] line 223
+			filesystem.type: "local"                                 # [D] line 226
+			workDirectory: "swiftwork"                               # [D] line 229
+		}
+		stampede {
+			app.ALL.executable: "*"                                  # [R] line 56
+			execution {
+				URL: "stampede.tacc.utexas.edu"                         # [R] line 41
+				jobManager: "ssh-cl:slurm"                              # [R] line 42
+				options {
+					jobQueue: "development"                                # [R] line 48
+					maxJobTime: "00:25:00"                                 # [R] line 49
+					maxJobs: 10                                            # [R] line 44
+					maxNodesPerJob: 1                                      # [R] line 46
+					nodeGranularity: 1                                     # [R] line 45
+					tasksPerNode: 24                                       # [R] line 47
+				}
+				type: "coaster"                                         # [R] line 40
+			}
+			initialParallelTasks: 100                                # [R] line 55
+			maxParallelTasks: 101                                    # [R] line 54
+			staging: "local"                                         # [R] line 52
+			workDirectory: "/tmp/yadunand/swiftwork"                 # [C]
+		}
+	}
+	sites: [aimes_emgr]                                        # [R] line 1
+	tracingEnabled: false                                      # [D] line 51
+}
+
+2015-11-30 23:26:56,531+0000 DEBUG textfiles BEGIN SWIFTSCRIPT:
+type file;
+
+app (file out) remote_driver (int time)
+{
+   sleep time stdout=@out;
+}
+
+app (file out) remote_shuf (int time)
+{
+   shuf "-i 1-100" stdout=@out;
+}
+
+file driver_out[] <simple_mapper; prefix="date", suffix=".out">;
+
+int count = toInt(arg("N", "1"));
+int sleep = toInt(arg("sleep", "100"));
+
+foreach i in [1:count] {
+    driver_out[i] = remote_driver(sleep);
+    //driver_out[i] = remote_shuf(sleep);
+}
+
+
+2015-11-30 23:26:56,531+0000 DEBUG textfiles END SWIFTSCRIPT:
+2015-11-30 23:26:56,531+0000 INFO  Loader bag_of_tasks.swift: source file is new. Recompiling.
+2015-11-30 23:27:01,700+0000 INFO  Loader RUN_START
+2015-11-30 23:27:01,713+0000 INFO  SwiftExecutor swift.home = /home/yadunand/swift-k/dist/swift-svn
+2015-11-30 23:27:01,819+0000 INFO  AbstractScheduler Setting resources to: {aimes_emgr=aimes_emgr}
+2015-11-30 23:27:01,861+0000 INFO  GlobalSubmitQueue No global submit throttle set. Using default (1024)
+2015-11-30 23:27:01,946+0000 INFO  LateBindingScheduler jobs queued: 0
+2015-11-30 23:27:01,955+0000 INFO  LateBindingScheduler jobs queued: 0
+2015-11-30 23:27:01,956+0000 INFO  LateBindingScheduler jobs queued: 0
+2015-11-30 23:27:02,018+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22266840, JVMThreads: 12
+2015-11-30 23:27:02,030+0000 INFO  RuntimeStats$ProgressTicker 
+2015-11-30 23:27:02,057+0000 DEBUG swift FOREACH_IT_START line=18 thread=R-4-0
+2015-11-30 23:27:02,057+0000 DEBUG swift SCOPE thread=R-4-0
+2015-11-30 23:27:02,057+0000 DEBUG swift PROCEDURE line=3 thread=R-4-0 name=remote_driver
+2015-11-30 23:27:02,063+0000 DEBUG swift FOREACH_IT_START line=18 thread=R-4-1
+2015-11-30 23:27:02,079+0000 DEBUG swift SCOPE thread=R-4-1
+2015-11-30 23:27:02,082+0000 DEBUG swift PROCEDURE line=3 thread=R-4-1 name=remote_driver
+2015-11-30 23:27:02,087+0000 DEBUG swift JOB_INIT jobid=sleep-6ovc37im tr=sleep
+2015-11-30 23:27:02,090+0000 DEBUG swift JOB_INIT jobid=sleep-7ovc37im tr=sleep
+2015-11-30 23:27:02,090+0000 DEBUG swift JOB_SITE_SELECT jobid=sleep-7ovc37im
+2015-11-30 23:27:02,093+0000 DEBUG swift JOB_SITE_SELECT jobid=sleep-6ovc37im
+2015-11-30 23:27:02,097+0000 DEBUG swift FOREACH_IT_START line=18 thread=R-4-2
+2015-11-30 23:27:02,097+0000 DEBUG swift SCOPE thread=R-4-2
+2015-11-30 23:27:02,098+0000 DEBUG swift PROCEDURE line=3 thread=R-4-2 name=remote_driver
+2015-11-30 23:27:02,098+0000 DEBUG swift JOB_INIT jobid=sleep-8ovc37im tr=sleep
+2015-11-30 23:27:02,098+0000 DEBUG swift JOB_SITE_SELECT jobid=sleep-8ovc37im
+2015-11-30 23:27:02,099+0000 DEBUG swift FOREACH_IT_START line=18 thread=R-4-3
+2015-11-30 23:27:02,103+0000 DEBUG swift SCOPE thread=R-4-3
+2015-11-30 23:27:02,103+0000 DEBUG swift PROCEDURE line=3 thread=R-4-3 name=remote_driver
+2015-11-30 23:27:02,103+0000 DEBUG swift JOB_INIT jobid=sleep-9ovc37im tr=sleep
+2015-11-30 23:27:02,106+0000 DEBUG swift JOB_SITE_SELECT jobid=sleep-9ovc37im
+2015-11-30 23:27:02,103+0000 DEBUG swift FOREACH_IT_START line=18 thread=R-4x2
+2015-11-30 23:27:02,106+0000 DEBUG swift SCOPE thread=R-4x2
+2015-11-30 23:27:02,107+0000 DEBUG swift PROCEDURE line=3 thread=R-4x2 name=remote_driver
+2015-11-30 23:27:02,107+0000 DEBUG swift JOB_INIT jobid=sleep-aovc37im tr=sleep
+2015-11-30 23:27:02,107+0000 DEBUG swift JOB_SITE_SELECT jobid=sleep-aovc37im
+2015-11-30 23:27:02,108+0000 DEBUG swift FOREACH_IT_START line=18 thread=R-4-5
+2015-11-30 23:27:02,108+0000 DEBUG swift SCOPE thread=R-4-5
+2015-11-30 23:27:02,109+0000 DEBUG swift PROCEDURE line=3 thread=R-4-5 name=remote_driver
+2015-11-30 23:27:02,109+0000 DEBUG swift JOB_INIT jobid=sleep-bovc37im tr=sleep
+2015-11-30 23:27:02,109+0000 DEBUG swift JOB_SITE_SELECT jobid=sleep-bovc37im
+2015-11-30 23:27:02,108+0000 DEBUG swift FOREACH_IT_START line=18 thread=R-4-6
+2015-11-30 23:27:02,110+0000 DEBUG swift SCOPE thread=R-4-6
+2015-11-30 23:27:02,110+0000 DEBUG swift PROCEDURE line=3 thread=R-4-6 name=remote_driver
+2015-11-30 23:27:02,110+0000 DEBUG swift JOB_INIT jobid=sleep-covc37im tr=sleep
+2015-11-30 23:27:02,111+0000 DEBUG swift JOB_SITE_SELECT jobid=sleep-covc37im
+2015-11-30 23:27:02,111+0000 DEBUG swift FOREACH_IT_START line=18 thread=R-4-7
+2015-11-30 23:27:02,112+0000 DEBUG swift SCOPE thread=R-4-7
+2015-11-30 23:27:02,112+0000 DEBUG swift PROCEDURE line=3 thread=R-4-7 name=remote_driver
+2015-11-30 23:27:02,113+0000 DEBUG swift JOB_INIT jobid=sleep-dovc37im tr=sleep
+2015-11-30 23:27:02,113+0000 DEBUG swift JOB_SITE_SELECT jobid=sleep-dovc37im
+2015-11-30 23:27:02,113+0000 DEBUG swift THREAD_ASSOCIATION jobid=sleep-6ovc37im thread=R-4-0 host=aimes_emgr replicationGroup=null
+2015-11-30 23:27:02,117+0000 DEBUG swift JOB_START jobid=sleep-6ovc37im tr=sleep arguments=[900] tmpdir=bag_of_tasks-run006/jobs/s/sleep-6ovc37im host=aimes_emgr
+2015-11-30 23:27:02,120+0000 DEBUG swift THREAD_ASSOCIATION jobid=sleep-7ovc37im thread=R-4-1 host=aimes_emgr replicationGroup=null
+2015-11-30 23:27:02,121+0000 DEBUG swift JOB_START jobid=sleep-7ovc37im tr=sleep arguments=[900] tmpdir=bag_of_tasks-run006/jobs/s/sleep-7ovc37im host=aimes_emgr
+2015-11-30 23:27:02,129+0000 INFO  Execute JOB_TASK jobid=sleep-6ovc37im taskid=urn:R-4-0-1448926016469 exec=/bin/bash dir=bag_of_tasks-run006/jobs/s/sleep-6ovc37im args=_swiftwrap.staging -e /bin/sleep -out date0001.out -err stderr.txt -i -d  -if  -of date0001.out -cf  -cdmfile  -status provider -a 900
+2015-11-30 23:27:02,129+0000 INFO  Execute JOB_TASK jobid=sleep-7ovc37im taskid=urn:R-4-1-1448926016471 exec=/bin/bash dir=bag_of_tasks-run006/jobs/s/sleep-7ovc37im args=_swiftwrap.staging -e /bin/sleep -out date0002.out -err stderr.txt -i -d  -if  -of date0002.out -cf  -cdmfile  -status provider -a 900
+2015-11-30 23:27:02,140+0000 DEBUG swift THREAD_ASSOCIATION jobid=sleep-8ovc37im thread=R-4-2 host=aimes_emgr replicationGroup=null
+2015-11-30 23:27:02,141+0000 DEBUG swift JOB_START jobid=sleep-8ovc37im tr=sleep arguments=[900] tmpdir=bag_of_tasks-run006/jobs/s/sleep-8ovc37im host=aimes_emgr
+2015-11-30 23:27:02,142+0000 INFO  Execute JOB_TASK jobid=sleep-8ovc37im taskid=urn:R-4-2-1448926016473 exec=/bin/bash dir=bag_of_tasks-run006/jobs/s/sleep-8ovc37im args=_swiftwrap.staging -e /bin/sleep -out date0003.out -err stderr.txt -i -d  -if  -of date0003.out -cf  -cdmfile  -status provider -a 900
+2015-11-30 23:27:02,144+0000 DEBUG swift THREAD_ASSOCIATION jobid=sleep-9ovc37im thread=R-4-3 host=aimes_emgr replicationGroup=null
+2015-11-30 23:27:02,144+0000 DEBUG swift JOB_START jobid=sleep-9ovc37im tr=sleep arguments=[900] tmpdir=bag_of_tasks-run006/jobs/s/sleep-9ovc37im host=aimes_emgr
+2015-11-30 23:27:02,145+0000 INFO  Execute JOB_TASK jobid=sleep-9ovc37im taskid=urn:R-4-3-1448926016475 exec=/bin/bash dir=bag_of_tasks-run006/jobs/s/sleep-9ovc37im args=_swiftwrap.staging -e /bin/sleep -out date0004.out -err stderr.txt -i -d  -if  -of date0004.out -cf  -cdmfile  -status provider -a 900
+2015-11-30 23:27:02,143+0000 DEBUG swift THREAD_ASSOCIATION jobid=sleep-aovc37im thread=R-4x2 host=aimes_emgr replicationGroup=null
+2015-11-30 23:27:02,150+0000 DEBUG swift JOB_START jobid=sleep-aovc37im tr=sleep arguments=[900] tmpdir=bag_of_tasks-run006/jobs/s/sleep-aovc37im host=aimes_emgr
+2015-11-30 23:27:02,150+0000 INFO  Execute JOB_TASK jobid=sleep-aovc37im taskid=urn:R-4x2-1448926016477 exec=/bin/bash dir=bag_of_tasks-run006/jobs/s/sleep-aovc37im args=_swiftwrap.staging -e /bin/sleep -out date0005.out -err stderr.txt -i -d  -if  -of date0005.out -cf  -cdmfile  -status provider -a 900
+2015-11-30 23:27:02,152+0000 DEBUG swift THREAD_ASSOCIATION jobid=sleep-bovc37im thread=R-4-5 host=aimes_emgr replicationGroup=null
+2015-11-30 23:27:02,156+0000 DEBUG swift JOB_START jobid=sleep-bovc37im tr=sleep arguments=[900] tmpdir=bag_of_tasks-run006/jobs/s/sleep-bovc37im host=aimes_emgr
+2015-11-30 23:27:02,157+0000 INFO  Execute JOB_TASK jobid=sleep-bovc37im taskid=urn:R-4-5-1448926016479 exec=/bin/bash dir=bag_of_tasks-run006/jobs/s/sleep-bovc37im args=_swiftwrap.staging -e /bin/sleep -out date0006.out -err stderr.txt -i -d  -if  -of date0006.out -cf  -cdmfile  -status provider -a 900
+2015-11-30 23:27:02,158+0000 DEBUG swift THREAD_ASSOCIATION jobid=sleep-dovc37im thread=R-4-7 host=aimes_emgr replicationGroup=null
+2015-11-30 23:27:02,152+0000 DEBUG swift THREAD_ASSOCIATION jobid=sleep-covc37im thread=R-4-6 host=aimes_emgr replicationGroup=null
+2015-11-30 23:27:02,158+0000 DEBUG swift JOB_START jobid=sleep-covc37im tr=sleep arguments=[900] tmpdir=bag_of_tasks-run006/jobs/s/sleep-covc37im host=aimes_emgr
+2015-11-30 23:27:02,159+0000 INFO  Execute JOB_TASK jobid=sleep-covc37im taskid=urn:R-4-6-1448926016481 exec=/bin/bash dir=bag_of_tasks-run006/jobs/s/sleep-covc37im args=_swiftwrap.staging -e /bin/sleep -out date0007.out -err stderr.txt -i -d  -if  -of date0007.out -cf  -cdmfile  -status provider -a 900
+2015-11-30 23:27:02,159+0000 DEBUG swift JOB_START jobid=sleep-dovc37im tr=sleep arguments=[900] tmpdir=bag_of_tasks-run006/jobs/s/sleep-dovc37im host=aimes_emgr
+2015-11-30 23:27:02,161+0000 INFO  Execute JOB_TASK jobid=sleep-dovc37im taskid=urn:R-4-7-1448926016483 exec=/bin/bash dir=bag_of_tasks-run006/jobs/s/sleep-dovc37im args=_swiftwrap.staging -e /bin/sleep -out date0008.out -err stderr.txt -i -d  -if  -of date0008.out -cf  -cdmfile  -status provider -a 900
+2015-11-30 23:27:02,164+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-0-1448926016469 status=8
+2015-11-30 23:27:02,462+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-0-1448926016469 status=1
+2015-11-30 23:27:02,463+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-1-1448926016471 status=8
+2015-11-30 23:27:02,463+0000 INFO  AbstractQueuePoller Actively monitored: 0, New: 1, Done: 0
+2015-11-30 23:27:02,624+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-1-1448926016471 status=1
+2015-11-30 23:27:02,625+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-2-1448926016473 status=8
+2015-11-30 23:27:02,781+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-2-1448926016473 status=1
+2015-11-30 23:27:02,783+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4x2-1448926016477 status=8
+2015-11-30 23:27:02,948+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4x2-1448926016477 status=1
+2015-11-30 23:27:02,949+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-3-1448926016475 status=8
+2015-11-30 23:27:03,032+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8762224, JVMThreads: 13
+2015-11-30 23:27:03,036+0000 INFO  RuntimeStats$ProgressTicker   Submitting:4  Submitted:4
+2015-11-30 23:27:03,196+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-3-1448926016475 status=1
+2015-11-30 23:27:03,197+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-5-1448926016479 status=8
+2015-11-30 23:27:03,443+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-5-1448926016479 status=1
+2015-11-30 23:27:03,444+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-6-1448926016481 status=8
+2015-11-30 23:27:03,603+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-6-1448926016481 status=1
+2015-11-30 23:27:03,603+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-7-1448926016483 status=8
+2015-11-30 23:27:03,766+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-7-1448926016483 status=1
+2015-11-30 23:27:04,036+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9032928, JVMThreads: 13
+2015-11-30 23:27:04,037+0000 INFO  RuntimeStats$ProgressTicker   Submitted:8
+2015-11-30 23:27:05,037+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9033008, JVMThreads: 13
+2015-11-30 23:27:06,037+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9033088, JVMThreads: 13
+2015-11-30 23:27:07,037+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9033168, JVMThreads: 13
+2015-11-30 23:27:07,888+0000 INFO  AbstractQueuePoller Actively monitored: 1, New: 7, Done: 0
+2015-11-30 23:27:08,038+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9033248, JVMThreads: 13
+2015-11-30 23:27:09,038+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9033328, JVMThreads: 13
+2015-11-30 23:27:10,039+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9033408, JVMThreads: 13
+2015-11-30 23:27:11,039+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9033488, JVMThreads: 13
+2015-11-30 23:27:12,039+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9033568, JVMThreads: 13
+2015-11-30 23:27:13,042+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9058256, JVMThreads: 13
+2015-11-30 23:27:14,056+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9058336, JVMThreads: 13
+2015-11-30 23:27:15,056+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9167712, JVMThreads: 13
+2015-11-30 23:27:15,468+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:27:16,056+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9167792, JVMThreads: 13
+2015-11-30 23:27:17,057+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9167872, JVMThreads: 13
+2015-11-30 23:27:18,057+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9167952, JVMThreads: 13
+2015-11-30 23:27:19,058+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9168032, JVMThreads: 13
+2015-11-30 23:27:20,058+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9168112, JVMThreads: 13
+2015-11-30 23:27:21,058+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9168192, JVMThreads: 13
+2015-11-30 23:27:22,060+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9168272, JVMThreads: 13
+2015-11-30 23:27:22,706+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:27:23,060+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9184752, JVMThreads: 13
+2015-11-30 23:27:24,060+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9184832, JVMThreads: 13
+2015-11-30 23:27:25,061+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9184912, JVMThreads: 13
+2015-11-30 23:27:26,061+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9184992, JVMThreads: 13
+2015-11-30 23:27:27,061+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9185072, JVMThreads: 13
+2015-11-30 23:27:28,061+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9234384, JVMThreads: 13
+2015-11-30 23:27:29,062+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9234464, JVMThreads: 13
+2015-11-30 23:27:29,315+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:27:30,062+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9343944, JVMThreads: 13
+2015-11-30 23:27:31,062+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9344024, JVMThreads: 13
+2015-11-30 23:27:32,063+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9344104, JVMThreads: 13
+2015-11-30 23:27:33,063+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9344184, JVMThreads: 13
+2015-11-30 23:27:34,063+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9344264, JVMThreads: 13
+2015-11-30 23:27:34,064+0000 INFO  RuntimeStats$ProgressTicker   Submitted:8
+2015-11-30 23:27:35,067+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9344344, JVMThreads: 13
+2015-11-30 23:27:35,920+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:27:36,067+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9360824, JVMThreads: 13
+2015-11-30 23:27:37,067+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9360904, JVMThreads: 13
+2015-11-30 23:27:38,068+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9360984, JVMThreads: 13
+2015-11-30 23:27:39,068+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9361064, JVMThreads: 13
+2015-11-30 23:27:40,068+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9361144, JVMThreads: 13
+2015-11-30 23:27:41,068+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9402248, JVMThreads: 13
+2015-11-30 23:27:42,069+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9511576, JVMThreads: 13
+2015-11-30 23:27:43,053+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:27:43,069+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9511656, JVMThreads: 13
+2015-11-30 23:27:44,069+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9511736, JVMThreads: 13
+2015-11-30 23:27:45,070+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9511816, JVMThreads: 13
+2015-11-30 23:27:46,070+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9511896, JVMThreads: 13
+2015-11-30 23:27:47,070+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9511976, JVMThreads: 13
+2015-11-30 23:27:48,071+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9512056, JVMThreads: 13
+2015-11-30 23:27:48,880+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-5-1448926016479 status=2
+2015-11-30 23:27:49,071+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9512136, JVMThreads: 13
+2015-11-30 23:27:49,071+0000 INFO  RuntimeStats$ProgressTicker   Submitted:7  Active:1
+2015-11-30 23:27:49,140+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-6-1448926016481 status=2
+2015-11-30 23:27:49,333+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-0-1448926016469 status=2
+2015-11-30 23:27:49,705+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:27:50,072+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9528616, JVMThreads: 13
+2015-11-30 23:27:50,072+0000 INFO  RuntimeStats$ProgressTicker   Submitted:5  Active:3
+2015-11-30 23:27:51,072+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9528696, JVMThreads: 13
+2015-11-30 23:27:52,073+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9528776, JVMThreads: 13
+2015-11-30 23:27:53,073+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9528856, JVMThreads: 13
+2015-11-30 23:27:54,073+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9528936, JVMThreads: 13
+2015-11-30 23:27:55,073+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9578248, JVMThreads: 13
+2015-11-30 23:27:56,078+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9687600, JVMThreads: 13
+2015-11-30 23:27:56,609+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:27:57,078+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9687680, JVMThreads: 13
+2015-11-30 23:27:58,078+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9759960, JVMThreads: 13
+2015-11-30 23:27:59,079+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9760040, JVMThreads: 13
+2015-11-30 23:28:00,079+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9760120, JVMThreads: 13
+2015-11-30 23:28:01,079+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9760200, JVMThreads: 13
+2015-11-30 23:28:02,080+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9760280, JVMThreads: 13
+2015-11-30 23:28:03,080+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9760360, JVMThreads: 13
+2015-11-30 23:28:03,270+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:28:04,080+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9776840, JVMThreads: 13
+2015-11-30 23:28:05,081+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9776920, JVMThreads: 13
+2015-11-30 23:28:06,081+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9777000, JVMThreads: 13
+2015-11-30 23:28:07,081+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9777080, JVMThreads: 13
+2015-11-30 23:28:08,081+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9777160, JVMThreads: 13
+2015-11-30 23:28:09,083+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9826472, JVMThreads: 13
+2015-11-30 23:28:09,916+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:28:10,083+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9935848, JVMThreads: 13
+2015-11-30 23:28:11,083+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9935928, JVMThreads: 13
+2015-11-30 23:28:12,084+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9936008, JVMThreads: 13
+2015-11-30 23:28:13,084+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9936088, JVMThreads: 13
+2015-11-30 23:28:14,084+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9936168, JVMThreads: 13
+2015-11-30 23:28:15,084+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9936248, JVMThreads: 13
+2015-11-30 23:28:16,085+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9936328, JVMThreads: 13
+2015-11-30 23:28:16,550+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:28:17,085+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9952808, JVMThreads: 13
+2015-11-30 23:28:18,085+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9952888, JVMThreads: 13
+2015-11-30 23:28:19,085+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9952968, JVMThreads: 13
+2015-11-30 23:28:20,086+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9953048, JVMThreads: 13
+2015-11-30 23:28:20,086+0000 INFO  RuntimeStats$ProgressTicker   Submitted:5  Active:3
+2015-11-30 23:28:21,086+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9953128, JVMThreads: 13
+2015-11-30 23:28:22,087+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9994232, JVMThreads: 13
+2015-11-30 23:28:23,087+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10103592, JVMThreads: 13
+2015-11-30 23:28:23,268+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:28:24,087+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10103672, JVMThreads: 13
+2015-11-30 23:28:25,088+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10103752, JVMThreads: 13
+2015-11-30 23:28:26,088+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10103832, JVMThreads: 13
+2015-11-30 23:28:27,088+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10103912, JVMThreads: 13
+2015-11-30 23:28:28,089+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10103992, JVMThreads: 13
+2015-11-30 23:28:29,089+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10104072, JVMThreads: 13
+2015-11-30 23:28:30,089+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10104152, JVMThreads: 13
+2015-11-30 23:28:30,481+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:28:31,090+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10120632, JVMThreads: 13
+2015-11-30 23:28:32,090+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10120712, JVMThreads: 13
+2015-11-30 23:28:33,090+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10120792, JVMThreads: 13
+2015-11-30 23:28:34,091+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10120872, JVMThreads: 13
+2015-11-30 23:28:35,091+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10120952, JVMThreads: 13
+2015-11-30 23:28:36,092+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10170264, JVMThreads: 13
+2015-11-30 23:28:37,094+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10170344, JVMThreads: 13
+2015-11-30 23:28:37,962+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:28:38,094+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10279672, JVMThreads: 13
+2015-11-30 23:28:39,095+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10447080, JVMThreads: 13
+2015-11-30 23:28:40,095+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10447160, JVMThreads: 13
+2015-11-30 23:28:41,095+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10447240, JVMThreads: 13
+2015-11-30 23:28:42,096+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10447320, JVMThreads: 13
+2015-11-30 23:28:43,096+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10447400, JVMThreads: 13
+2015-11-30 23:28:44,096+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10447480, JVMThreads: 13
+2015-11-30 23:28:45,097+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10447560, JVMThreads: 13
+2015-11-30 23:28:45,545+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:28:46,097+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10464040, JVMThreads: 13
+2015-11-30 23:28:47,097+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10464120, JVMThreads: 13
+2015-11-30 23:28:48,097+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10464200, JVMThreads: 13
+2015-11-30 23:28:49,098+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10464280, JVMThreads: 13
+2015-11-30 23:28:50,098+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10464360, JVMThreads: 13
+2015-11-30 23:28:50,099+0000 INFO  RuntimeStats$ProgressTicker   Submitted:5  Active:3
+2015-11-30 23:28:51,099+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10505464, JVMThreads: 13
+2015-11-30 23:28:52,099+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10615000, JVMThreads: 13
+2015-11-30 23:28:52,313+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:28:53,100+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10615080, JVMThreads: 13
+2015-11-30 23:28:54,100+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10615160, JVMThreads: 13
+2015-11-30 23:28:55,100+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10615240, JVMThreads: 13
+2015-11-30 23:28:56,100+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10687744, JVMThreads: 13
+2015-11-30 23:28:57,101+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10687824, JVMThreads: 13
+2015-11-30 23:28:58,101+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10687904, JVMThreads: 13
+2015-11-30 23:28:58,879+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:28:59,101+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10704384, JVMThreads: 13
+2015-11-30 23:29:00,101+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10704464, JVMThreads: 13
+2015-11-30 23:29:01,102+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10704544, JVMThreads: 13
+2015-11-30 23:29:02,102+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10704624, JVMThreads: 13
+2015-11-30 23:29:03,102+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10704704, JVMThreads: 13
+2015-11-30 23:29:04,103+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10754016, JVMThreads: 13
+2015-11-30 23:29:05,103+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10754096, JVMThreads: 13
+2015-11-30 23:29:05,651+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:29:06,103+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10863560, JVMThreads: 13
+2015-11-30 23:29:07,104+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10863640, JVMThreads: 13
+2015-11-30 23:29:08,104+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10863720, JVMThreads: 13
+2015-11-30 23:29:09,105+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10863800, JVMThreads: 13
+2015-11-30 23:29:10,105+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10863880, JVMThreads: 13
+2015-11-30 23:29:11,105+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10863960, JVMThreads: 13
+2015-11-30 23:29:12,106+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10864040, JVMThreads: 13
+2015-11-30 23:29:12,539+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:29:13,106+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10880520, JVMThreads: 13
+2015-11-30 23:29:14,107+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10880600, JVMThreads: 13
+2015-11-30 23:29:15,107+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10880680, JVMThreads: 13
+2015-11-30 23:29:16,107+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10880760, JVMThreads: 13
+2015-11-30 23:29:17,107+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10880840, JVMThreads: 13
+2015-11-30 23:29:18,108+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10921944, JVMThreads: 13
+2015-11-30 23:29:19,108+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11031512, JVMThreads: 13
+2015-11-30 23:29:19,781+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-2-1448926016473 status=2
+2015-11-30 23:29:19,796+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:29:20,108+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11031592, JVMThreads: 13
+2015-11-30 23:29:20,109+0000 INFO  RuntimeStats$ProgressTicker   Submitted:4  Active:4
+2015-11-30 23:29:21,109+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11031672, JVMThreads: 13
+2015-11-30 23:29:22,109+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11031752, JVMThreads: 13
+2015-11-30 23:29:23,110+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11031832, JVMThreads: 13
+2015-11-30 23:29:24,110+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11031912, JVMThreads: 13
+2015-11-30 23:29:25,112+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11031992, JVMThreads: 13
+2015-11-30 23:29:25,336+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4x2-1448926016477 status=2
+2015-11-30 23:29:25,511+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-3-1448926016475 status=2
+2015-11-30 23:29:26,113+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11032072, JVMThreads: 13
+2015-11-30 23:29:26,113+0000 INFO  RuntimeStats$ProgressTicker   Submitted:2  Active:6
+2015-11-30 23:29:26,588+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:29:27,113+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11048552, JVMThreads: 13
+2015-11-30 23:29:28,113+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11048632, JVMThreads: 13
+2015-11-30 23:29:29,114+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11048712, JVMThreads: 13
+2015-11-30 23:29:30,114+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11048792, JVMThreads: 13
+2015-11-30 23:29:31,114+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11048872, JVMThreads: 13
+2015-11-30 23:29:32,115+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11098184, JVMThreads: 13
+2015-11-30 23:29:33,117+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11207640, JVMThreads: 13
+2015-11-30 23:29:33,311+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:29:34,117+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11207720, JVMThreads: 13
+2015-11-30 23:29:35,117+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11207800, JVMThreads: 13
+2015-11-30 23:29:36,118+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11207880, JVMThreads: 13
+2015-11-30 23:29:37,118+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11207960, JVMThreads: 13
+2015-11-30 23:29:38,118+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11208040, JVMThreads: 13
+2015-11-30 23:29:39,119+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11208120, JVMThreads: 13
+2015-11-30 23:29:40,089+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:29:40,119+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11224600, JVMThreads: 13
+2015-11-30 23:29:41,119+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11224680, JVMThreads: 13
+2015-11-30 23:29:42,119+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11224760, JVMThreads: 13
+2015-11-30 23:29:43,120+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11224840, JVMThreads: 13
+2015-11-30 23:29:44,120+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11224920, JVMThreads: 13
+2015-11-30 23:29:45,120+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11274232, JVMThreads: 13
+2015-11-30 23:29:46,120+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11274312, JVMThreads: 13
+2015-11-30 23:29:46,680+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:29:47,121+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11383792, JVMThreads: 13
+2015-11-30 23:29:48,121+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11383872, JVMThreads: 13
+2015-11-30 23:29:49,121+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11383952, JVMThreads: 13
+2015-11-30 23:29:50,122+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11384032, JVMThreads: 13
+2015-11-30 23:29:51,122+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11384112, JVMThreads: 13
+2015-11-30 23:29:52,126+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11384192, JVMThreads: 13
+2015-11-30 23:29:53,126+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11456488, JVMThreads: 13
+2015-11-30 23:29:53,450+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:29:54,126+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11472968, JVMThreads: 13
+2015-11-30 23:29:55,127+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11473048, JVMThreads: 13
+2015-11-30 23:29:56,127+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11473128, JVMThreads: 13
+2015-11-30 23:29:56,127+0000 INFO  RuntimeStats$ProgressTicker   Submitted:2  Active:6
+2015-11-30 23:29:57,127+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11473208, JVMThreads: 13
+2015-11-30 23:29:58,128+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11473288, JVMThreads: 13
+2015-11-30 23:29:59,128+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11623640, JVMThreads: 13
+2015-11-30 23:30:00,128+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11623720, JVMThreads: 13
+2015-11-30 23:30:00,466+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:30:01,129+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11623800, JVMThreads: 13
+2015-11-30 23:30:02,129+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11951688, JVMThreads: 13
+2015-11-30 23:30:03,129+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11951768, JVMThreads: 13
+2015-11-30 23:30:04,130+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11951848, JVMThreads: 13
+2015-11-30 23:30:05,130+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11951928, JVMThreads: 13
+2015-11-30 23:30:06,130+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11952008, JVMThreads: 13
+2015-11-30 23:30:07,130+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11952088, JVMThreads: 13
+2015-11-30 23:30:08,131+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11952168, JVMThreads: 13
+2015-11-30 23:30:08,428+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:30:09,131+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11968648, JVMThreads: 13
+2015-11-30 23:30:10,131+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11968728, JVMThreads: 13
+2015-11-30 23:30:11,132+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11968808, JVMThreads: 13
+2015-11-30 23:30:12,132+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11968888, JVMThreads: 13
+2015-11-30 23:30:13,132+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 11968968, JVMThreads: 13
+2015-11-30 23:30:14,132+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12018280, JVMThreads: 13
+2015-11-30 23:30:15,133+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12018360, JVMThreads: 13
+2015-11-30 23:30:15,601+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:30:16,133+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12127704, JVMThreads: 13
+2015-11-30 23:30:17,133+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12127784, JVMThreads: 13
+2015-11-30 23:30:18,134+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12127864, JVMThreads: 13
+2015-11-30 23:30:19,134+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12127944, JVMThreads: 13
+2015-11-30 23:30:20,134+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12128024, JVMThreads: 13
+2015-11-30 23:30:21,135+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12128104, JVMThreads: 13
+2015-11-30 23:30:22,136+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12128184, JVMThreads: 13
+2015-11-30 23:30:22,715+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:30:23,137+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12144664, JVMThreads: 13
+2015-11-30 23:30:24,137+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12144744, JVMThreads: 13
+2015-11-30 23:30:25,137+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12144824, JVMThreads: 13
+2015-11-30 23:30:26,138+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12144904, JVMThreads: 13
+2015-11-30 23:30:26,140+0000 INFO  RuntimeStats$ProgressTicker   Submitted:2  Active:6
+2015-11-30 23:30:27,140+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12144984, JVMThreads: 13
+2015-11-30 23:30:28,140+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12186088, JVMThreads: 13
+2015-11-30 23:30:29,140+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12295576, JVMThreads: 13
+2015-11-30 23:30:29,514+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:30:30,141+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12295656, JVMThreads: 13
+2015-11-30 23:30:31,141+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12295736, JVMThreads: 13
+2015-11-30 23:30:32,141+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12295816, JVMThreads: 13
+2015-11-30 23:30:33,141+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12295896, JVMThreads: 13
+2015-11-30 23:30:34,142+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12295976, JVMThreads: 13
+2015-11-30 23:30:35,142+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12296056, JVMThreads: 13
+2015-11-30 23:30:36,142+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12463408, JVMThreads: 13
+2015-11-30 23:30:36,348+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:30:37,142+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12479888, JVMThreads: 13
+2015-11-30 23:30:38,143+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12479968, JVMThreads: 13
+2015-11-30 23:30:39,143+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12480048, JVMThreads: 13
+2015-11-30 23:30:40,143+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12480128, JVMThreads: 13
+2015-11-30 23:30:41,144+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12480208, JVMThreads: 13
+2015-11-30 23:30:41,661+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-7-1448926016483 status=2
+2015-11-30 23:30:42,144+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12529520, JVMThreads: 13
+2015-11-30 23:30:42,144+0000 INFO  RuntimeStats$ProgressTicker   Submitted:1  Active:7
+2015-11-30 23:30:42,842+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-1-1448926016471 status=2
+2015-11-30 23:30:43,150+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12638880, JVMThreads: 13
+2015-11-30 23:30:43,150+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:30:43,222+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:30:44,150+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12638960, JVMThreads: 13
+2015-11-30 23:30:45,151+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12639040, JVMThreads: 13
+2015-11-30 23:30:46,151+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12639120, JVMThreads: 13
+2015-11-30 23:30:47,151+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12639200, JVMThreads: 13
+2015-11-30 23:30:48,151+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12711704, JVMThreads: 13
+2015-11-30 23:30:49,152+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12711784, JVMThreads: 13
+2015-11-30 23:30:49,859+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:30:50,152+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12728264, JVMThreads: 13
+2015-11-30 23:30:51,152+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12728344, JVMThreads: 13
+2015-11-30 23:30:52,152+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12728424, JVMThreads: 13
+2015-11-30 23:30:53,153+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12728504, JVMThreads: 13
+2015-11-30 23:30:54,153+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12728584, JVMThreads: 13
+2015-11-30 23:30:55,153+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12846096, JVMThreads: 13
+2015-11-30 23:30:56,154+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12846176, JVMThreads: 13
+2015-11-30 23:30:56,714+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:30:57,154+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12846256, JVMThreads: 13
+2015-11-30 23:30:58,154+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12846336, JVMThreads: 13
+2015-11-30 23:30:59,154+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12846416, JVMThreads: 13
+2015-11-30 23:31:00,155+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12846496, JVMThreads: 13
+2015-11-30 23:31:01,155+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12846576, JVMThreads: 13
+2015-11-30 23:31:02,155+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12863056, JVMThreads: 13
+2015-11-30 23:31:03,156+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12863136, JVMThreads: 13
+2015-11-30 23:31:03,463+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:31:04,156+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12972496, JVMThreads: 13
+2015-11-30 23:31:05,156+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12972576, JVMThreads: 13
+2015-11-30 23:31:06,156+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12972656, JVMThreads: 13
+2015-11-30 23:31:07,157+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12972736, JVMThreads: 13
+2015-11-30 23:31:08,157+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12972816, JVMThreads: 13
+2015-11-30 23:31:09,158+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12972896, JVMThreads: 13
+2015-11-30 23:31:10,158+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12972976, JVMThreads: 13
+2015-11-30 23:31:10,284+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:31:11,158+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12989456, JVMThreads: 13
+2015-11-30 23:31:12,159+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12989536, JVMThreads: 13
+2015-11-30 23:31:13,159+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12989616, JVMThreads: 13
+2015-11-30 23:31:13,159+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:31:14,159+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12989696, JVMThreads: 13
+2015-11-30 23:31:15,160+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 12989776, JVMThreads: 13
+2015-11-30 23:31:16,161+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13140264, JVMThreads: 13
+2015-11-30 23:31:17,131+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:31:17,162+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13140344, JVMThreads: 13
+2015-11-30 23:31:18,162+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13140424, JVMThreads: 13
+2015-11-30 23:31:19,163+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13140504, JVMThreads: 13
+2015-11-30 23:31:20,163+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13140584, JVMThreads: 13
+2015-11-30 23:31:21,163+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13140664, JVMThreads: 13
+2015-11-30 23:31:22,164+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13140744, JVMThreads: 13
+2015-11-30 23:31:23,164+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13140824, JVMThreads: 13
+2015-11-30 23:31:23,815+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:31:24,164+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13157304, JVMThreads: 13
+2015-11-30 23:31:25,165+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13157384, JVMThreads: 13
+2015-11-30 23:31:26,165+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13157464, JVMThreads: 13
+2015-11-30 23:31:27,165+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13157544, JVMThreads: 13
+2015-11-30 23:31:28,165+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13157624, JVMThreads: 13
+2015-11-30 23:31:29,166+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13206936, JVMThreads: 13
+2015-11-30 23:31:30,168+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13207016, JVMThreads: 13
+2015-11-30 23:31:30,694+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:31:31,168+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13316480, JVMThreads: 13
+2015-11-30 23:31:32,168+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13316560, JVMThreads: 13
+2015-11-30 23:31:33,168+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13316640, JVMThreads: 13
+2015-11-30 23:31:34,169+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13316720, JVMThreads: 13
+2015-11-30 23:31:35,169+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13316800, JVMThreads: 13
+2015-11-30 23:31:36,170+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13316880, JVMThreads: 13
+2015-11-30 23:31:37,170+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13316960, JVMThreads: 13
+2015-11-30 23:31:37,588+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:31:38,170+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13333440, JVMThreads: 13
+2015-11-30 23:31:39,171+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13333520, JVMThreads: 13
+2015-11-30 23:31:40,171+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13333600, JVMThreads: 13
+2015-11-30 23:31:41,171+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13333680, JVMThreads: 13
+2015-11-30 23:31:42,172+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13333760, JVMThreads: 13
+2015-11-30 23:31:43,174+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13374864, JVMThreads: 13
+2015-11-30 23:31:43,174+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:31:44,175+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13484432, JVMThreads: 13
+2015-11-30 23:31:44,433+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:31:45,175+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13484512, JVMThreads: 13
+2015-11-30 23:31:46,175+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13557016, JVMThreads: 13
+2015-11-30 23:31:47,176+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13557096, JVMThreads: 13
+2015-11-30 23:31:48,176+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13557176, JVMThreads: 13
+2015-11-30 23:31:49,176+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13557256, JVMThreads: 13
+2015-11-30 23:31:50,178+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13557336, JVMThreads: 13
+2015-11-30 23:31:51,093+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:31:51,178+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13573816, JVMThreads: 13
+2015-11-30 23:31:52,178+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13573896, JVMThreads: 13
+2015-11-30 23:31:53,178+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13573976, JVMThreads: 13
+2015-11-30 23:31:54,179+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13574056, JVMThreads: 13
+2015-11-30 23:31:55,179+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13574136, JVMThreads: 13
+2015-11-30 23:31:56,179+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13623448, JVMThreads: 13
+2015-11-30 23:31:57,182+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13623528, JVMThreads: 13
+2015-11-30 23:31:57,938+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:31:58,182+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13732992, JVMThreads: 13
+2015-11-30 23:31:59,182+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13733072, JVMThreads: 13
+2015-11-30 23:32:00,182+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13733152, JVMThreads: 13
+2015-11-30 23:32:01,183+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13733232, JVMThreads: 13
+2015-11-30 23:32:02,183+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13733312, JVMThreads: 13
+2015-11-30 23:32:03,183+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13733392, JVMThreads: 13
+2015-11-30 23:32:04,183+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13733472, JVMThreads: 13
+2015-11-30 23:32:04,624+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:32:05,184+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13749952, JVMThreads: 13
+2015-11-30 23:32:06,184+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13750032, JVMThreads: 13
+2015-11-30 23:32:07,184+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13750112, JVMThreads: 13
+2015-11-30 23:32:08,185+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13750192, JVMThreads: 13
+2015-11-30 23:32:09,185+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13750272, JVMThreads: 13
+2015-11-30 23:32:10,187+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13900864, JVMThreads: 13
+2015-11-30 23:32:11,187+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13900944, JVMThreads: 13
+2015-11-30 23:32:11,325+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:32:12,187+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13901024, JVMThreads: 13
+2015-11-30 23:32:13,188+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13901104, JVMThreads: 13
+2015-11-30 23:32:13,188+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:32:14,188+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13901184, JVMThreads: 13
+2015-11-30 23:32:15,189+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13901264, JVMThreads: 13
+2015-11-30 23:32:16,189+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13901344, JVMThreads: 13
+2015-11-30 23:32:17,189+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13901424, JVMThreads: 13
+2015-11-30 23:32:18,189+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13901504, JVMThreads: 13
+2015-11-30 23:32:18,207+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:32:19,190+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13917984, JVMThreads: 13
+2015-11-30 23:32:20,190+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13918064, JVMThreads: 13
+2015-11-30 23:32:21,190+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13918144, JVMThreads: 13
+2015-11-30 23:32:22,191+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13918224, JVMThreads: 13
+2015-11-30 23:32:23,191+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13918304, JVMThreads: 13
+2015-11-30 23:32:24,191+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 13967616, JVMThreads: 13
+2015-11-30 23:32:25,077+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:32:25,192+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14077080, JVMThreads: 13
+2015-11-30 23:32:26,192+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14077160, JVMThreads: 13
+2015-11-30 23:32:27,193+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14077240, JVMThreads: 13
+2015-11-30 23:32:28,193+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14077320, JVMThreads: 13
+2015-11-30 23:32:29,193+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14077400, JVMThreads: 13
+2015-11-30 23:32:30,193+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14077480, JVMThreads: 13
+2015-11-30 23:32:31,194+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14077560, JVMThreads: 13
+2015-11-30 23:32:31,850+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:32:32,194+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14094040, JVMThreads: 13
+2015-11-30 23:32:33,194+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14094120, JVMThreads: 13
+2015-11-30 23:32:34,195+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14094200, JVMThreads: 13
+2015-11-30 23:32:35,195+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14094280, JVMThreads: 13
+2015-11-30 23:32:36,195+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14094360, JVMThreads: 13
+2015-11-30 23:32:37,195+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14135464, JVMThreads: 13
+2015-11-30 23:32:38,196+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14412448, JVMThreads: 13
+2015-11-30 23:32:38,539+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:32:39,197+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14412528, JVMThreads: 13
+2015-11-30 23:32:40,197+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14412608, JVMThreads: 13
+2015-11-30 23:32:41,197+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14412688, JVMThreads: 13
+2015-11-30 23:32:42,198+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14412768, JVMThreads: 13
+2015-11-30 23:32:43,198+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14412848, JVMThreads: 13
+2015-11-30 23:32:43,199+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:32:44,202+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14412928, JVMThreads: 13
+2015-11-30 23:32:45,202+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14485432, JVMThreads: 13
+2015-11-30 23:32:45,366+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:32:46,203+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14501912, JVMThreads: 13
+2015-11-30 23:32:47,203+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14501992, JVMThreads: 13
+2015-11-30 23:32:48,203+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14502072, JVMThreads: 13
+2015-11-30 23:32:49,203+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14502152, JVMThreads: 13
+2015-11-30 23:32:50,204+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14502232, JVMThreads: 13
+2015-11-30 23:32:51,204+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14551544, JVMThreads: 13
+2015-11-30 23:32:52,101+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:32:52,205+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14661008, JVMThreads: 13
+2015-11-30 23:32:53,205+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14661088, JVMThreads: 13
+2015-11-30 23:32:54,205+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14661168, JVMThreads: 13
+2015-11-30 23:32:55,206+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14661248, JVMThreads: 13
+2015-11-30 23:32:56,206+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14661328, JVMThreads: 13
+2015-11-30 23:32:57,206+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14661408, JVMThreads: 13
+2015-11-30 23:32:58,207+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14661488, JVMThreads: 13
+2015-11-30 23:32:58,924+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:32:59,207+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14677968, JVMThreads: 13
+2015-11-30 23:33:00,207+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14678048, JVMThreads: 13
+2015-11-30 23:33:01,207+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14678128, JVMThreads: 13
+2015-11-30 23:33:02,208+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14678208, JVMThreads: 13
+2015-11-30 23:33:03,208+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14678288, JVMThreads: 13
+2015-11-30 23:33:04,209+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14719392, JVMThreads: 13
+2015-11-30 23:33:05,209+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14828960, JVMThreads: 13
+2015-11-30 23:33:05,853+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:33:06,210+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14829040, JVMThreads: 13
+2015-11-30 23:33:07,210+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14829120, JVMThreads: 13
+2015-11-30 23:33:08,210+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14829200, JVMThreads: 13
+2015-11-30 23:33:09,211+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14829280, JVMThreads: 13
+2015-11-30 23:33:10,211+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14829360, JVMThreads: 13
+2015-11-30 23:33:11,211+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14829440, JVMThreads: 13
+2015-11-30 23:33:12,212+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14829520, JVMThreads: 13
+2015-11-30 23:33:12,797+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:33:13,212+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14846000, JVMThreads: 13
+2015-11-30 23:33:13,212+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:33:14,213+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14846080, JVMThreads: 13
+2015-11-30 23:33:15,213+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14846160, JVMThreads: 13
+2015-11-30 23:33:16,213+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14846240, JVMThreads: 13
+2015-11-30 23:33:17,213+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14846320, JVMThreads: 13
+2015-11-30 23:33:18,215+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14895632, JVMThreads: 13
+2015-11-30 23:33:19,215+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 14895712, JVMThreads: 13
+2015-11-30 23:33:19,487+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:33:20,215+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15005176, JVMThreads: 13
+2015-11-30 23:33:21,215+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15005256, JVMThreads: 13
+2015-11-30 23:33:22,216+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15005336, JVMThreads: 13
+2015-11-30 23:33:23,216+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15005416, JVMThreads: 13
+2015-11-30 23:33:24,216+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15005496, JVMThreads: 13
+2015-11-30 23:33:25,218+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15005576, JVMThreads: 13
+2015-11-30 23:33:26,218+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15005656, JVMThreads: 13
+2015-11-30 23:33:26,330+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:33:27,218+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15022136, JVMThreads: 13
+2015-11-30 23:33:28,219+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15022216, JVMThreads: 13
+2015-11-30 23:33:29,219+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15022296, JVMThreads: 13
+2015-11-30 23:33:30,219+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15022376, JVMThreads: 13
+2015-11-30 23:33:31,219+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15022456, JVMThreads: 13
+2015-11-30 23:33:32,220+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15173048, JVMThreads: 13
+2015-11-30 23:33:33,189+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:33:33,220+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15173128, JVMThreads: 13
+2015-11-30 23:33:34,220+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15173208, JVMThreads: 13
+2015-11-30 23:33:35,220+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15173288, JVMThreads: 13
+2015-11-30 23:33:36,221+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15173368, JVMThreads: 13
+2015-11-30 23:33:37,221+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15173448, JVMThreads: 13
+2015-11-30 23:33:38,222+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15173528, JVMThreads: 13
+2015-11-30 23:33:39,226+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15173608, JVMThreads: 13
+2015-11-30 23:33:39,861+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:33:40,226+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15190088, JVMThreads: 13
+2015-11-30 23:33:41,226+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15190168, JVMThreads: 13
+2015-11-30 23:33:42,227+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15190248, JVMThreads: 13
+2015-11-30 23:33:43,227+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15190328, JVMThreads: 13
+2015-11-30 23:33:43,227+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:33:44,227+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15262624, JVMThreads: 13
+2015-11-30 23:33:45,228+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15311936, JVMThreads: 13
+2015-11-30 23:33:46,228+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15312016, JVMThreads: 13
+2015-11-30 23:33:46,664+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:33:47,228+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15421480, JVMThreads: 13
+2015-11-30 23:33:48,228+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15421560, JVMThreads: 13
+2015-11-30 23:33:49,229+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15421640, JVMThreads: 13
+2015-11-30 23:33:50,229+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15421720, JVMThreads: 13
+2015-11-30 23:33:51,230+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15421800, JVMThreads: 13
+2015-11-30 23:33:52,230+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15421880, JVMThreads: 13
+2015-11-30 23:33:53,232+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15421960, JVMThreads: 13
+2015-11-30 23:33:53,557+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:33:54,232+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15438440, JVMThreads: 13
+2015-11-30 23:33:55,233+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15438520, JVMThreads: 13
+2015-11-30 23:33:56,233+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15438600, JVMThreads: 13
+2015-11-30 23:33:57,233+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15438680, JVMThreads: 13
+2015-11-30 23:33:58,233+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15438760, JVMThreads: 13
+2015-11-30 23:33:59,234+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15479864, JVMThreads: 13
+2015-11-30 23:34:00,234+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15589432, JVMThreads: 13
+2015-11-30 23:34:00,427+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:34:01,234+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15589512, JVMThreads: 13
+2015-11-30 23:34:02,235+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15589592, JVMThreads: 13
+2015-11-30 23:34:03,235+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15589672, JVMThreads: 13
+2015-11-30 23:34:04,235+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15589752, JVMThreads: 13
+2015-11-30 23:34:05,236+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15589832, JVMThreads: 13
+2015-11-30 23:34:06,238+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15589912, JVMThreads: 13
+2015-11-30 23:34:07,103+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:34:07,238+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15606392, JVMThreads: 13
+2015-11-30 23:34:08,238+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15606472, JVMThreads: 13
+2015-11-30 23:34:09,239+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15606552, JVMThreads: 13
+2015-11-30 23:34:10,239+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15606632, JVMThreads: 13
+2015-11-30 23:34:11,239+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15606712, JVMThreads: 13
+2015-11-30 23:34:12,239+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15656024, JVMThreads: 13
+2015-11-30 23:34:13,240+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15656104, JVMThreads: 13
+2015-11-30 23:34:13,240+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:34:13,936+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:34:14,240+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15765568, JVMThreads: 13
+2015-11-30 23:34:15,240+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15765648, JVMThreads: 13
+2015-11-30 23:34:16,241+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15765728, JVMThreads: 13
+2015-11-30 23:34:17,241+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15765808, JVMThreads: 13
+2015-11-30 23:34:18,241+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15765888, JVMThreads: 13
+2015-11-30 23:34:19,241+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15765968, JVMThreads: 13
+2015-11-30 23:34:20,246+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15766048, JVMThreads: 13
+2015-11-30 23:34:20,782+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:34:21,246+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15782528, JVMThreads: 13
+2015-11-30 23:34:22,246+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15782608, JVMThreads: 13
+2015-11-30 23:34:23,247+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15782688, JVMThreads: 13
+2015-11-30 23:34:24,248+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15782768, JVMThreads: 13
+2015-11-30 23:34:25,248+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15782848, JVMThreads: 13
+2015-11-30 23:34:26,248+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15823952, JVMThreads: 13
+2015-11-30 23:34:27,248+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15933520, JVMThreads: 13
+2015-11-30 23:34:27,493+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:34:28,249+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15933600, JVMThreads: 13
+2015-11-30 23:34:29,249+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15933680, JVMThreads: 13
+2015-11-30 23:34:30,249+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15933760, JVMThreads: 13
+2015-11-30 23:34:31,249+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15933840, JVMThreads: 13
+2015-11-30 23:34:32,250+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15933920, JVMThreads: 13
+2015-11-30 23:34:33,250+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15934000, JVMThreads: 13
+2015-11-30 23:34:34,250+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15934080, JVMThreads: 13
+2015-11-30 23:34:34,366+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:34:35,251+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15950560, JVMThreads: 13
+2015-11-30 23:34:36,251+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15950640, JVMThreads: 13
+2015-11-30 23:34:37,251+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15950720, JVMThreads: 13
+2015-11-30 23:34:38,251+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15950800, JVMThreads: 13
+2015-11-30 23:34:39,252+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 15950880, JVMThreads: 13
+2015-11-30 23:34:40,252+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16000192, JVMThreads: 13
+2015-11-30 23:34:41,186+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:34:41,252+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16277072, JVMThreads: 13
+2015-11-30 23:34:42,253+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16349368, JVMThreads: 13
+2015-11-30 23:34:43,253+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16349448, JVMThreads: 13
+2015-11-30 23:34:43,253+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:34:44,254+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16349528, JVMThreads: 13
+2015-11-30 23:34:45,254+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16349608, JVMThreads: 13
+2015-11-30 23:34:46,254+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16349688, JVMThreads: 13
+2015-11-30 23:34:47,254+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16349768, JVMThreads: 13
+2015-11-30 23:34:48,028+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:34:48,255+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16366248, JVMThreads: 13
+2015-11-30 23:34:49,255+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16366328, JVMThreads: 13
+2015-11-30 23:34:50,255+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16694176, JVMThreads: 13
+2015-11-30 23:34:51,255+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16694256, JVMThreads: 13
+2015-11-30 23:34:52,256+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16694336, JVMThreads: 13
+2015-11-30 23:34:53,256+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16735440, JVMThreads: 13
+2015-11-30 23:34:54,257+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16845008, JVMThreads: 13
+2015-11-30 23:34:54,696+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:34:55,257+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16845088, JVMThreads: 13
+2015-11-30 23:34:56,257+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16845168, JVMThreads: 13
+2015-11-30 23:34:57,257+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16845248, JVMThreads: 13
+2015-11-30 23:34:58,258+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16845328, JVMThreads: 13
+2015-11-30 23:34:59,258+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16845408, JVMThreads: 13
+2015-11-30 23:35:00,258+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16845488, JVMThreads: 13
+2015-11-30 23:35:01,259+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16845568, JVMThreads: 13
+2015-11-30 23:35:01,639+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:35:02,259+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16862048, JVMThreads: 13
+2015-11-30 23:35:03,259+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16862128, JVMThreads: 13
+2015-11-30 23:35:04,260+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16862208, JVMThreads: 13
+2015-11-30 23:35:05,260+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16862288, JVMThreads: 13
+2015-11-30 23:35:06,260+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16862368, JVMThreads: 13
+2015-11-30 23:35:07,261+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 16911680, JVMThreads: 13
+2015-11-30 23:35:08,261+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17021144, JVMThreads: 13
+2015-11-30 23:35:08,329+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:35:09,261+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17021224, JVMThreads: 13
+2015-11-30 23:35:10,262+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17021304, JVMThreads: 13
+2015-11-30 23:35:11,262+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17021384, JVMThreads: 13
+2015-11-30 23:35:12,262+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17021464, JVMThreads: 13
+2015-11-30 23:35:13,262+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17021544, JVMThreads: 13
+2015-11-30 23:35:13,263+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:35:14,264+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17021624, JVMThreads: 13
+2015-11-30 23:35:15,264+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17021704, JVMThreads: 13
+2015-11-30 23:35:15,322+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:35:16,264+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17038184, JVMThreads: 13
+2015-11-30 23:35:17,264+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17038264, JVMThreads: 13
+2015-11-30 23:35:18,265+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17038344, JVMThreads: 13
+2015-11-30 23:35:19,265+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17038424, JVMThreads: 13
+2015-11-30 23:35:20,265+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17038504, JVMThreads: 13
+2015-11-30 23:35:21,266+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17189096, JVMThreads: 13
+2015-11-30 23:35:22,170+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:35:22,266+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17189176, JVMThreads: 13
+2015-11-30 23:35:23,266+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17189256, JVMThreads: 13
+2015-11-30 23:35:24,266+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17189336, JVMThreads: 13
+2015-11-30 23:35:25,267+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17189416, JVMThreads: 13
+2015-11-30 23:35:26,267+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17189496, JVMThreads: 13
+2015-11-30 23:35:27,267+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17189576, JVMThreads: 13
+2015-11-30 23:35:28,267+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17189656, JVMThreads: 13
+2015-11-30 23:35:29,007+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:35:29,268+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17206136, JVMThreads: 13
+2015-11-30 23:35:30,268+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17206216, JVMThreads: 13
+2015-11-30 23:35:31,269+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17206296, JVMThreads: 13
+2015-11-30 23:35:32,269+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17206376, JVMThreads: 13
+2015-11-30 23:35:33,269+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17206456, JVMThreads: 13
+2015-11-30 23:35:34,270+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17255768, JVMThreads: 13
+2015-11-30 23:35:35,270+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17255848, JVMThreads: 13
+2015-11-30 23:35:35,695+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:35:36,270+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17365312, JVMThreads: 13
+2015-11-30 23:35:37,271+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17365392, JVMThreads: 13
+2015-11-30 23:35:38,271+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17365472, JVMThreads: 13
+2015-11-30 23:35:39,271+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17365552, JVMThreads: 13
+2015-11-30 23:35:40,271+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17437784, JVMThreads: 13
+2015-11-30 23:35:41,272+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17437864, JVMThreads: 13
+2015-11-30 23:35:42,272+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17437944, JVMThreads: 13
+2015-11-30 23:35:42,380+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:35:43,272+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17454424, JVMThreads: 13
+2015-11-30 23:35:43,273+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:35:44,273+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17454504, JVMThreads: 13
+2015-11-30 23:35:45,273+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17454584, JVMThreads: 13
+2015-11-30 23:35:46,273+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17454664, JVMThreads: 13
+2015-11-30 23:35:47,274+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17454744, JVMThreads: 13
+2015-11-30 23:35:48,275+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17605336, JVMThreads: 13
+2015-11-30 23:35:49,218+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:35:49,275+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17605416, JVMThreads: 13
+2015-11-30 23:35:50,275+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17605496, JVMThreads: 13
+2015-11-30 23:35:51,276+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17605576, JVMThreads: 13
+2015-11-30 23:35:52,276+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17605656, JVMThreads: 13
+2015-11-30 23:35:53,276+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17605736, JVMThreads: 13
+2015-11-30 23:35:54,282+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17605816, JVMThreads: 13
+2015-11-30 23:35:55,282+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17605896, JVMThreads: 13
+2015-11-30 23:35:55,993+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:35:56,282+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17622376, JVMThreads: 13
+2015-11-30 23:35:57,282+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17622456, JVMThreads: 13
+2015-11-30 23:35:58,283+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17622536, JVMThreads: 13
+2015-11-30 23:35:59,283+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17622616, JVMThreads: 13
+2015-11-30 23:36:00,283+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17622696, JVMThreads: 13
+2015-11-30 23:36:01,284+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17672008, JVMThreads: 13
+2015-11-30 23:36:02,284+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17672088, JVMThreads: 13
+2015-11-30 23:36:03,027+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:36:03,284+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17781552, JVMThreads: 13
+2015-11-30 23:36:04,285+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17781632, JVMThreads: 13
+2015-11-30 23:36:05,285+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17781712, JVMThreads: 13
+2015-11-30 23:36:06,285+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17781792, JVMThreads: 13
+2015-11-30 23:36:07,285+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17781872, JVMThreads: 13
+2015-11-30 23:36:08,286+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17781952, JVMThreads: 13
+2015-11-30 23:36:09,286+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17782032, JVMThreads: 13
+2015-11-30 23:36:09,750+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:36:10,286+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17798512, JVMThreads: 13
+2015-11-30 23:36:11,287+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17798592, JVMThreads: 13
+2015-11-30 23:36:12,287+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17798672, JVMThreads: 13
+2015-11-30 23:36:13,287+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17798752, JVMThreads: 13
+2015-11-30 23:36:13,287+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:36:14,288+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17798832, JVMThreads: 13
+2015-11-30 23:36:15,293+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17839936, JVMThreads: 13
+2015-11-30 23:36:16,294+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17949504, JVMThreads: 13
+2015-11-30 23:36:16,622+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:36:17,294+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17949584, JVMThreads: 13
+2015-11-30 23:36:18,294+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17949664, JVMThreads: 13
+2015-11-30 23:36:19,295+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17949744, JVMThreads: 13
+2015-11-30 23:36:20,295+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17949824, JVMThreads: 13
+2015-11-30 23:36:21,295+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17949904, JVMThreads: 13
+2015-11-30 23:36:22,298+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17949984, JVMThreads: 13
+2015-11-30 23:36:23,298+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:36:23,298+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17966464, JVMThreads: 13
+2015-11-30 23:36:24,298+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17966544, JVMThreads: 13
+2015-11-30 23:36:25,299+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17966624, JVMThreads: 13
+2015-11-30 23:36:26,299+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17966704, JVMThreads: 13
+2015-11-30 23:36:27,299+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 17966784, JVMThreads: 13
+2015-11-30 23:36:28,299+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18016096, JVMThreads: 13
+2015-11-30 23:36:29,302+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18016176, JVMThreads: 13
+2015-11-30 23:36:30,119+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:36:30,306+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18125640, JVMThreads: 13
+2015-11-30 23:36:31,306+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18125720, JVMThreads: 13
+2015-11-30 23:36:32,307+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18125800, JVMThreads: 13
+2015-11-30 23:36:33,307+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18125880, JVMThreads: 13
+2015-11-30 23:36:34,307+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18125960, JVMThreads: 13
+2015-11-30 23:36:35,307+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18126040, JVMThreads: 13
+2015-11-30 23:36:36,310+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18126120, JVMThreads: 13
+2015-11-30 23:36:36,996+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:36:37,310+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18142648, JVMThreads: 13
+2015-11-30 23:36:38,310+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18214968, JVMThreads: 13
+2015-11-30 23:36:39,311+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18215048, JVMThreads: 13
+2015-11-30 23:36:40,311+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18215128, JVMThreads: 13
+2015-11-30 23:36:41,311+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18215208, JVMThreads: 13
+2015-11-30 23:36:42,311+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18256312, JVMThreads: 13
+2015-11-30 23:36:43,312+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18365880, JVMThreads: 13
+2015-11-30 23:36:43,312+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:36:43,857+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:36:44,312+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18533376, JVMThreads: 13
+2015-11-30 23:36:45,312+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18533456, JVMThreads: 13
+2015-11-30 23:36:46,313+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18533536, JVMThreads: 13
+2015-11-30 23:36:47,313+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18533616, JVMThreads: 13
+2015-11-30 23:36:48,313+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18533696, JVMThreads: 13
+2015-11-30 23:36:49,314+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18533776, JVMThreads: 13
+2015-11-30 23:36:50,315+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18533856, JVMThreads: 13
+2015-11-30 23:36:50,659+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:36:51,315+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18550336, JVMThreads: 13
+2015-11-30 23:36:52,315+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18550416, JVMThreads: 13
+2015-11-30 23:36:53,315+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18550496, JVMThreads: 13
+2015-11-30 23:36:54,316+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18550576, JVMThreads: 13
+2015-11-30 23:36:55,316+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18550656, JVMThreads: 13
+2015-11-30 23:36:56,318+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18599968, JVMThreads: 13
+2015-11-30 23:36:57,318+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18709432, JVMThreads: 13
+2015-11-30 23:36:57,505+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:36:58,318+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18709512, JVMThreads: 13
+2015-11-30 23:36:59,319+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18709592, JVMThreads: 13
+2015-11-30 23:37:00,319+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18709672, JVMThreads: 13
+2015-11-30 23:37:01,319+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18709752, JVMThreads: 13
+2015-11-30 23:37:02,319+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18709832, JVMThreads: 13
+2015-11-30 23:37:03,322+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18709912, JVMThreads: 13
+2015-11-30 23:37:04,322+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18709992, JVMThreads: 13
+2015-11-30 23:37:04,395+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:37:05,322+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18726472, JVMThreads: 13
+2015-11-30 23:37:06,323+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18726552, JVMThreads: 13
+2015-11-30 23:37:07,323+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18726632, JVMThreads: 13
+2015-11-30 23:37:08,323+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18726712, JVMThreads: 13
+2015-11-30 23:37:09,323+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18726792, JVMThreads: 13
+2015-11-30 23:37:10,324+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18877384, JVMThreads: 13
+2015-11-30 23:37:11,092+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:37:11,324+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18877464, JVMThreads: 13
+2015-11-30 23:37:12,324+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18877544, JVMThreads: 13
+2015-11-30 23:37:13,325+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18877624, JVMThreads: 13
+2015-11-30 23:37:13,325+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:37:14,325+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18877704, JVMThreads: 13
+2015-11-30 23:37:15,325+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18877784, JVMThreads: 13
+2015-11-30 23:37:16,326+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18877864, JVMThreads: 13
+2015-11-30 23:37:17,327+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18877944, JVMThreads: 13
+2015-11-30 23:37:17,937+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:37:18,327+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18894424, JVMThreads: 13
+2015-11-30 23:37:19,327+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18894504, JVMThreads: 13
+2015-11-30 23:37:20,328+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18894584, JVMThreads: 13
+2015-11-30 23:37:21,328+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18894664, JVMThreads: 13
+2015-11-30 23:37:22,328+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18894744, JVMThreads: 13
+2015-11-30 23:37:23,331+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18944056, JVMThreads: 13
+2015-11-30 23:37:24,331+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 18944136, JVMThreads: 13
+2015-11-30 23:37:24,882+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:37:25,332+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19053600, JVMThreads: 13
+2015-11-30 23:37:26,332+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19053680, JVMThreads: 13
+2015-11-30 23:37:27,332+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19053760, JVMThreads: 13
+2015-11-30 23:37:28,333+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19053840, JVMThreads: 13
+2015-11-30 23:37:29,333+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19053920, JVMThreads: 13
+2015-11-30 23:37:30,333+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19054000, JVMThreads: 13
+2015-11-30 23:37:31,333+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19054080, JVMThreads: 13
+2015-11-30 23:37:31,762+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:37:32,334+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19070560, JVMThreads: 13
+2015-11-30 23:37:33,334+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19070640, JVMThreads: 13
+2015-11-30 23:37:34,334+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19070720, JVMThreads: 13
+2015-11-30 23:37:35,334+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19070800, JVMThreads: 13
+2015-11-30 23:37:36,335+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19143304, JVMThreads: 13
+2015-11-30 23:37:37,335+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19184408, JVMThreads: 13
+2015-11-30 23:37:38,335+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19293976, JVMThreads: 13
+2015-11-30 23:37:38,426+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:37:39,336+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19294056, JVMThreads: 13
+2015-11-30 23:37:40,336+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19294136, JVMThreads: 13
+2015-11-30 23:37:41,336+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19294216, JVMThreads: 13
+2015-11-30 23:37:42,336+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19294296, JVMThreads: 13
+2015-11-30 23:37:43,337+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19294376, JVMThreads: 13
+2015-11-30 23:37:43,337+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:37:44,338+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19294456, JVMThreads: 13
+2015-11-30 23:37:45,271+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:37:45,339+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19310936, JVMThreads: 13
+2015-11-30 23:37:46,339+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19311016, JVMThreads: 13
+2015-11-30 23:37:47,339+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19311096, JVMThreads: 13
+2015-11-30 23:37:48,340+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19311176, JVMThreads: 13
+2015-11-30 23:37:49,340+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19311256, JVMThreads: 13
+2015-11-30 23:37:50,340+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19360568, JVMThreads: 13
+2015-11-30 23:37:51,342+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19360648, JVMThreads: 13
+2015-11-30 23:37:52,131+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:37:52,342+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19470112, JVMThreads: 13
+2015-11-30 23:37:53,342+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19470192, JVMThreads: 13
+2015-11-30 23:37:54,342+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19470272, JVMThreads: 13
+2015-11-30 23:37:55,343+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19470352, JVMThreads: 13
+2015-11-30 23:37:56,343+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19470432, JVMThreads: 13
+2015-11-30 23:37:57,346+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19470512, JVMThreads: 13
+2015-11-30 23:37:58,346+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19470592, JVMThreads: 13
+2015-11-30 23:37:58,927+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:37:59,346+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19487072, JVMThreads: 13
+2015-11-30 23:38:00,347+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19487152, JVMThreads: 13
+2015-11-30 23:38:01,347+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19487232, JVMThreads: 13
+2015-11-30 23:38:02,348+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19487312, JVMThreads: 13
+2015-11-30 23:38:03,348+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19487392, JVMThreads: 13
+2015-11-30 23:38:04,348+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19528496, JVMThreads: 13
+2015-11-30 23:38:05,348+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19638064, JVMThreads: 13
+2015-11-30 23:38:05,709+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:38:06,349+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19638144, JVMThreads: 13
+2015-11-30 23:38:07,349+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19638224, JVMThreads: 13
+2015-11-30 23:38:08,349+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19638304, JVMThreads: 13
+2015-11-30 23:38:09,350+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19638384, JVMThreads: 13
+2015-11-30 23:38:10,350+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19638464, JVMThreads: 13
+2015-11-30 23:38:11,354+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19638544, JVMThreads: 13
+2015-11-30 23:38:12,354+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19638624, JVMThreads: 13
+2015-11-30 23:38:12,527+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:38:13,354+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19655104, JVMThreads: 13
+2015-11-30 23:38:13,355+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:38:14,355+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19655184, JVMThreads: 13
+2015-11-30 23:38:15,355+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19655264, JVMThreads: 13
+2015-11-30 23:38:16,355+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19655344, JVMThreads: 13
+2015-11-30 23:38:17,356+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19655424, JVMThreads: 13
+2015-11-30 23:38:18,356+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19704736, JVMThreads: 13
+2015-11-30 23:38:19,356+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19814200, JVMThreads: 13
+2015-11-30 23:38:19,359+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:38:20,356+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19814280, JVMThreads: 13
+2015-11-30 23:38:21,357+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19814360, JVMThreads: 13
+2015-11-30 23:38:22,357+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19814440, JVMThreads: 13
+2015-11-30 23:38:23,357+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19814520, JVMThreads: 13
+2015-11-30 23:38:24,357+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19814600, JVMThreads: 13
+2015-11-30 23:38:25,358+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19814680, JVMThreads: 13
+2015-11-30 23:38:26,098+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:38:26,358+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19831160, JVMThreads: 13
+2015-11-30 23:38:27,359+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19831240, JVMThreads: 13
+2015-11-30 23:38:28,359+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19831320, JVMThreads: 13
+2015-11-30 23:38:29,359+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19831400, JVMThreads: 13
+2015-11-30 23:38:30,359+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19831480, JVMThreads: 13
+2015-11-30 23:38:31,360+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19872584, JVMThreads: 13
+2015-11-30 23:38:32,360+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19982152, JVMThreads: 13
+2015-11-30 23:38:32,925+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:38:33,360+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 19982232, JVMThreads: 13
+2015-11-30 23:38:34,360+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20054736, JVMThreads: 13
+2015-11-30 23:38:35,361+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20054816, JVMThreads: 13
+2015-11-30 23:38:36,361+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20054896, JVMThreads: 13
+2015-11-30 23:38:37,361+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20054976, JVMThreads: 13
+2015-11-30 23:38:38,365+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20055056, JVMThreads: 13
+2015-11-30 23:38:39,365+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20055136, JVMThreads: 13
+2015-11-30 23:38:39,818+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:38:40,365+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20071616, JVMThreads: 13
+2015-11-30 23:38:41,366+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20071696, JVMThreads: 13
+2015-11-30 23:38:42,366+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20071776, JVMThreads: 13
+2015-11-30 23:38:43,366+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20071856, JVMThreads: 13
+2015-11-30 23:38:43,367+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:38:44,367+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20071936, JVMThreads: 13
+2015-11-30 23:38:45,370+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20121248, JVMThreads: 13
+2015-11-30 23:38:46,373+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20288744, JVMThreads: 13
+2015-11-30 23:38:46,683+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:38:47,374+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20398208, JVMThreads: 13
+2015-11-30 23:38:48,374+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20398288, JVMThreads: 13
+2015-11-30 23:38:49,374+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20398368, JVMThreads: 13
+2015-11-30 23:38:50,374+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20398448, JVMThreads: 13
+2015-11-30 23:38:51,375+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20398528, JVMThreads: 13
+2015-11-30 23:38:52,375+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20398608, JVMThreads: 13
+2015-11-30 23:38:53,353+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:38:53,375+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20415088, JVMThreads: 13
+2015-11-30 23:38:54,375+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20415168, JVMThreads: 13
+2015-11-30 23:38:55,376+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20415248, JVMThreads: 13
+2015-11-30 23:38:56,376+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20415328, JVMThreads: 13
+2015-11-30 23:38:57,376+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20415408, JVMThreads: 13
+2015-11-30 23:38:58,376+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20456512, JVMThreads: 13
+2015-11-30 23:38:59,377+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20566080, JVMThreads: 13
+2015-11-30 23:39:00,182+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:39:00,377+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20566160, JVMThreads: 13
+2015-11-30 23:39:01,377+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20566240, JVMThreads: 13
+2015-11-30 23:39:02,378+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20566320, JVMThreads: 13
+2015-11-30 23:39:03,378+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20566400, JVMThreads: 13
+2015-11-30 23:39:04,378+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20566480, JVMThreads: 13
+2015-11-30 23:39:05,378+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20566560, JVMThreads: 13
+2015-11-30 23:39:06,382+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20566640, JVMThreads: 13
+2015-11-30 23:39:06,866+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:39:07,382+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20583120, JVMThreads: 13
+2015-11-30 23:39:08,382+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20583200, JVMThreads: 13
+2015-11-30 23:39:09,382+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20583280, JVMThreads: 13
+2015-11-30 23:39:10,383+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20583360, JVMThreads: 13
+2015-11-30 23:39:11,383+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20583440, JVMThreads: 13
+2015-11-30 23:39:12,383+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20632752, JVMThreads: 13
+2015-11-30 23:39:13,388+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20742216, JVMThreads: 13
+2015-11-30 23:39:13,388+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:39:13,740+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:39:14,389+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20742296, JVMThreads: 13
+2015-11-30 23:39:15,389+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20742376, JVMThreads: 13
+2015-11-30 23:39:16,389+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20742456, JVMThreads: 13
+2015-11-30 23:39:17,389+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20742536, JVMThreads: 13
+2015-11-30 23:39:18,390+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20742616, JVMThreads: 13
+2015-11-30 23:39:19,390+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20742696, JVMThreads: 13
+2015-11-30 23:39:20,390+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20742776, JVMThreads: 13
+2015-11-30 23:39:20,611+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:39:21,391+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20759256, JVMThreads: 13
+2015-11-30 23:39:22,391+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20759336, JVMThreads: 13
+2015-11-30 23:39:23,391+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20759416, JVMThreads: 13
+2015-11-30 23:39:24,392+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20759496, JVMThreads: 13
+2015-11-30 23:39:25,392+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20759576, JVMThreads: 13
+2015-11-30 23:39:26,395+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20800680, JVMThreads: 13
+2015-11-30 23:39:27,396+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20910248, JVMThreads: 13
+2015-11-30 23:39:27,438+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:39:28,396+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20910328, JVMThreads: 13
+2015-11-30 23:39:29,396+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20910408, JVMThreads: 13
+2015-11-30 23:39:30,396+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20910488, JVMThreads: 13
+2015-11-30 23:39:31,397+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20910568, JVMThreads: 13
+2015-11-30 23:39:32,397+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20910648, JVMThreads: 13
+2015-11-30 23:39:33,397+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20983152, JVMThreads: 13
+2015-11-30 23:39:34,118+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:39:34,397+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20999632, JVMThreads: 13
+2015-11-30 23:39:35,398+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20999712, JVMThreads: 13
+2015-11-30 23:39:36,398+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20999792, JVMThreads: 13
+2015-11-30 23:39:37,398+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20999872, JVMThreads: 13
+2015-11-30 23:39:38,399+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 20999952, JVMThreads: 13
+2015-11-30 23:39:39,399+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21049264, JVMThreads: 13
+2015-11-30 23:39:40,399+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21049344, JVMThreads: 13
+2015-11-30 23:39:40,801+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:39:41,399+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21158808, JVMThreads: 13
+2015-11-30 23:39:42,400+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21158888, JVMThreads: 13
+2015-11-30 23:39:43,400+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21158968, JVMThreads: 13
+2015-11-30 23:39:43,400+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:39:44,400+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21159048, JVMThreads: 13
+2015-11-30 23:39:45,401+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21159128, JVMThreads: 13
+2015-11-30 23:39:46,401+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21159208, JVMThreads: 13
+2015-11-30 23:39:47,401+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21159288, JVMThreads: 13
+2015-11-30 23:39:47,648+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:39:48,402+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21175768, JVMThreads: 13
+2015-11-30 23:39:49,402+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21175848, JVMThreads: 13
+2015-11-30 23:39:50,402+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21175928, JVMThreads: 13
+2015-11-30 23:39:51,402+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21176008, JVMThreads: 13
+2015-11-30 23:39:52,403+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21176088, JVMThreads: 13
+2015-11-30 23:39:53,403+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21326680, JVMThreads: 13
+2015-11-30 23:39:54,403+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21326760, JVMThreads: 13
+2015-11-30 23:39:54,422+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:39:55,404+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21326840, JVMThreads: 13
+2015-11-30 23:39:56,404+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21326920, JVMThreads: 13
+2015-11-30 23:39:57,404+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21327000, JVMThreads: 13
+2015-11-30 23:39:58,405+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21327080, JVMThreads: 13
+2015-11-30 23:39:59,405+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21327160, JVMThreads: 13
+2015-11-30 23:40:00,406+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21327240, JVMThreads: 13
+2015-11-30 23:40:01,410+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21327320, JVMThreads: 13
+2015-11-30 23:40:01,435+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:40:02,411+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21343800, JVMThreads: 13
+2015-11-30 23:40:03,411+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21343880, JVMThreads: 13
+2015-11-30 23:40:04,412+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21343960, JVMThreads: 13
+2015-11-30 23:40:05,412+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21344040, JVMThreads: 13
+2015-11-30 23:40:06,412+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21344120, JVMThreads: 13
+2015-11-30 23:40:07,413+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21393432, JVMThreads: 13
+2015-11-30 23:40:08,207+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:40:08,413+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21502896, JVMThreads: 13
+2015-11-30 23:40:09,413+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21502976, JVMThreads: 13
+2015-11-30 23:40:10,413+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21503056, JVMThreads: 13
+2015-11-30 23:40:11,414+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21503136, JVMThreads: 13
+2015-11-30 23:40:12,414+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21503216, JVMThreads: 13
+2015-11-30 23:40:13,414+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21503296, JVMThreads: 13
+2015-11-30 23:40:13,414+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:40:14,415+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21503376, JVMThreads: 13
+2015-11-30 23:40:15,055+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:40:15,415+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21519856, JVMThreads: 13
+2015-11-30 23:40:16,415+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21519936, JVMThreads: 13
+2015-11-30 23:40:17,415+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21520016, JVMThreads: 13
+2015-11-30 23:40:18,416+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21520096, JVMThreads: 13
+2015-11-30 23:40:19,416+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21520176, JVMThreads: 13
+2015-11-30 23:40:20,416+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21561280, JVMThreads: 13
+2015-11-30 23:40:21,417+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21670848, JVMThreads: 13
+2015-11-30 23:40:21,772+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:40:22,417+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21670928, JVMThreads: 13
+2015-11-30 23:40:23,417+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21671008, JVMThreads: 13
+2015-11-30 23:40:24,417+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21671088, JVMThreads: 13
+2015-11-30 23:40:25,418+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21671168, JVMThreads: 13
+2015-11-30 23:40:26,418+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21671248, JVMThreads: 13
+2015-11-30 23:40:27,418+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21671328, JVMThreads: 13
+2015-11-30 23:40:28,419+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21671408, JVMThreads: 13
+2015-11-30 23:40:28,675+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:40:29,419+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21687888, JVMThreads: 13
+2015-11-30 23:40:30,419+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21687968, JVMThreads: 13
+2015-11-30 23:40:31,420+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21760472, JVMThreads: 13
+2015-11-30 23:40:32,420+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21760552, JVMThreads: 13
+2015-11-30 23:40:33,420+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21760632, JVMThreads: 13
+2015-11-30 23:40:34,420+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21809944, JVMThreads: 13
+2015-11-30 23:40:35,421+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21919408, JVMThreads: 13
+2015-11-30 23:40:35,584+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:40:36,421+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21919488, JVMThreads: 13
+2015-11-30 23:40:37,421+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21919568, JVMThreads: 13
+2015-11-30 23:40:38,422+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21919648, JVMThreads: 13
+2015-11-30 23:40:39,422+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21919728, JVMThreads: 13
+2015-11-30 23:40:40,423+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21919808, JVMThreads: 13
+2015-11-30 23:40:41,423+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21919888, JVMThreads: 13
+2015-11-30 23:40:42,426+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21919968, JVMThreads: 13
+2015-11-30 23:40:42,497+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:40:43,426+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21936448, JVMThreads: 13
+2015-11-30 23:40:43,426+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:40:44,427+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21936528, JVMThreads: 13
+2015-11-30 23:40:45,427+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21936608, JVMThreads: 13
+2015-11-30 23:40:46,427+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21936688, JVMThreads: 13
+2015-11-30 23:40:47,427+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 21936768, JVMThreads: 13
+2015-11-30 23:40:48,428+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22087360, JVMThreads: 13
+2015-11-30 23:40:49,189+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:40:49,428+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22254856, JVMThreads: 13
+2015-11-30 23:40:50,428+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22254936, JVMThreads: 13
+2015-11-30 23:40:51,428+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22255016, JVMThreads: 13
+2015-11-30 23:40:52,429+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22255096, JVMThreads: 13
+2015-11-30 23:40:53,429+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22255176, JVMThreads: 13
+2015-11-30 23:40:54,429+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22255256, JVMThreads: 13
+2015-11-30 23:40:55,430+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22255336, JVMThreads: 13
+2015-11-30 23:40:56,043+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:40:56,430+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22271816, JVMThreads: 13
+2015-11-30 23:40:57,430+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22271896, JVMThreads: 13
+2015-11-30 23:40:58,431+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22271976, JVMThreads: 13
+2015-11-30 23:40:59,431+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22272056, JVMThreads: 13
+2015-11-30 23:41:00,431+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22272136, JVMThreads: 13
+2015-11-30 23:41:01,432+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22321448, JVMThreads: 13
+2015-11-30 23:41:02,433+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 22321528, JVMThreads: 13
+2015-11-30 23:41:02,989+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:41:03,433+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5665416, JVMThreads: 13
+2015-11-30 23:41:04,433+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5720480, JVMThreads: 13
+2015-11-30 23:41:05,434+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5720560, JVMThreads: 13
+2015-11-30 23:41:06,434+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5720640, JVMThreads: 13
+2015-11-30 23:41:07,434+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5720720, JVMThreads: 13
+2015-11-30 23:41:08,434+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5844272, JVMThreads: 13
+2015-11-30 23:41:09,435+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5844352, JVMThreads: 13
+2015-11-30 23:41:09,664+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:41:10,435+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5844464, JVMThreads: 13
+2015-11-30 23:41:11,435+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5844544, JVMThreads: 13
+2015-11-30 23:41:12,436+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5844624, JVMThreads: 13
+2015-11-30 23:41:13,436+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5844704, JVMThreads: 13
+2015-11-30 23:41:13,436+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:41:14,436+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5844784, JVMThreads: 13
+2015-11-30 23:41:15,437+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5984776, JVMThreads: 13
+2015-11-30 23:41:16,437+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5984856, JVMThreads: 13
+2015-11-30 23:41:16,526+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:41:17,437+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5984968, JVMThreads: 13
+2015-11-30 23:41:18,437+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5985048, JVMThreads: 13
+2015-11-30 23:41:19,438+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5985128, JVMThreads: 13
+2015-11-30 23:41:20,438+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5985208, JVMThreads: 13
+2015-11-30 23:41:21,438+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5985288, JVMThreads: 13
+2015-11-30 23:41:22,439+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5985368, JVMThreads: 13
+2015-11-30 23:41:23,425+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:41:23,439+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5985480, JVMThreads: 13
+2015-11-30 23:41:24,439+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5985560, JVMThreads: 13
+2015-11-30 23:41:25,439+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5985640, JVMThreads: 13
+2015-11-30 23:41:26,440+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5985720, JVMThreads: 13
+2015-11-30 23:41:27,440+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 5985800, JVMThreads: 13
+2015-11-30 23:41:28,440+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6035112, JVMThreads: 13
+2015-11-30 23:41:29,440+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6035192, JVMThreads: 13
+2015-11-30 23:41:30,292+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:41:30,441+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6158776, JVMThreads: 13
+2015-11-30 23:41:31,441+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6158856, JVMThreads: 13
+2015-11-30 23:41:32,441+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6158936, JVMThreads: 13
+2015-11-30 23:41:33,442+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6159016, JVMThreads: 13
+2015-11-30 23:41:34,442+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6159096, JVMThreads: 13
+2015-11-30 23:41:35,442+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6159176, JVMThreads: 13
+2015-11-30 23:41:36,442+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6159256, JVMThreads: 13
+2015-11-30 23:41:36,975+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:41:37,443+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6159368, JVMThreads: 13
+2015-11-30 23:41:38,443+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6159448, JVMThreads: 13
+2015-11-30 23:41:39,443+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6159528, JVMThreads: 13
+2015-11-30 23:41:40,443+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6159608, JVMThreads: 13
+2015-11-30 23:41:41,444+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6159688, JVMThreads: 13
+2015-11-30 23:41:42,444+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6209000, JVMThreads: 13
+2015-11-30 23:41:43,444+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6209080, JVMThreads: 13
+2015-11-30 23:41:43,445+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:41:43,777+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:41:44,445+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6332720, JVMThreads: 13
+2015-11-30 23:41:45,445+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6332800, JVMThreads: 13
+2015-11-30 23:41:46,445+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6332880, JVMThreads: 13
+2015-11-30 23:41:47,446+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6332960, JVMThreads: 13
+2015-11-30 23:41:48,446+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6388296, JVMThreads: 13
+2015-11-30 23:41:49,446+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6388376, JVMThreads: 13
+2015-11-30 23:41:50,439+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:41:50,446+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6388488, JVMThreads: 13
+2015-11-30 23:41:51,447+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6388568, JVMThreads: 13
+2015-11-30 23:41:52,447+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6388648, JVMThreads: 13
+2015-11-30 23:41:53,447+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6388728, JVMThreads: 13
+2015-11-30 23:41:54,447+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6388808, JVMThreads: 13
+2015-11-30 23:41:55,450+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6520512, JVMThreads: 13
+2015-11-30 23:41:56,450+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6520592, JVMThreads: 13
+2015-11-30 23:41:57,256+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:41:57,450+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6520704, JVMThreads: 13
+2015-11-30 23:41:58,450+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6520784, JVMThreads: 13
+2015-11-30 23:41:59,451+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6520864, JVMThreads: 13
+2015-11-30 23:42:00,451+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6520944, JVMThreads: 13
+2015-11-30 23:42:01,451+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6521024, JVMThreads: 13
+2015-11-30 23:42:02,454+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6521104, JVMThreads: 13
+2015-11-30 23:42:03,454+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6644696, JVMThreads: 13
+2015-11-30 23:42:04,187+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:42:04,454+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6644808, JVMThreads: 13
+2015-11-30 23:42:05,454+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6644888, JVMThreads: 13
+2015-11-30 23:42:06,455+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6644968, JVMThreads: 13
+2015-11-30 23:42:07,455+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6645048, JVMThreads: 13
+2015-11-30 23:42:08,455+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6645128, JVMThreads: 13
+2015-11-30 23:42:09,456+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6645208, JVMThreads: 13
+2015-11-30 23:42:10,456+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6645288, JVMThreads: 13
+2015-11-30 23:42:11,006+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:42:11,456+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6645400, JVMThreads: 13
+2015-11-30 23:42:12,456+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6645480, JVMThreads: 13
+2015-11-30 23:42:13,457+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6645560, JVMThreads: 13
+2015-11-30 23:42:13,457+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:42:14,457+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6645640, JVMThreads: 13
+2015-11-30 23:42:15,457+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6645720, JVMThreads: 13
+2015-11-30 23:42:16,462+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6695032, JVMThreads: 13
+2015-11-30 23:42:17,462+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6695112, JVMThreads: 13
+2015-11-30 23:42:17,705+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:42:18,463+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6818696, JVMThreads: 13
+2015-11-30 23:42:19,463+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6818776, JVMThreads: 13
+2015-11-30 23:42:20,463+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6818856, JVMThreads: 13
+2015-11-30 23:42:21,463+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6818936, JVMThreads: 13
+2015-11-30 23:42:22,464+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6819016, JVMThreads: 13
+2015-11-30 23:42:23,466+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6819096, JVMThreads: 13
+2015-11-30 23:42:24,352+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:42:24,466+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6819208, JVMThreads: 13
+2015-11-30 23:42:25,466+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6819288, JVMThreads: 13
+2015-11-30 23:42:26,466+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6819368, JVMThreads: 13
+2015-11-30 23:42:27,467+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6819448, JVMThreads: 13
+2015-11-30 23:42:28,467+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6819528, JVMThreads: 13
+2015-11-30 23:42:29,467+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 6951232, JVMThreads: 13
+2015-11-30 23:42:30,470+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7069600, JVMThreads: 13
+2015-11-30 23:42:31,185+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:42:31,470+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7069712, JVMThreads: 13
+2015-11-30 23:42:32,470+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7069792, JVMThreads: 13
+2015-11-30 23:42:33,471+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7124880, JVMThreads: 13
+2015-11-30 23:42:34,471+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7124960, JVMThreads: 13
+2015-11-30 23:42:35,471+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7125040, JVMThreads: 13
+2015-11-30 23:42:36,471+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7125120, JVMThreads: 13
+2015-11-30 23:42:37,472+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7248712, JVMThreads: 13
+2015-11-30 23:42:37,943+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:42:38,472+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7248824, JVMThreads: 13
+2015-11-30 23:42:39,472+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7248904, JVMThreads: 13
+2015-11-30 23:42:40,473+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7248984, JVMThreads: 13
+2015-11-30 23:42:41,473+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7249064, JVMThreads: 13
+2015-11-30 23:42:42,473+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7249144, JVMThreads: 13
+2015-11-30 23:42:43,474+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7249224, JVMThreads: 13
+2015-11-30 23:42:43,474+0000 INFO  RuntimeStats$ProgressTicker   Active:8
+2015-11-30 23:42:44,475+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7249304, JVMThreads: 13
+2015-11-30 23:42:44,853+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:42:45,475+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7249416, JVMThreads: 13
+2015-11-30 23:42:46,475+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7249496, JVMThreads: 13
+2015-11-30 23:42:47,476+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7249576, JVMThreads: 13
+2015-11-30 23:42:48,476+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7249656, JVMThreads: 13
+2015-11-30 23:42:49,476+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7249736, JVMThreads: 13
+2015-11-30 23:42:50,478+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7299048, JVMThreads: 13
+2015-11-30 23:42:51,478+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7422600, JVMThreads: 13
+2015-11-30 23:42:51,574+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:42:52,478+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7422712, JVMThreads: 13
+2015-11-30 23:42:53,478+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7422792, JVMThreads: 13
+2015-11-30 23:42:54,479+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7422872, JVMThreads: 13
+2015-11-30 23:42:55,482+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7422952, JVMThreads: 13
+2015-11-30 23:42:56,482+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7423032, JVMThreads: 13
+2015-11-30 23:42:57,482+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7423112, JVMThreads: 13
+2015-11-30 23:42:58,483+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7423192, JVMThreads: 13
+2015-11-30 23:42:58,654+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:42:59,483+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7423304, JVMThreads: 13
+2015-11-30 23:43:00,483+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7423384, JVMThreads: 13
+2015-11-30 23:43:01,484+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7423464, JVMThreads: 13
+2015-11-30 23:43:02,484+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7423544, JVMThreads: 13
+2015-11-30 23:43:03,484+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 7423624, JVMThreads: 13
+2015-11-30 23:43:04,367+0000 INFO  LateBindingScheduler jobs queued: 0
+2015-11-30 23:43:04,369+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-5-1448926016479 status=7
+2015-11-30 23:43:04,370+0000 DEBUG swift JOB_END jobid=sleep-bovc37im
+2015-11-30 23:43:04,370+0000 INFO  swift END_SUCCESS thread=R-4-5 tr=sleep
+2015-11-30 23:43:04,372+0000 DEBUG swift PROCEDURE_END line=3 thread=R-4-5 name=remote_driver
+2015-11-30 23:43:04,373+0000 DEBUG swift FOREACH_IT_END line=18 thread=R-4-5
+2015-11-30 23:43:04,485+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8121576, JVMThreads: 13
+2015-11-30 23:43:04,485+0000 INFO  RuntimeStats$ProgressTicker   Active:7  Finished successfully:1
+2015-11-30 23:43:04,640+0000 INFO  LateBindingScheduler jobs queued: 0
+2015-11-30 23:43:04,641+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-6-1448926016481 status=7
+2015-11-30 23:43:04,641+0000 DEBUG swift JOB_END jobid=sleep-covc37im
+2015-11-30 23:43:04,644+0000 INFO  swift END_SUCCESS thread=R-4-6 tr=sleep
+2015-11-30 23:43:04,645+0000 DEBUG swift PROCEDURE_END line=3 thread=R-4-6 name=remote_driver
+2015-11-30 23:43:04,645+0000 DEBUG swift FOREACH_IT_END line=18 thread=R-4-6
+2015-11-30 23:43:04,981+0000 INFO  LateBindingScheduler jobs queued: 0
+2015-11-30 23:43:04,981+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-0-1448926016469 status=7
+2015-11-30 23:43:04,982+0000 DEBUG swift JOB_END jobid=sleep-6ovc37im
+2015-11-30 23:43:04,982+0000 INFO  swift END_SUCCESS thread=R-4-0 tr=sleep
+2015-11-30 23:43:04,982+0000 DEBUG swift PROCEDURE_END line=3 thread=R-4-0 name=remote_driver
+2015-11-30 23:43:04,982+0000 DEBUG swift FOREACH_IT_END line=18 thread=R-4-0
+2015-11-30 23:43:05,348+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:43:05,486+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8176856, JVMThreads: 13
+2015-11-30 23:43:05,486+0000 INFO  RuntimeStats$ProgressTicker   Active:5  Finished successfully:3
+2015-11-30 23:43:06,486+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8176936, JVMThreads: 13
+2015-11-30 23:43:07,486+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8177016, JVMThreads: 13
+2015-11-30 23:43:08,487+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8177096, JVMThreads: 13
+2015-11-30 23:43:09,487+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8177176, JVMThreads: 13
+2015-11-30 23:43:10,487+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8193656, JVMThreads: 13
+2015-11-30 23:43:11,489+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8193736, JVMThreads: 13
+2015-11-30 23:43:12,177+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:43:12,489+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8218456, JVMThreads: 13
+2015-11-30 23:43:13,489+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8218536, JVMThreads: 13
+2015-11-30 23:43:14,490+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8218616, JVMThreads: 13
+2015-11-30 23:43:15,490+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8218696, JVMThreads: 13
+2015-11-30 23:43:16,490+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8218776, JVMThreads: 13
+2015-11-30 23:43:17,492+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8268088, JVMThreads: 13
+2015-11-30 23:43:18,493+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8391728, JVMThreads: 13
+2015-11-30 23:43:19,115+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:43:19,493+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8391840, JVMThreads: 13
+2015-11-30 23:43:20,493+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8391920, JVMThreads: 13
+2015-11-30 23:43:21,493+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8392000, JVMThreads: 13
+2015-11-30 23:43:22,494+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8392080, JVMThreads: 13
+2015-11-30 23:43:23,494+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8392160, JVMThreads: 13
+2015-11-30 23:43:24,494+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8392240, JVMThreads: 13
+2015-11-30 23:43:25,495+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8392320, JVMThreads: 13
+2015-11-30 23:43:25,966+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:43:26,495+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8392432, JVMThreads: 13
+2015-11-30 23:43:27,495+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8392512, JVMThreads: 13
+2015-11-30 23:43:28,495+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8392592, JVMThreads: 13
+2015-11-30 23:43:29,496+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8392672, JVMThreads: 13
+2015-11-30 23:43:30,496+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8392752, JVMThreads: 13
+2015-11-30 23:43:31,498+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8442064, JVMThreads: 13
+2015-11-30 23:43:32,498+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8565768, JVMThreads: 13
+2015-11-30 23:43:32,678+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:43:33,498+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8565880, JVMThreads: 13
+2015-11-30 23:43:34,498+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8565960, JVMThreads: 13
+2015-11-30 23:43:35,499+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8566040, JVMThreads: 13
+2015-11-30 23:43:35,500+0000 INFO  RuntimeStats$ProgressTicker   Active:5  Finished successfully:3
+2015-11-30 23:43:36,500+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8566120, JVMThreads: 13
+2015-11-30 23:43:37,500+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8566200, JVMThreads: 13
+2015-11-30 23:43:38,503+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8566280, JVMThreads: 13
+2015-11-30 23:43:39,351+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:43:39,503+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8566392, JVMThreads: 13
+2015-11-30 23:43:40,504+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8566472, JVMThreads: 13
+2015-11-30 23:43:41,504+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8566552, JVMThreads: 13
+2015-11-30 23:43:42,504+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8566632, JVMThreads: 13
+2015-11-30 23:43:43,504+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8566712, JVMThreads: 13
+2015-11-30 23:43:44,505+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8616024, JVMThreads: 13
+2015-11-30 23:43:45,505+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8616104, JVMThreads: 13
+2015-11-30 23:43:46,209+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:43:46,505+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8739656, JVMThreads: 13
+2015-11-30 23:43:47,505+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8739736, JVMThreads: 13
+2015-11-30 23:43:48,506+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8739816, JVMThreads: 13
+2015-11-30 23:43:49,506+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8739896, JVMThreads: 13
+2015-11-30 23:43:50,506+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8794984, JVMThreads: 13
+2015-11-30 23:43:51,506+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8795064, JVMThreads: 13
+2015-11-30 23:43:52,509+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8795144, JVMThreads: 13
+2015-11-30 23:43:52,953+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:43:53,510+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8913544, JVMThreads: 13
+2015-11-30 23:43:54,510+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8913624, JVMThreads: 13
+2015-11-30 23:43:55,510+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8913704, JVMThreads: 13
+2015-11-30 23:43:56,511+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8913784, JVMThreads: 13
+2015-11-30 23:43:57,511+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8913864, JVMThreads: 13
+2015-11-30 23:43:58,511+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8963176, JVMThreads: 13
+2015-11-30 23:43:59,511+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 8963304, JVMThreads: 13
+2015-11-30 23:43:59,858+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:44:00,512+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9086856, JVMThreads: 13
+2015-11-30 23:44:01,512+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9086936, JVMThreads: 13
+2015-11-30 23:44:02,512+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9087016, JVMThreads: 13
+2015-11-30 23:44:03,512+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9087096, JVMThreads: 13
+2015-11-30 23:44:04,513+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9087176, JVMThreads: 13
+2015-11-30 23:44:05,513+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9087256, JVMThreads: 13
+2015-11-30 23:44:05,515+0000 INFO  RuntimeStats$ProgressTicker   Active:5  Finished successfully:3
+2015-11-30 23:44:06,516+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9087336, JVMThreads: 13
+2015-11-30 23:44:06,567+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:44:07,516+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9087448, JVMThreads: 13
+2015-11-30 23:44:08,516+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9087528, JVMThreads: 13
+2015-11-30 23:44:09,517+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9087608, JVMThreads: 13
+2015-11-30 23:44:10,517+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9087688, JVMThreads: 13
+2015-11-30 23:44:11,517+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9087768, JVMThreads: 13
+2015-11-30 23:44:12,517+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9219472, JVMThreads: 13
+2015-11-30 23:44:13,420+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:44:13,518+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9219584, JVMThreads: 13
+2015-11-30 23:44:14,518+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9219664, JVMThreads: 13
+2015-11-30 23:44:15,518+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9219744, JVMThreads: 13
+2015-11-30 23:44:16,519+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9219824, JVMThreads: 13
+2015-11-30 23:44:17,519+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9219904, JVMThreads: 13
+2015-11-30 23:44:18,519+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9219984, JVMThreads: 13
+2015-11-30 23:44:19,519+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9220064, JVMThreads: 13
+2015-11-30 23:44:20,117+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:44:20,520+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9343736, JVMThreads: 13
+2015-11-30 23:44:21,520+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9343816, JVMThreads: 13
+2015-11-30 23:44:22,521+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9343896, JVMThreads: 13
+2015-11-30 23:44:23,521+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9343976, JVMThreads: 13
+2015-11-30 23:44:24,521+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9344056, JVMThreads: 13
+2015-11-30 23:44:25,523+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9344136, JVMThreads: 13
+2015-11-30 23:44:26,525+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9344216, JVMThreads: 13
+2015-11-30 23:44:27,330+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:44:27,526+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9344328, JVMThreads: 13
+2015-11-30 23:44:28,526+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9344408, JVMThreads: 13
+2015-11-30 23:44:29,526+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9344488, JVMThreads: 13
+2015-11-30 23:44:30,527+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9344568, JVMThreads: 13
+2015-11-30 23:44:31,527+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9344648, JVMThreads: 13
+2015-11-30 23:44:32,527+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9393960, JVMThreads: 13
+2015-11-30 23:44:33,528+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9394040, JVMThreads: 13
+2015-11-30 23:44:34,274+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:44:34,529+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9572832, JVMThreads: 13
+2015-11-30 23:44:35,529+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9572912, JVMThreads: 13
+2015-11-30 23:44:35,529+0000 INFO  RuntimeStats$ProgressTicker   Active:5  Finished successfully:3
+2015-11-30 23:44:36,529+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9572992, JVMThreads: 13
+2015-11-30 23:44:37,530+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9573072, JVMThreads: 13
+2015-11-30 23:44:38,530+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9573152, JVMThreads: 13
+2015-11-30 23:44:39,530+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9573232, JVMThreads: 13
+2015-11-30 23:44:39,802+0000 INFO  LateBindingScheduler jobs queued: 0
+2015-11-30 23:44:39,802+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4x2-1448926016477 status=7
+2015-11-30 23:44:39,803+0000 DEBUG swift JOB_END jobid=sleep-aovc37im
+2015-11-30 23:44:39,803+0000 INFO  swift END_SUCCESS thread=R-4x2 tr=sleep
+2015-11-30 23:44:39,803+0000 DEBUG swift PROCEDURE_END line=3 thread=R-4x2 name=remote_driver
+2015-11-30 23:44:39,803+0000 DEBUG swift FOREACH_IT_END line=18 thread=R-4x2
+2015-11-30 23:44:39,987+0000 INFO  LateBindingScheduler jobs queued: 0
+2015-11-30 23:44:39,987+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-3-1448926016475 status=7
+2015-11-30 23:44:39,988+0000 DEBUG swift JOB_END jobid=sleep-9ovc37im
+2015-11-30 23:44:39,989+0000 INFO  swift END_SUCCESS thread=R-4-3 tr=sleep
+2015-11-30 23:44:39,989+0000 DEBUG swift PROCEDURE_END line=3 thread=R-4-3 name=remote_driver
+2015-11-30 23:44:39,989+0000 DEBUG swift FOREACH_IT_END line=18 thread=R-4-3
+2015-11-30 23:44:40,530+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9573312, JVMThreads: 13
+2015-11-30 23:44:40,531+0000 INFO  RuntimeStats$ProgressTicker   Active:3  Finished successfully:5
+2015-11-30 23:44:41,137+0000 INFO  LateBindingScheduler jobs queued: 0
+2015-11-30 23:44:41,137+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-2-1448926016473 status=7
+2015-11-30 23:44:41,138+0000 DEBUG swift JOB_END jobid=sleep-8ovc37im
+2015-11-30 23:44:41,138+0000 INFO  swift END_SUCCESS thread=R-4-2 tr=sleep
+2015-11-30 23:44:41,138+0000 DEBUG swift PROCEDURE_END line=3 thread=R-4-2 name=remote_driver
+2015-11-30 23:44:41,138+0000 DEBUG swift FOREACH_IT_END line=18 thread=R-4-2
+2015-11-30 23:44:41,151+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:44:41,531+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9573424, JVMThreads: 13
+2015-11-30 23:44:41,531+0000 INFO  RuntimeStats$ProgressTicker   Active:2  Finished successfully:6
+2015-11-30 23:44:42,531+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9573504, JVMThreads: 13
+2015-11-30 23:44:43,532+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9573584, JVMThreads: 13
+2015-11-30 23:44:44,532+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9573664, JVMThreads: 13
+2015-11-30 23:44:45,532+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9573744, JVMThreads: 13
+2015-11-30 23:44:46,532+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9705448, JVMThreads: 13
+2015-11-30 23:44:47,533+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9705528, JVMThreads: 13
+2015-11-30 23:44:48,055+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:44:48,533+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9705640, JVMThreads: 13
+2015-11-30 23:44:49,533+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9705720, JVMThreads: 13
+2015-11-30 23:44:50,534+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9705800, JVMThreads: 13
+2015-11-30 23:44:51,534+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9705880, JVMThreads: 13
+2015-11-30 23:44:52,534+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9705960, JVMThreads: 13
+2015-11-30 23:44:53,535+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9722440, JVMThreads: 13
+2015-11-30 23:44:54,535+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9722520, JVMThreads: 13
+2015-11-30 23:44:54,887+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:44:55,535+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9747240, JVMThreads: 13
+2015-11-30 23:44:56,536+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9747320, JVMThreads: 13
+2015-11-30 23:44:57,536+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9747400, JVMThreads: 13
+2015-11-30 23:44:58,536+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9747480, JVMThreads: 13
+2015-11-30 23:44:59,536+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9747560, JVMThreads: 13
+2015-11-30 23:45:00,537+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9879264, JVMThreads: 13
+2015-11-30 23:45:01,537+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9879344, JVMThreads: 13
+2015-11-30 23:45:01,917+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:45:02,537+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9879456, JVMThreads: 13
+2015-11-30 23:45:03,538+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9879536, JVMThreads: 13
+2015-11-30 23:45:04,538+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9879616, JVMThreads: 13
+2015-11-30 23:45:05,538+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9879696, JVMThreads: 13
+2015-11-30 23:45:06,538+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9879776, JVMThreads: 13
+2015-11-30 23:45:07,539+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9951288, JVMThreads: 13
+2015-11-30 23:45:08,539+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9951368, JVMThreads: 13
+2015-11-30 23:45:08,625+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:45:09,539+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9976088, JVMThreads: 13
+2015-11-30 23:45:10,539+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9976168, JVMThreads: 13
+2015-11-30 23:45:11,540+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9976248, JVMThreads: 13
+2015-11-30 23:45:11,540+0000 INFO  RuntimeStats$ProgressTicker   Active:2  Finished successfully:6
+2015-11-30 23:45:12,540+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 9976328, JVMThreads: 13
+2015-11-30 23:45:13,541+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10094480, JVMThreads: 13
+2015-11-30 23:45:14,542+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10226184, JVMThreads: 13
+2015-11-30 23:45:15,506+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:45:15,542+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10226296, JVMThreads: 13
+2015-11-30 23:45:16,542+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10226376, JVMThreads: 13
+2015-11-30 23:45:17,542+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10226456, JVMThreads: 13
+2015-11-30 23:45:18,543+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10226536, JVMThreads: 13
+2015-11-30 23:45:19,543+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10226616, JVMThreads: 13
+2015-11-30 23:45:20,543+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10243096, JVMThreads: 13
+2015-11-30 23:45:21,546+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10243176, JVMThreads: 13
+2015-11-30 23:45:22,206+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:45:22,546+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10267896, JVMThreads: 13
+2015-11-30 23:45:23,546+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10267976, JVMThreads: 13
+2015-11-30 23:45:24,547+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10268056, JVMThreads: 13
+2015-11-30 23:45:25,547+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10268136, JVMThreads: 13
+2015-11-30 23:45:26,547+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10268216, JVMThreads: 13
+2015-11-30 23:45:27,548+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10399920, JVMThreads: 13
+2015-11-30 23:45:28,548+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10400000, JVMThreads: 13
+2015-11-30 23:45:29,072+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:45:29,548+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10400112, JVMThreads: 13
+2015-11-30 23:45:30,548+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10400192, JVMThreads: 13
+2015-11-30 23:45:31,549+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10400272, JVMThreads: 13
+2015-11-30 23:45:32,549+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10400352, JVMThreads: 13
+2015-11-30 23:45:33,549+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10400432, JVMThreads: 13
+2015-11-30 23:45:34,549+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10416912, JVMThreads: 13
+2015-11-30 23:45:35,550+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10416992, JVMThreads: 13
+2015-11-30 23:45:35,903+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:45:36,550+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10441712, JVMThreads: 13
+2015-11-30 23:45:37,550+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10441792, JVMThreads: 13
+2015-11-30 23:45:38,550+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10441872, JVMThreads: 13
+2015-11-30 23:45:39,551+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10441952, JVMThreads: 13
+2015-11-30 23:45:40,551+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10442032, JVMThreads: 13
+2015-11-30 23:45:41,554+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10573736, JVMThreads: 13
+2015-11-30 23:45:41,554+0000 INFO  RuntimeStats$ProgressTicker   Active:2  Finished successfully:6
+2015-11-30 23:45:42,554+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10573816, JVMThreads: 13
+2015-11-30 23:45:42,744+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:45:43,555+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10573928, JVMThreads: 13
+2015-11-30 23:45:44,555+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10574008, JVMThreads: 13
+2015-11-30 23:45:45,555+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10574088, JVMThreads: 13
+2015-11-30 23:45:46,555+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10574168, JVMThreads: 13
+2015-11-30 23:45:47,556+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10574248, JVMThreads: 13
+2015-11-30 23:45:48,556+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10590728, JVMThreads: 13
+2015-11-30 23:45:49,556+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10590808, JVMThreads: 13
+2015-11-30 23:45:49,655+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:45:50,556+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10670696, JVMThreads: 13
+2015-11-30 23:45:51,557+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10670776, JVMThreads: 13
+2015-11-30 23:45:52,557+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10670856, JVMThreads: 13
+2015-11-30 23:45:53,557+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10670936, JVMThreads: 13
+2015-11-30 23:45:54,558+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10671016, JVMThreads: 13
+2015-11-30 23:45:55,559+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10802720, JVMThreads: 13
+2015-11-30 23:45:56,427+0000 INFO  AbstractQueuePoller Actively monitored: 8, New: 0, Done: 0
+2015-11-30 23:45:56,560+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10802832, JVMThreads: 13
+2015-11-30 23:45:57,560+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10802912, JVMThreads: 13
+2015-11-30 23:45:58,561+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10802992, JVMThreads: 13
+2015-11-30 23:45:59,561+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10803072, JVMThreads: 13
+2015-11-30 23:46:00,561+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10803152, JVMThreads: 13
+2015-11-30 23:46:01,561+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10819632, JVMThreads: 13
+2015-11-30 23:46:01,808+0000 INFO  LateBindingScheduler jobs queued: 0
+2015-11-30 23:46:01,808+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-7-1448926016483 status=7
+2015-11-30 23:46:01,811+0000 DEBUG swift JOB_END jobid=sleep-dovc37im
+2015-11-30 23:46:01,811+0000 INFO  swift END_SUCCESS thread=R-4-7 tr=sleep
+2015-11-30 23:46:01,811+0000 DEBUG swift PROCEDURE_END line=3 thread=R-4-7 name=remote_driver
+2015-11-30 23:46:01,811+0000 DEBUG swift FOREACH_IT_END line=18 thread=R-4-7
+2015-11-30 23:46:02,562+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10819712, JVMThreads: 13
+2015-11-30 23:46:02,562+0000 INFO  RuntimeStats$ProgressTicker   Active:1  Finished successfully:7
+2015-11-30 23:46:03,001+0000 INFO  LateBindingScheduler jobs queued: 0
+2015-11-30 23:46:03,006+0000 INFO  Execute TASK_STATUS_CHANGE taskid=urn:R-4-1-1448926016471 status=7
+2015-11-30 23:46:03,007+0000 DEBUG swift JOB_END jobid=sleep-7ovc37im
+2015-11-30 23:46:03,007+0000 INFO  swift END_SUCCESS thread=R-4-1 tr=sleep
+2015-11-30 23:46:03,007+0000 DEBUG swift PROCEDURE_END line=3 thread=R-4-1 name=remote_driver
+2015-11-30 23:46:03,008+0000 DEBUG swift FOREACH_IT_END line=18 thread=R-4-1
+2015-11-30 23:46:03,009+0000 INFO  RuntimeStats$ProgressTicker HeapMax: 1037959168, CrtHeap: 59441152, UsedHeap: 10819752, JVMThreads: 13
+2015-11-30 23:46:03,009+0000 INFO  RuntimeStats$ProgressTicker   Finished successfully:8
+2015-11-30 23:46:03,085+0000 DEBUG swift Starting cleanups
+2015-11-30 23:46:03,091+0000 INFO  swift START cleanups=[]
+2015-11-30 23:46:03,094+0000 INFO  swift END cleanups=[]
+2015-11-30 23:46:03,094+0000 DEBUG swift Ending cleanups
+2015-11-30 23:46:03,102+0000 INFO  SwiftFunction Cleaning driver_out:file[int] = {1=driver_out[1]:file = <FILE> - Closed, 2=driver_out[2]:file = <FILE> - Closed, 3=driver_out[3]:file = <FILE> - Closed, 4=driver_out[4]:file = <FILE> - Closed, 5=driver_out[5]:file = <FILE> - Closed, 6=driver_out[6]:file = <FILE> - Closed, 7=driver_out[7]:file = <FILE> - Closed, 8=driver_out[8]:file = <FILE> - Closed} - Closed
+2015-11-30 23:46:03,110+0000 INFO  Loader Swift finished with no errors
