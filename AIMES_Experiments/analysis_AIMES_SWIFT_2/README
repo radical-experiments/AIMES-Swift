@@ -1,0 +1,20 @@
+This folder contains experiments that measure the performance of AIMES
+by running 16 jobs (TASKS x MACHINES, where CORES = [8, 32, 256, 2048],
+and MACHINES = [Stampede, Gordon])
+
+CORES = [1], Iterations = range(1, 5)
+
+There are two folders containing raw data: raw_data_unc100 and
+raw_data_TG-MCB090174
+
+There are two folders containing raw data: raw_data_unc100 and
+raw_data_TG-MCB090174. Both folders contain the same experiment,
+but the only difference is that the ALLOCATION_ID for the machine
+Gordron.
+
+The unc100 allocation expired and thus all pilots were force to
+run on Stampede. The TG-MCB090174 allocation is used to allow pilots
+to run on Gordon. Seven of the pilots submitted on the former
+allocation ran to completion, eight were canceled and the experiment
+was canceled before the last pilot was able to run in light of the 
+new allocation
