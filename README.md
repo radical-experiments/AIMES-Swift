@@ -97,14 +97,14 @@ Python 2.7; ant; pip; git
   ```
   {
     "n_tasks": <int>,
-    "cores": {
+    "cores": [
       [<int tasks>, <int n_cores>],
       [<int tasks>, <int n_cores>]
-    },
-    "durations": {
+    ],
+    "durations": [
       [<int tasks>, <int duration>],
       [<int tasks>, <int duration>]
-    }
+    ]
   }
   ```
   
