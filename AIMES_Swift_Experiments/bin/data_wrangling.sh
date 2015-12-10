@@ -10,10 +10,9 @@ plots='AIMES_Swift_Experiments/plots'
 analysis='AIMES_Swift_Experiments/analysis'
 
 if [ ! -d ${raw} ]; then
-    if [ -f ${data}/raw.tar.bz2 ]; then
-        cd ${data}
-        tar xfj ${data}/raw.tar.bz2
-        cd ..
+    if [ -f ${data}/*.tar.bz2 ]; then
+        echo "Untar raw data archive into ${raw}"
+        exit
     else
         mkdir -p ${raw}
     fi
@@ -79,22 +78,6 @@ for binding in $bindings; do
     done
 done
 
-# echo
-# echo "Clean up raw data archive..."
-
-# for archive in $(find $data -type f -name dbkp.tar.bz2); do
-#     echo "rm -f ${archive}"
-#     rm -f ${archive}
-# done
-
-# for pdf in $(find $data -type f -name '*.pdf'); do
-#     mv -v ${pdf} ${plots}
-# done
-
-# for png in $(find $data -type f -name '*.png'); do
-#     mv -v ${png} ${plots}
-# done
-
 echo
 echo "Copying swift log file for analysis..."
 for binding in $bindings; do
@@ -113,11 +96,5 @@ for binding in $bindings; do
         done
     done
 done
-
-# echo
-# echo "Compress raw data..."
-
-# echo "tar cfj ${data}/raw.tar.bz2 $raw"
-# tar cfj ${data}/raw.tar.bz2 $raw
 
 echo "Done."
