@@ -38,8 +38,8 @@ for binding in $bindings; do
         pr -m -t -s, $fdata > $fout;
 
         # Add bags to the header of the csv file
-        header=$(echo ${bags} | tr ' ' ,)
-        echo $header | cat - $fout > temp && mv temp $fout
+        # header=$(echo ${bags} | tr ' ' ,)
+        # echo $header | cat - $fout > temp && mv temp $fout
 
         # if [[ 'late' =~ ${binding} ]]; then
 
