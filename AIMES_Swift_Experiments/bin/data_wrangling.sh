@@ -10,12 +10,7 @@ plots='AIMES_Swift_Experiments/plots'
 analysis='AIMES_Swift_Experiments/analysis'
 
 if [ ! -d ${raw} ]; then
-    if [ -f ${data}/*.tar.bz2 ]; then
-        echo "Untar raw data archive into ${raw}"
-        exit
-    else
-        mkdir -p ${raw}
-    fi
+    mkdir -p ${raw}
 fi
 
 if [ ! -d ${plots} ]; then
@@ -78,6 +73,23 @@ for binding in $bindings; do
     done
 done
 
-. ./data_copying.sh
+echo
+echo "Copying swift log file for analysis..."
+for binding in $bindings; do
+    for bag in $bags; do
+
+        tag=${bag}_${binding}
+
+        for run in $(find ${raw} -type d -name "run-${tag}_*"); do
+
+            if [ ! -d ${analysis}/${binding}/${bag} ] ; then
+                mkdir -p ${analysis}/${binding}/${bag}
+            fi
+
+            cp -pnv ${run}/swift.log ${analysis}/${binding}/${bag}/swift.`gdate +%s%N`.log
+
+        done
+    done
+done
 
 echo "Done."

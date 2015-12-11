@@ -32,7 +32,7 @@ for binding in $bindings; do
 
         T=${timing}.data
         fdata=$(get_fdata "$binding" "$T")
-        fout=${binding}/${binding}_${timing}.csv
+        fout=${binding}_${timing}.csv
 
         # Create csv file, bags are columns
         pr -m -t -s, $fdata > $fout;
