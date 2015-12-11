@@ -78,23 +78,6 @@ for binding in $bindings; do
     done
 done
 
-echo
-echo "Copying swift log file for analysis..."
-for binding in $bindings; do
-    for bag in $bags; do
-
-        tag=${bag}_${binding}
-
-        for run in $(find ${raw} -type d -name "run-${tag}_*"); do
-
-            if [ ! -d ${analysis}/${binding}/${bag} ] ; then
-                mkdir -p ${analysis}/${binding}/${bag}
-            fi
-
-            cp -pnv ${run}/swift.log ${analysis}/${binding}/${bag}/swift.log.`gdate +%s%N`
-
-        done
-    done
-done
+. ./data_copying.sh
 
 echo "Done."
