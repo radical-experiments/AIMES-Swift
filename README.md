@@ -139,13 +139,14 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
 
 The analysis wrokflow is designed to be automated, reusable, and extensible. It can be automated by running the following commands from a 'master' shell script (not provided). The wrokflow incrementally integrates new data to those previously collected. Raw, wrangled, and analysis data are all kept across runs preserving the reproducibility of the analysis and (to a certain extent) the provenance of the data. When needed, new analyses can be added to a single step of the workflow without altering the other steps.
 
-1. Prerequisites: Bash on Linux.
+1. Prerequisites: Bash on Linux. Bask on OSX requires GNU coreutils (brew install coreutils) and to export ```PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"```
+
 2. If the file ```AIMES_Swift_experiments/raw.tar.bz2``` exists, from the repository's root directory run:
 
   ```
   tar xfj AIMES_Swift_experiments/raw.tar.bz2 -C AIMES_Swift_experiments
   ```
-1. Run the data Wrangler. From the repository's root directory run: 
+3. Run the data Wrangler. From the repository's root directory run: 
 
   ```
   . AIMES_Swift_experiments/bin/data_wrangling.sh
@@ -153,7 +154,7 @@ The analysis wrokflow is designed to be automated, reusable, and extensible. It 
   
   The wrangler copies the run directories from the repository's root to ```AIMES_Swift_experiments/raw```. Each run is copied into a directory with the following name convention: ```run-<size-of-bag>_<type-of-binding>_<run-counter>```. The size of the bag and the type of binding are read from the file ```metadata.json``` within each run directory. The wrangler checks for previous directories and increments run counters of new directories accordingly. The wrangler copies the Swif.log of each run into ```AIMES_Swift_experiments/analysis/<type-of-binding>/<size-of-bag>/Swift.<milliseconds-since-epoch>.log```.
   
-2. Extract timestamps for run and tasks from the Swift logs. From the ```AIMES_Swift_experiments/analysis``` directory run:
+4. Extract timestamps for run and tasks from the Swift logs. From the ```AIMES_Swift_experiments/analysis``` directory run:
 
   ```
   . ../bin/get_timestamps.sh
@@ -182,7 +183,7 @@ The analysis wrokflow is designed to be automated, reusable, and extensible. It 
   ```
   and backups the oringal log files to ```<type-of-binding>/<size-of-bot>/swift.<epoch>.bak```.  
 
-3. Compute timings from the timestamps of each run. From the ```AIMES_Swift_experiments/analysis``` directory run:
+5. Compute timings from the timestamps of each run. From the ```AIMES_Swift_experiments/analysis``` directory run:
  
   ```
   . ../bin/compute_timings.sh
@@ -190,7 +191,7 @@ The analysis wrokflow is designed to be automated, reusable, and extensible. It 
   
   ```compute_timings.sh``` calls the Python script ```get_timings.py``` for each timings file. A file ```<name-of-timing>.data``` is created in each ```<type-of-binding>/<size-of-bot>``` directory. Each file contains a list of timings of every run. When new runs are added, their new timings are appended to the existing files. The existing files are backed up in place with the ```.bak``` extension. This script can and should be extended to calculate and output all the timimngs as requested by the experiment analysis.
 
-3. Aggregate each type of timing into a ```csv``` file. From the ```AIMES_Swift_experiments/analysis``` directory run:
+6. Aggregate each type of timing into a ```csv``` file. From the ```AIMES_Swift_experiments/analysis``` directory run:
 
   ```
   . ../bin/aggregate_timings.sh
@@ -204,4 +205,4 @@ The analysis wrokflow is designed to be automated, reusable, and extensible. It 
   |1142|1934|2167||
   |||2203||
   
-3. Diverse approaches can be used to produce plots from the csv files.
+7. Diverse approaches can be used to produce plots from the csv files.
