@@ -189,7 +189,7 @@ The analysis wrokflow is designed to be automated, reusable, and extensible. It 
   . ../bin/compute_timings.sh
   ```
   
-  ```compute_timings.sh``` calls the Python script ```get_timings.py``` for each timings file. A file ```<name-of-timing>.data``` is created in each ```<type-of-binding>/<size-of-bot>``` directory. Each file contains a list of timings of every run. When new runs are added, their new timings are appended to the existing files. The existing files are backed up in place with the ```.bak``` extension. This script can and should be extended to calculate and output all the timimngs as requested by the experiment analysis.
+  ```compute_timings.sh``` calls the Python script ```get_timings.py``` for each timesteps file. A file ```<name-of-timing>.data``` is created in each ```<type-of-binding>/<size-of-bot>``` directory. Each file contains a list of timings in seconds since EPOCH for every run. When new runs are processed, their new timings are appended to the existing files. The existing files are backed up in place with the ```.bak``` extension before being appended.  ```get_timings.py``` can and *should* be extended to calculate and output all the timimngs as requested by the experiment analysis.
 
 6. Aggregate each type of timing into a ```csv``` file. From the ```AIMES_Swift_experiments/analysis``` directory run:
 
