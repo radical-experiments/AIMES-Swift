@@ -137,7 +137,7 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
 
 ## Data Analysis Workflow
 
-The following wrokflow is designed to be automated, reusable, and extensible. It can be fully automated by running the following commands from a 'master' shell script. The wrokflow incrementally integrate new data without overwriting data previously corrected. Raw, wrangled, and analysis data are all kept across runs preserving the reproducibility of the analysis and (to a certain extent) the provenance of the data. When needed, new analytical steps can be added to a single step of the workflow without altering the other steps.
+The analysis wrokflow is designed to be automated, reusable, and extensible. It can be automated by running the following commands from a 'master' shell script (not provided). The wrokflow incrementally integrates new data to those previously collected. Raw, wrangled, and analysis data are all kept across runs preserving the reproducibility of the analysis and (to a certain extent) the provenance of the data. When needed, new analyses can be added to a single step of the workflow without altering the other steps.
 
 1. Prerequisites: Bash on Linux.
 2. If the file ```AIMES_Swift_experiments/raw.tar.bz2``` exists, from the repository's root directory run:
