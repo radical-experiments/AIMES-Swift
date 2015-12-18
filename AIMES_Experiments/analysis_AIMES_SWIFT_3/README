@@ -1,0 +1,12 @@
+This folder contains experiments that measure the performance of AIMES
+by running 16 jobs (TASKS x MACHINES, where CORES = [8, 32, 256, 2048],
+and MACHINES = [Stampede])
+
+CORES = [1], Iterations = range(1, 5)
+
+There is one experiment failure that is noteworthy:
+
+The 3rd iteration of 256 cores, late-uniform was run again. Though it
+was properly executing, there was no Output Staging, indicating that
+the experiment did not execute properly.
+

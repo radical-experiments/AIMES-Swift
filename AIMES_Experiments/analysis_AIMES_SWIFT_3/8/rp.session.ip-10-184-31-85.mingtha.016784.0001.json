@@ -1,0 +1,1883 @@
+{
+    "pilot": [
+        {
+            "_id": "pilot.0007", 
+            "agent_config": {
+                "agent_launch_method": "SSH", 
+                "agent_layout": {
+                    "agent_0": {
+                        "bridges": [
+                            "agent_staging_input_queue", 
+                            "agent_scheduling_queue", 
+                            "agent_executing_queue", 
+                            "agent_staging_output_queue", 
+                            "agent_unschedule_pubsub", 
+                            "agent_reschedule_pubsub", 
+                            "agent_command_pubsub", 
+                            "agent_state_pubsub"
+                        ], 
+                        "components": {
+                            "AgentExecutingComponent": 1, 
+                            "AgentSchedulingComponent": 1, 
+                            "AgentStagingInputComponent": 1, 
+                            "AgentStagingOutputComponent": 1
+                        }, 
+                        "pull_units": true, 
+                        "sub_agents": [], 
+                        "target": "local"
+                    }
+                }, 
+                "bulk_collection_time": 1.0, 
+                "clone": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "cores": 8, 
+                "db_poll_sleeptime": 0.1, 
+                "debug": 10, 
+                "drop": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "heartbeat_interval": 10, 
+                "lrms": "SLURM", 
+                "max_io_loglength": 1024, 
+                "mongodb_url": "mongodb://54.221.194.147:24242/mturilli_aimesexperiments", 
+                "mpi_launch_method": "MPIRUN_RSH", 
+                "pilot_id": "pilot.0007", 
+                "runtime": 26, 
+                "scheduler": "CONTINUOUS", 
+                "session_id": "rp.session.ip-10-184-31-85.mingtha.016784.0001", 
+                "spawner": "POPEN", 
+                "staging_area": "staging_area", 
+                "staging_scheme": "staging", 
+                "task_launch_method": "SSH"
+            }, 
+            "callbackhistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1450143563.048114
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1450143564.265803
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1450143594.565307
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1450144049.435392
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1450144984.785884
+                }
+            ], 
+            "commands": [], 
+            "cores_per_node": null, 
+            "description": {
+                "_config": null, 
+                "access_schema": null, 
+                "cleanup": true, 
+                "cores": 8, 
+                "exit_on_error": false, 
+                "memory": null, 
+                "project": "TG-MCB090174", 
+                "queue": null, 
+                "resource": "xsede.stampede", 
+                "runtime": 26, 
+                "sandbox": null
+            }, 
+            "finished": 1450144984.679438, 
+            "global_sandbox": "/work/03662/tg829619/radical.pilot.sandbox", 
+            "heartbeat": null, 
+            "input_transfer_finished": null, 
+            "input_transfer_started": null, 
+            "log": [
+                {
+                    "message": "Using bootstrapper /home/mingtha/ve/rp_experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/default_bootstrapper.sh", 
+                    "timestamp": 1450143564.32732
+                }, 
+                {
+                    "message": "Copying bootstrapper 'file://localhost/home/mingtha/ve/rp_experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/default_bootstrapper.sh' to agent sandbox (<saga.filesystem.directory.Directory object at 0x7fdc38a55810>).", 
+                    "timestamp": 1450143564.327685
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/rp_experiments/local/lib/python2.7/site-packages/radical/utils/radical.utils-0.38.tar.gz' to sandbox (sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007/).", 
+                    "timestamp": 1450143573.719868
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/rp_experiments/local/lib/python2.7/site-packages/saga/saga-python-0.39.tar.gz' to sandbox (sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007/).", 
+                    "timestamp": 1450143574.56759
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/rp_experiments/local/lib/python2.7/site-packages/radical/pilot/controller/..//radical.pilot-v0.37.10-2-gae14f27-hotfix-get-session-frames.tar.gz' to sandbox (sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007/).", 
+                    "timestamp": 1450143576.46902
+                }, 
+                {
+                    "message": "Writing agent configuration to file '/tmp/rp_agent_cfg_QMvKbt.json'.", 
+                    "timestamp": 1450143577.098764
+                }, 
+                {
+                    "message": "Copying agent configuration file 'file://localhost/tmp/rp_agent_cfg_QMvKbt.json' to sandbox (sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007/).", 
+                    "timestamp": 1450143577.101169
+                }, 
+                {
+                    "message": "Submitting SAGA job with description: {'Project': 'TG-MCB090174', 'Executable': '/bin/bash', 'TotalPhysicalMemory': None, 'WorkingDirectory': '/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007/', 'Queue': 'normal', 'Environment': {'RADICAL_PILOT_PROFILE': 'TRUE'}, 'WallTimeLimit': 26, 'Arguments': ['-l bootstrap_1.sh', \" -d 'radical.utils-0.38.tar.gz:saga-python-0.39.tar.gz:radical.pilot-v0.37.10-2-gae14f27-hotfix-get-session-frames.tar.gz' -m 'create' -p 'pilot.0007' -r 'local' -s 'rp.session.ip-10-184-31-85.mingtha.016784.0001' -v '/work/03662/tg829619/radical.pilot.sandbox/ve_stampede' -a 'multicore' -e 'module purge' -e 'module load TACC' -e 'module load intel/15.0.2' -e 'module load python/2.7.9' -e 'module unload xalt' -e 'source ~train00/ssi_sourceme' -e 'export TACC_DELETE_FILES=TRUE' -w 'export PATH=$PATH' -w 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH' -x 'lue'\"], 'ProcessesPerHost': None, 'Error': 'bootstrap_1.err', 'Output': 'bootstrap_1.out', 'TotalCPUCount': 8}", 
+                    "timestamp": 1450143582.271822
+                }, 
+                {
+                    "message": "SAGA job submitted with job id [slurm+ssh://stampede.tacc.utexas.edu/]-[6217557]", 
+                    "timestamp": 1450143593.455356
+                }, 
+                {
+                    "message": "CANCEL received. Terminating.", 
+                    "timestamp": 1450144984.679438
+                }, 
+                {
+                    "message": "real 1450144984.698755 sec | user 5.282 sec | system 1.242 sec | mem 54676.00 kB", 
+                    "timestamp": 1450144984.679438
+                }
+            ], 
+            "logfile": null, 
+            "nodes": null, 
+            "output_transfer_finished": null, 
+            "output_transfer_started": null, 
+            "pilotmanager": "pmgr.0007", 
+            "saga_job_id": "[slurm+ssh://stampede.tacc.utexas.edu/]-[6217557]", 
+            "sagajobid": null, 
+            "sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007/", 
+            "started": 1450144048.601489, 
+            "state": "Canceled", 
+            "statehistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1450143562.903776
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1450143563.23259
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1450143593.455554
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1450144048.601489
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1450144984.679438
+                }
+            ], 
+            "stderr": null, 
+            "stdout": null, 
+            "submitted": 1450143562.903776, 
+            "unit_ids": [
+                "unit.002641", 
+                "unit.002644", 
+                "unit.002640", 
+                "unit.002647", 
+                "unit.002645", 
+                "unit.002646", 
+                "unit.002643", 
+                "unit.002642"
+            ], 
+            "unitmanager": "umgr.0007"
+        }
+    ], 
+    "pmgr": [
+        {
+            "_id": "pmgr.0007", 
+            "data": {}, 
+            "pilot_launcher_workers": 1
+        }
+    ], 
+    "session": {
+        "_id": "rp.session.ip-10-184-31-85.mingtha.016784.0001", 
+        "connected": 1450143554.571323, 
+        "created": 1450143554.571323, 
+        "name": "rp.session.ip-10-184-31-85.mingtha.016784.0001"
+    }, 
+    "umgr": [
+        {
+            "_id": "umgr.0007", 
+            "input_transfer_workers": 2, 
+            "output_transfer_workers": 2, 
+            "scheduler": "direct_submission"
+        }
+    ], 
+    "unit": [
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Input/Stage_1_Input_0_2", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Input/Stage_1_Input_0_2"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Output/Stage_1_Output_0_2", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Output/Stage_1_Output_0_2"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.002641", 
+            "callbackhistory": [
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143564.270369
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143575.001134
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144061.947758
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1450144962.140361
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144963.231774
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144964.245273
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144973.701917
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900.0", 
+                    "65536", 
+                    "65536", 
+                    "1", 
+                    "1", 
+                    "0", 
+                    "Stage_1_Input/Stage_1_Input_0_2", 
+                    "Stage_1_Output/Stage_1_Output_0_2", 
+                    "20000"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Input/Stage_1_Input_0_2", 
+                        "target": "Stage_1_Input/Stage_1_Input_0_2"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_1", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Output/Stage_1_Output_0_2", 
+                        "target": "Stage_1_Output/Stage_1_Output_0_2"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0007.", 
+                    "timestamp": 1450143563.780338
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1450143574.862115
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1450144973.001302
+                }
+            ], 
+            "pilot": "pilot.0007", 
+            "pilot_sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007/", 
+            "restartable": false, 
+            "sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007//unit.002641", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1450143563.392133
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143564.185608
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143564.185608
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450144060.108292
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1450144060.214356
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1450144060.315648
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1450144060.420258
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1450144060.520854
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144060.625493
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1450144961.830752
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1450144961.948494
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144962.051988
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144963.746555
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144973.001302
+                }
+            ], 
+            "stderr": "Warning: Permanently added 'c482-904,129.114.78.232' (RSA) to the list of known hosts.\r\n", 
+            "stdout": "serial: 12\nreading input file: Stage_1_Input/Stage_1_Input_0_2 size: 1048576 num_reads: 16\nread : 1048576 bytes to Stage_1_Input/Stage_1_Input_0_2 with bufsize: 65536\nsleep interval: 900.000000\nwrite: 20000 bytes to Stage_1_Output/Stage_1_Output_0_2 with bufsize: 65536\n", 
+            "submitted": 1450143563.392133, 
+            "unitmanager": "umgr.0007"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Input/Stage_1_Input_0_5", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Input/Stage_1_Input_0_5"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Output/Stage_1_Output_0_5", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Output/Stage_1_Output_0_5"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.002644", 
+            "callbackhistory": [
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143564.268704
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143572.856965
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144061.947494
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144963.230499
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144964.243642
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144975.965849
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900.0", 
+                    "65536", 
+                    "65536", 
+                    "1", 
+                    "1", 
+                    "0", 
+                    "Stage_1_Input/Stage_1_Input_0_5", 
+                    "Stage_1_Output/Stage_1_Output_0_5", 
+                    "20000"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Input/Stage_1_Input_0_5", 
+                        "target": "Stage_1_Input/Stage_1_Input_0_5"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_4", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Output/Stage_1_Output_0_5", 
+                        "target": "Stage_1_Output/Stage_1_Output_0_5"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0007.", 
+                    "timestamp": 1450143563.781633
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1450143572.170899
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1450144975.167375
+                }
+            ], 
+            "pilot": "pilot.0007", 
+            "pilot_sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007/", 
+            "restartable": false, 
+            "sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007//unit.002644", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1450143563.405413
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143564.186474
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143564.186474
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450144060.210385
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1450144060.416775
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1450144060.517695
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1450144060.62202
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1450144060.722836
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144060.826519
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1450144962.032681
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1450144962.358149
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144962.461542
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144963.748561
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144975.167375
+                }
+            ], 
+            "stderr": "Warning: Permanently added 'c482-904,129.114.78.232' (RSA) to the list of known hosts.\r\n", 
+            "stdout": "serial: 12\nreading input file: Stage_1_Input/Stage_1_Input_0_5 size: 1048576 num_reads: 16\nread : 1048576 bytes to Stage_1_Input/Stage_1_Input_0_5 with bufsize: 65536\nsleep interval: 900.000000\nwrite: 20000 bytes to Stage_1_Output/Stage_1_Output_0_5 with bufsize: 65536\n", 
+            "submitted": 1450143563.405413, 
+            "unitmanager": "umgr.0007"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Input/Stage_1_Input_0_1", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Input/Stage_1_Input_0_1"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Output/Stage_1_Output_0_1", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Output/Stage_1_Output_0_1"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.002640", 
+            "callbackhistory": [
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1450143564.271451
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143572.85803
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143573.964821
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144061.948001
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144963.232213
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144973.71936
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144974.833343
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900.0", 
+                    "65536", 
+                    "65536", 
+                    "1", 
+                    "1", 
+                    "0", 
+                    "Stage_1_Input/Stage_1_Input_0_1", 
+                    "Stage_1_Output/Stage_1_Output_0_1", 
+                    "20000"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Input/Stage_1_Input_0_1", 
+                        "target": "Stage_1_Input/Stage_1_Input_0_1"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_0", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Output/Stage_1_Output_0_1", 
+                        "target": "Stage_1_Output/Stage_1_Output_0_1"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0007.", 
+                    "timestamp": 1450143563.782635
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1450143573.191673
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1450144974.05832
+                }
+            ], 
+            "pilot": "pilot.0007", 
+            "pilot_sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007/", 
+            "restartable": false, 
+            "sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007//unit.002640", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1450143563.390368
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143572.172733
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143572.172733
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450144060.310991
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1450144060.619066
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1450144060.719917
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1450144060.823781
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1450144060.92493
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144061.028808
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1450144961.931766
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1450144962.153204
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144962.257035
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144973.017711
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144974.05832
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "serial: 12\nreading input file: Stage_1_Input/Stage_1_Input_0_1 size: 1048576 num_reads: 16\nread : 1048576 bytes to Stage_1_Input/Stage_1_Input_0_1 with bufsize: 65536\nsleep interval: 900.000000\nwrite: 20000 bytes to Stage_1_Output/Stage_1_Output_0_1 with bufsize: 65536\n", 
+            "submitted": 1450143563.390368, 
+            "unitmanager": "umgr.0007"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Input/Stage_1_Input_0_8", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Input/Stage_1_Input_0_8"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Output/Stage_1_Output_0_8", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Output/Stage_1_Output_0_8"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.002647", 
+            "callbackhistory": [
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1450143564.265514
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143573.961274
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143574.999439
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1450144061.944677
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144063.002299
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144963.229187
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144974.832127
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144975.906043
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900.0", 
+                    "65536", 
+                    "65536", 
+                    "1", 
+                    "1", 
+                    "0", 
+                    "Stage_1_Input/Stage_1_Input_0_8", 
+                    "Stage_1_Output/Stage_1_Output_0_8", 
+                    "20000"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Input/Stage_1_Input_0_8", 
+                        "target": "Stage_1_Input/Stage_1_Input_0_8"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_7", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Output/Stage_1_Output_0_8", 
+                        "target": "Stage_1_Output/Stage_1_Output_0_8"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0007.", 
+                    "timestamp": 1450143563.783606
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1450143574.112034
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1450144975.210699
+                }
+            ], 
+            "pilot": "pilot.0007", 
+            "pilot_sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007/", 
+            "restartable": false, 
+            "sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007//unit.002647", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1450143563.417697
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143573.233268
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143573.233268
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450144060.411566
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1450144060.821186
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1450144060.922203
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1450144061.026099
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1450144061.209936
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144061.231083
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1450144962.234519
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1450144962.767734
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144962.871249
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144974.108509
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144975.210699
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "serial: 12\nreading input file: Stage_1_Input/Stage_1_Input_0_8 size: 1048576 num_reads: 16\nread : 1048576 bytes to Stage_1_Input/Stage_1_Input_0_8 with bufsize: 65536\nsleep interval: 900.000000\nwrite: 20000 bytes to Stage_1_Output/Stage_1_Output_0_8 with bufsize: 65536\n", 
+            "submitted": 1450143563.417697, 
+            "unitmanager": "umgr.0007"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Input/Stage_1_Input_0_6", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Input/Stage_1_Input_0_6"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Output/Stage_1_Output_0_6", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Output/Stage_1_Output_0_6"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.002645", 
+            "callbackhistory": [
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1450143564.268289
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143575.000579
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143576.020444
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1450144061.947217
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144063.003573
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144963.230093
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144975.96561
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144977.172704
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900.0", 
+                    "65536", 
+                    "65536", 
+                    "1", 
+                    "1", 
+                    "0", 
+                    "Stage_1_Input/Stage_1_Input_0_6", 
+                    "Stage_1_Output/Stage_1_Output_0_6", 
+                    "20000"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Input/Stage_1_Input_0_6", 
+                        "target": "Stage_1_Input/Stage_1_Input_0_6"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_5", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Output/Stage_1_Output_0_6", 
+                        "target": "Stage_1_Output/Stage_1_Output_0_6"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0007.", 
+                    "timestamp": 1450143563.784678
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1450143575.272823
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1450144976.223994
+                }
+            ], 
+            "pilot": "pilot.0007", 
+            "pilot_sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007/", 
+            "restartable": false, 
+            "sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007//unit.002645", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1450143563.407208
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143574.19688
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143574.19688
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450144060.5121
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1450144061.023503
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1450144061.124579
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1450144061.228378
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1450144061.329642
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144061.433432
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1450144962.133674
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1450144962.562706
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144962.666542
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144975.18166
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144976.223994
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "serial: 12\nreading input file: Stage_1_Input/Stage_1_Input_0_6 size: 1048576 num_reads: 16\nread : 1048576 bytes to Stage_1_Input/Stage_1_Input_0_6 with bufsize: 65536\nsleep interval: 900.000000\nwrite: 20000 bytes to Stage_1_Output/Stage_1_Output_0_6 with bufsize: 65536\n", 
+            "submitted": 1450143563.407208, 
+            "unitmanager": "umgr.0007"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Input/Stage_1_Input_0_7", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Input/Stage_1_Input_0_7"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Output/Stage_1_Output_0_7", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Output/Stage_1_Output_0_7"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.002646", 
+            "callbackhistory": [
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1450143564.267873
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143575.000144
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143576.019911
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144063.003129
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1450144963.229661
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144964.242538
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144975.965319
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144977.171147
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900.0", 
+                    "65536", 
+                    "65536", 
+                    "1", 
+                    "1", 
+                    "0", 
+                    "Stage_1_Input/Stage_1_Input_0_7", 
+                    "Stage_1_Output/Stage_1_Output_0_7", 
+                    "20000"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Input/Stage_1_Input_0_7", 
+                        "target": "Stage_1_Input/Stage_1_Input_0_7"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_6", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Output/Stage_1_Output_0_7", 
+                        "target": "Stage_1_Output/Stage_1_Output_0_7"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0007.", 
+                    "timestamp": 1450143563.785635
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1450143575.776075
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1450144976.295932
+                }
+            ], 
+            "pilot": "pilot.0007", 
+            "pilot_sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007/", 
+            "restartable": false, 
+            "sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007//unit.002646", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1450143563.41126
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143574.872729
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143574.872729
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450144060.612737
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1450144061.225786
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1450144061.326923
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1450144061.430734
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1450144061.531946
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144061.63628
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1450144962.335381
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1450144962.972405
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144963.075768
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144975.249251
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144976.295932
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "serial: 12\nreading input file: Stage_1_Input/Stage_1_Input_0_7 size: 1048576 num_reads: 16\nread : 1048576 bytes to Stage_1_Input/Stage_1_Input_0_7 with bufsize: 65536\nsleep interval: 900.000000\nwrite: 20000 bytes to Stage_1_Output/Stage_1_Output_0_7 with bufsize: 65536\n", 
+            "submitted": 1450143563.41126, 
+            "unitmanager": "umgr.0007"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Input/Stage_1_Input_0_4", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Input/Stage_1_Input_0_4"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Output/Stage_1_Output_0_4", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Output/Stage_1_Output_0_4"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.002643", 
+            "callbackhistory": [
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1450143564.269116
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143576.020875
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143577.029874
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144063.004094
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1450144963.230897
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144964.244226
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144977.174155
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144978.182431
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900.0", 
+                    "65536", 
+                    "65536", 
+                    "1", 
+                    "1", 
+                    "0", 
+                    "Stage_1_Input/Stage_1_Input_0_4", 
+                    "Stage_1_Output/Stage_1_Output_0_4", 
+                    "20000"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Input/Stage_1_Input_0_4", 
+                        "target": "Stage_1_Input/Stage_1_Input_0_4"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_3", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Output/Stage_1_Output_0_4", 
+                        "target": "Stage_1_Output/Stage_1_Output_0_4"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0007.", 
+                    "timestamp": 1450143563.787068
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1450143576.146246
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1450144977.2258
+                }
+            ], 
+            "pilot": "pilot.0007", 
+            "pilot_sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007/", 
+            "restartable": false, 
+            "sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007//unit.002643", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1450143563.403644
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143575.274337
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143575.274337
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450144060.713256
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1450144061.428131
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1450144061.529233
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1450144061.633564
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1450144061.731839
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144061.836187
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1450144962.436312
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1450144963.1769
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144963.283535
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144976.244539
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144977.2258
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "serial: 12\nreading input file: Stage_1_Input/Stage_1_Input_0_4 size: 1048576 num_reads: 16\nread : 1048576 bytes to Stage_1_Input/Stage_1_Input_0_4 with bufsize: 65536\nsleep interval: 900.000000\nwrite: 20000 bytes to Stage_1_Output/Stage_1_Output_0_4 with bufsize: 65536\n", 
+            "submitted": 1450143563.403644, 
+            "unitmanager": "umgr.0007"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Input/Stage_1_Input_0_3", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Input/Stage_1_Input_0_3"
+                }
+            ], 
+            "FTW_Input_Status": "Pending", 
+            "FTW_Output_Directives": [
+                {
+                    "action": "Transfer", 
+                    "flags": [
+                        "CreateParents", 
+                        "SkipFailed"
+                    ], 
+                    "priority": 0, 
+                    "source": "Stage_1_Output/Stage_1_Output_0_3", 
+                    "state": "Pending", 
+                    "target": "Stage_1_Output/Stage_1_Output_0_3"
+                }
+            ], 
+            "FTW_Output_Status": "New", 
+            "_id": "unit.002642", 
+            "callbackhistory": [
+                {
+                    "state": "PendingInputStaging", 
+                    "timestamp": 1450143564.269517
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143576.021285
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143577.039836
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144063.004519
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1450144963.231373
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144964.244699
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144977.174577
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144978.184286
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900.0", 
+                    "65536", 
+                    "65536", 
+                    "1", 
+                    "1", 
+                    "0", 
+                    "Stage_1_Input/Stage_1_Input_0_3", 
+                    "Stage_1_Output/Stage_1_Output_0_3", 
+                    "20000"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Input/Stage_1_Input_0_3", 
+                        "target": "Stage_1_Input/Stage_1_Input_0_3"
+                    }
+                ], 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_2", 
+                "output_staging": [
+                    {
+                        "action": "Transfer", 
+                        "flags": [
+                            "CreateParents", 
+                            "SkipFailed"
+                        ], 
+                        "priority": 0, 
+                        "source": "Stage_1_Output/Stage_1_Output_0_3", 
+                        "target": "Stage_1_Output/Stage_1_Output_0_3"
+                    }
+                ], 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0007.", 
+                    "timestamp": 1450143563.788101
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1450143576.714647
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1450144977.340931
+                }
+            ], 
+            "pilot": "pilot.0007", 
+            "pilot_sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007/", 
+            "restartable": false, 
+            "sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.ip-10-184-31-85.mingtha.016784.0001-pilot.0007//unit.002642", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1450143563.393846
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1450143575.782228
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450143575.782228
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1450144060.813924
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1450144061.630927
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1450144061.734472
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1450144061.83345
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1450144061.933995
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1450144062.035984
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1450144962.637353
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1450144963.384583
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1450144963.488268
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1450144976.327661
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1450144977.340931
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "serial: 12\nreading input file: Stage_1_Input/Stage_1_Input_0_3 size: 1048576 num_reads: 16\nread : 1048576 bytes to Stage_1_Input/Stage_1_Input_0_3 with bufsize: 65536\nsleep interval: 900.000000\nwrite: 20000 bytes to Stage_1_Output/Stage_1_Output_0_3 with bufsize: 65536\n", 
+            "submitted": 1450143563.393846, 
+            "unitmanager": "umgr.0007"
+        }
+    ]
+}
