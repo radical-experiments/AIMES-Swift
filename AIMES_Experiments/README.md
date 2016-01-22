@@ -32,6 +32,7 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
   ```
   virtualenv ~/ve/aimes-swift-experiments
   . ~/ve/aimes-swift-experiments/bin/activate
+  pip install -U pip
   cd aimes.emgr; pip install -U .; cd -
   cd aimes.bundle; pip install -U .; cd -
   cd Skeleton; pip install -U .; cd -
