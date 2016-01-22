@@ -54,7 +54,7 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
   * **"bundle.resource.unsupported"**: list of resources to target.
   * **"skeleton.tasks.duration.max|min"**: use the same n of seconds. E.g., 900.
 
-1. Copy and compile ```skeleton.c``` on each target resource. For example, with Stampede and assuming passwordless ssh auth and $HOME/bin in $PATH on Stampede:
+1. Copy and compile ```skeleton.c``` on each target resource. For example, with Stampede and assuming (i) passwordless ssh auth, and (ii) ```$HOME/bin``` in ```$PATH```:
 
   ```
   scp ../../../Skeleton/src/aimes/skeleton/task.c stampede.tacc.xsede.org:
