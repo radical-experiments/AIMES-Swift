@@ -46,13 +46,13 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
 
 1. Edit the file ```experiment.json``` to set:
 
-  . "mongodb": RADICAL-Pilot communication/coordination and experiment data.
-  . "scales": list of BoT sizes. E.g., [8, 32, 256, 2048].
-  . "iterations": number of times each run at any scale is repeated. E.g., 4.
-  . "project_ids": your XSEDE allocation/project for each resource.
-  . "log.email.recipients": add your e-mail address for notification.
-  . "bundle.resource.unsupported": list of resources to target.
-  . "skeleton.tasks.duration.max|min": use the same n of seconds. E.g., 900.
+  * **"mongodb"**: RADICAL-Pilot communication/coordination and experiment data.
+  * **"scales"**: list of BoT sizes. E.g., [8, 32, 256, 2048].
+  * **"iterations"**: number of times each run at any scale is repeated. E.g., 4.
+  * **"project_ids"**: your XSEDE allocation/project for each resource.
+  * **"log.email.recipients"**: add your e-mail address for notification.
+  * **"bundle.resource.unsupported"**: list of resources to target.
+  * **"skeleton.tasks.duration.max|min"**: use the same n of seconds. E.g., 900.
 
 1. Run the experiment script:
 
@@ -60,7 +60,7 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
   python aimes_only.py experiment.json
   ```
 
-  The data of each run of the experiment are saved into a dedicated directory with the following naming convention: run-<scale>_late_uniform_<n_run>.
+  The data of each run of the experiment are saved into a dedicated directory with the following naming convention: run\-\<scale\>\_late\_uniform\_\<n\_run\>.
 
 ## Data Analysis Workflow
 
