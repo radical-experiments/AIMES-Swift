@@ -19,7 +19,7 @@ def derive_run_sequence(scales, bindings, uniformities, iterations, cores):
     for scale in scales:
         for binding in bindings:
             for uniformity in uniformities:
-                for iteration in iterations:
+                for iteration in range(1, iterations+1):
                     sequence.append([scale, binding, uniformity, iteration,
                                      rerun, cores])
 
@@ -48,9 +48,9 @@ if __name__ == '__main__':
     cfg["recipients"] = cfg["log"]["email"]["recipients"]
 
     # TODO: Override with json skeleton config entries.
-    cfg['skeleton_task_duration'] = {'max': 60, 'min': 60}
-    cfg['skeleton_task_duration']['avg']   = cfg['skeleton_task_duration']['max'] / 2.0
-    cfg['skeleton_task_duration']['stdev'] = cfg['skeleton_task_duration']['avg'] / 3.0
+    cfg['skeleton_task_duration'] = {
+        "max": cfg["skeleton"]["tasks"]["duration"]["max"],
+        "min": cfg["skeleton"]["tasks"]["duration"]["min"]}
 
     # cfg['bundle_resources']   = {'hopper.nersc.gov'          : 'pbs',
     #                              'stampede.tacc.xsede.org'   : 'slurm'}
