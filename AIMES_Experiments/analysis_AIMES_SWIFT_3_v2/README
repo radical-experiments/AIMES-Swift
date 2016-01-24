@@ -1,0 +1,12 @@
+This folder contains experiments that measure the performance of AIMES
+by running 16 jobs (TASKS x MACHINES, where CORES = [8, 32, 256, 2048],
+and MACHINES = [Stampede])
+
+CORES = [1], Iterations = range(1, 5)
+
+This experiment is slightly different as we have updated the experiment
+script as we were encountering some problems regarding the AWS server
+which were using to host our MongoDB server. Thus, we have moved to
+using the package aimes.emgr. No other changes has been made to this
+experiment script; they do not affect the queue time, run time, nor
+the staging time of the files in the script.
