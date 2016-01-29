@@ -32,6 +32,7 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
   ```
   virtualenv ~/ve/aimes-swift-experiments
   . ~/ve/aimes-swift-experiments/bin/activate
+  pip install -U pip
   cd aimes.emgr; pip install -U .; cd -
   cd aimes.bundle; pip install -U .; cd -
   cd Skeleton; pip install -U .; cd -
@@ -53,6 +54,13 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
   * **"log.email.recipients"**: add your e-mail address for notification.
   * **"bundle.resource.unsupported"**: list of resources to target.
   * **"skeleton.tasks.duration.max|min"**: use the same n of seconds. E.g., 900.
+
+1. Copy and compile ```skeleton.c``` on each target resource. For example, with Stampede and assuming (i) passwordless ssh auth, and (ii) ```$HOME/bin``` in ```$PATH```:
+
+  ```
+  scp ../../../Skeleton/src/aimes/skeleton/task.c stampede.tacc.xsede.org:
+  ssh stampede.tacc.xsede.org 'gcc -o task -lm task.c; cp task bin'
+  ```
 
 1. Run the experiment script:
 
