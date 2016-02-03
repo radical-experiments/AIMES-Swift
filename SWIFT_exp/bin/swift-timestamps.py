@@ -119,7 +119,7 @@ def usage(msg=None, noexit=False):
         print "\nError: %s" % msg
 
     print """
-    usage   : %s <swift_log_file>.json <swift_durations>.json
+    usage   : %s <swift_log_file>.log <swift_durations_output>.json
     """ % (sys.argv[0])
 
     if msg:
@@ -133,7 +133,7 @@ def usage(msg=None, noexit=False):
 if __name__ == "__main__":
 
     if len(sys.argv) <= 2:
-        usage("insufficient arguments -- need session ID")
+        usage("insufficient arguments -- need swift log file and output file")
 
     if len(sys.argv) > 3:
         usage("too many arguments -- no more than 2")
