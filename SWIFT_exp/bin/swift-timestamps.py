@@ -149,18 +149,21 @@ class TimeStamp(object):
         self.regex = re.compile(re_state)
         self.state = state
         self.run = run
+        self.epoch = None
         self.stamp = self._get_stamp()
-        self.epoch = int(time.mktime(time.strptime(self.stamp,
-                         self.run.dtpattern)))
+        # print "DEBUG: TimeStamp: state = %s; stamp = %s" % (self.state.name,
+        #                                                     self.stamp)
 
     def _get_stamp(self):
         stamp = None
         for line in self.run.logs:
-            if stamp:
-                break
             m = re.match(self.regex, line)
             if m:
                 stamp = "%s %s" % (m.group(1), m.group(2))
+                self.epoch = int(time.mktime(time.strptime(stamp,
+                                 self.run.dtpattern)))
+                break
+
         return stamp
 
 
@@ -195,7 +198,7 @@ if __name__ == "__main__":
     conf['file_logs'] = sys.argv[1]
     conf['file_json'] = sys.argv[2]
     conf['tcodes'] = {'Submitting': 8, 'Submitted': 1, 'Active': 2,
-                      'Completed': 7}
+                      'Completed': 7, 'Failed': 5}
     conf['date_time_pattern'] = "%Y-%m-%d %H:%M:%S"
     conf['re']['date'] = "(\d+-\d+-\d+)"
     conf['re']['time'] = "(\d:\d+:\d+),\d+[-,+]\d+"
