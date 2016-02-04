@@ -18,6 +18,8 @@ class Run(object):
         self.states = []
         self.ntasks = None
         self.hosts = []
+        self.failed = 0
+        self.completed = 0
         self.id = self._get_id()
         self.jobs = self._get_jobs()
         self.tasks = self._get_tasks()
@@ -71,7 +73,8 @@ class Run(object):
 
     def save_to_json(self):
         d = {}
-        d["Run"] = {"ID": self.id, "hosts": self.hosts, "ntasks": self.ntasks}
+        d["Run"] = {"ID": self.id, "hosts": self.hosts, "ntasks": self.ntasks,
+                    "Failed": self.failed, "Completed": self.completed}
         d["Tasks"] = {}
         for state in self.states:
             d["Run"][state.name] = state.tstamp.epoch
@@ -135,7 +138,12 @@ class Task(object):
             re += '.*'+taskid
         if code:
             re += '.*status=%s' % code
-        self.states.append(State(name, re, self.run))
+        state = State(name, re, self.run)
+        if state.name == 'Failed' and state.tstamp.stamp:
+            self.run.failed += 1
+        elif state.name == 'Completed' and state.tstamp.stamp:
+            self.run.completed += 1
+        self.states.append(state)
 
 
 class State(object):
@@ -186,6 +194,21 @@ def usage(msg=None, noexit=False):
 
 # ------------------------------------------------------------------------------
 if __name__ == "__main__":
+    """
+    status codes:
+    COASTER_STATUS_UNSUBMITTED = 0,
+    COASTER_STATUS_SUBMITTING = 8,
+    COASTER_STATUS_SUBMITTED = 1,
+    COASTER_STATUS_ACTIVE = 2,
+    COASTER_STATUS_SUSPENDED = 3,
+    COASTER_STATUS_RESUMED = 4,
+    COASTER_STATUS_FAILED = 5,
+    COASTER_STATUS_CANCELED = 6,
+    COASTER_STATUS_COMPLETED = 7,
+    COASTER_STATUS_STAGE_IN = 16,
+    COASTER_STATUS_STAGE_OUT = 17,
+    COASTER_STATUS_UNKNOWN = 9999
+    """
 
     if len(sys.argv) <= 2:
         usage("insufficient arguments -- need swift log file and output file")
@@ -197,8 +220,10 @@ if __name__ == "__main__":
     conf['re'] = {}
     conf['file_logs'] = sys.argv[1]
     conf['file_json'] = sys.argv[2]
-    conf['tcodes'] = {'Submitting': 8, 'Submitted': 1, 'Active': 2,
-                      'Completed': 7, 'Failed': 5}
+    conf['tcodes'] = {'Unsubmitted': 0, 'Submitting': 8, 'Submitted': 1,
+                      'Active': 2, 'Suspended': 3, 'Resumed': 4, 'Failed': 5,
+                      'Canceled': 6, 'Completed': 7, 'Stage_in': 16,
+                      'Stage_out': 17, 'Unknown': 9999}
     conf['date_time_pattern'] = "%Y-%m-%d %H:%M:%S"
     conf['re']['date'] = "(\d+-\d+-\d+)"
     conf['re']['time'] = "(\d:\d+:\d+),\d+[-,+]\d+"
