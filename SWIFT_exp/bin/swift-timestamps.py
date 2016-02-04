@@ -15,9 +15,12 @@ class Run(object):
         self.logs = [line.strip() for line in open(conf['file_logs'])]
         self.reid = conf['re']['runid']
         self.dtpattern = conf['date_time_pattern']
-        self.id = self._get_id()
-        self.tasks = self._get_tasks()
         self.states = []
+        self.ntasks = None
+        self.hosts = []
+        self.id = self._get_id()
+        self.jobs = self._get_jobs()
+        self.tasks = self._get_tasks()
 
     def _get_id(self):
         runid = None
@@ -30,6 +33,20 @@ class Run(object):
                 runid = m.group(1)
         return runid
 
+    def _get_jobs(self):
+        ids = []
+        jobs = []
+        jobid = re.compile(self.conf['re']['jobid'])
+        for line in self.logs:
+            m = re.match(jobid, line)
+            if m and m.group(1) not in ids:
+                ids.append(m.group(1))
+                jobs.append(Job(m.group(1), self))
+        for job in jobs:
+            if job.host not in self.hosts:
+                self.hosts.append(job.host)
+        return jobs
+
     def _get_tasks(self):
         ids = []
         tasks = []
@@ -38,7 +55,8 @@ class Run(object):
             m = re.match(taskid, line)
             if m and m.group(1) not in ids:
                 ids.append(m.group(1))
-                tasks.append(Task(m.group(1), self))
+                tasks.append(Task(m.group(1), self, self.jobs))
+        self.ntasks = len(tasks)
         return tasks
 
     def _make_re(self, res):
@@ -53,23 +71,57 @@ class Run(object):
 
     def save_to_json(self):
         d = {}
-        d["Run"] = {"ID": self.id}
+        d["Run"] = {"ID": self.id, "hosts": self.hosts, "ntasks": self.ntasks}
         d["Tasks"] = {}
         for state in self.states:
             d["Run"][state.name] = state.tstamp.epoch
         for task in self.tasks:
             d["Tasks"][task.id] = {}
+            d["Tasks"][task.id]["host"] = task.host
             for state in task.states:
                 d["Tasks"][task.id][state.name] = state.tstamp.epoch
         fout = open(conf['file_json'], 'w')
         json.dump(d, fout, indent=4)
 
 
+class Job(object):
+    def __init__(self, jid, run):
+        self.run = run
+        self.id = jid
+        self.host = self._get_host(self.run.conf['re']['jobhost'])
+        self.tids = self._get_task_ids(self.run.conf['re']['jobtaskid'])
+
+    def _get_host(self, regex):
+        regex = regex % self.id
+        host = re.compile(regex)
+        for line in self.run.logs:
+            m = re.match(host, line)
+            if m and m.group(1):
+                return m.group(1)
+        return None
+
+    def _get_task_ids(self, regex):
+        regex = regex % self.id
+        jobtaskid = re.compile(regex)
+        tids = []
+        for line in self.run.logs:
+            m = re.match(jobtaskid, line)
+            if m and m.group(1) not in tids:
+                tids.append(m.group(1))
+        return tids
+
+
 class Task(object):
-    def __init__(self, tid, run):
+    def __init__(self, tid, run, jobs):
         self.run = run
         self.id = tid
         self.states = []
+        self.host = self._get_task_host(jobs)
+
+    def _get_task_host(self, jobs):
+        for job in jobs:
+            if self.id in job.tids:
+                return job.host
 
     def _make_re(self, res):
         re = ''
@@ -98,7 +150,7 @@ class TimeStamp(object):
         self.state = state
         self.run = run
         self.stamp = self._get_stamp()
-        self.epoch = int(time.mktime(time.strptime(self.stamp, 
+        self.epoch = int(time.mktime(time.strptime(self.stamp,
                          self.run.dtpattern)))
 
     def _get_stamp(self):
@@ -151,6 +203,9 @@ if __name__ == "__main__":
     conf['re']['finish'] = "INFO.*Loader.*Swift.*finished.*with.*no.*errors"
     conf['re']['runid'] = ".*INFO.*Loader.*RUN_ID.*(run\d{3}).*"
     conf['re']['taskid'] = ".*taskid=urn:(R-\d+[-,x]\d+[-,x]\d+).*"
+    conf['re']['jobid'] = ".*JOB_START jobid=(.*) tr=.*"
+    conf['re']['jobhost'] = ".*JOB_START jobid=%s.* host=(.*).*"
+    conf['re']['jobtaskid'] = ".*JOB_TASK jobid=%s"+conf['re']['taskid']
     conf['re']['tasknew'] = "INFO.*Execute.*JOB_TASK.*jobid.*taskid=urn:"
     conf['re']['tasksts'] = "TASK_STATUS_CHANGE.*taskid=urn:"
 
