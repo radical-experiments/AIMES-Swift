@@ -5,10 +5,16 @@ import sys
 import json
 import time
 
-'''Read Swift log file and return a json file with its states and their
-timings'''
+'''Reads Swift+Coaster log file and returns a json file with timestamps of each
+task's state and a summary of the run properties
+'''
+
+__author__ = "Matteo Turilli"
+__copyright__ = "Copyright 2015, The AIMES Project"
+__license__ = "MIT"
 
 
+# -----------------------------------------------------------------------------
 class Run(object):
     def __init__(self, conf):
         self.conf = conf
@@ -41,7 +47,7 @@ class Run(object):
                 logs.append(line)
         return logs
 
-    def _get_id(self,retag):
+    def _get_id(self, retag):
         runid = None
         regex = re.compile(self.conf['re'][retag])
         for line in self.logs[retag]:
@@ -104,6 +110,7 @@ class Run(object):
         json.dump(d, fout, indent=4)
 
 
+# -----------------------------------------------------------------------------
 class Job(object):
     def __init__(self, jid, run):
         self.run = run
@@ -133,6 +140,7 @@ class Job(object):
         return tids
 
 
+# -----------------------------------------------------------------------------
 class Task(object):
     def __init__(self, tid, run, jobs):
         self.run = run
@@ -154,16 +162,15 @@ class Task(object):
     def add_state(self, name, taskid):
         regex = self._make_re(['date', 'time', name])
         regex = regex % taskid
-        # print "Task %s; state %s; regex %s: Adding..." % (self.id, name, regex)
         state = State(name, regex, self.run)
         if state.name == 'failed' and state.tstamp.stamp:
             self.run.failed += 1
         elif state.name == 'completed' and state.tstamp.stamp:
             self.run.completed += 1
-        # print "Task %s; state %s: Added." % (self.id, name)
         self.states.append(state)
 
 
+# -----------------------------------------------------------------------------
 class State(object):
     def __init__(self, name, regex, run):
         self.name = name
@@ -177,8 +184,6 @@ class TimeStamp(object):
         self.run = run
         self.epoch = None
         self.stamp = self._get_stamp()
-        # print "DEBUG: TimeStamp: state = %s; stamp = %s" % (self.state.name,
-        #                                                     self.stamp)
 
     def _get_stamp(self):
         stamp = None
