@@ -52,11 +52,10 @@ class Run(object):
         if type(obj) == Task:
             regex = regex % obj.id
         state = State(name, regex, self)
-        if type(obj) == Session:
-            if state.name == 'failed' and state.tstamp.stamp:
-                obj.failed += 1
-            elif state.name == 'completed' and state.tstamp.stamp:
-                obj.completed += 1
+        if state.name == 'failed' and state.tstamp.stamp:
+            self.session.failed += 1
+        elif state.name == 'completed' and state.tstamp.stamp:
+            self.session.completed += 1
         obj.states.append(state)
 
     def save_to_json(self):
