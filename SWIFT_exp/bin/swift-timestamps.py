@@ -17,17 +17,11 @@ __license__ = "MIT"
 # -----------------------------------------------------------------------------
 class Run(object):
     def __init__(self, conf):
+        self.id = time.clock()
         self.conf = conf
         self.logs = self._partition_logs(conf['file_logs'])
         self.dtpattern = conf['date_time_pattern']
-        self.states = []
-        self.ntasks = None
-        self.hosts = []
-        self.failed = 0
-        self.completed = 0
-        self.id = self._get_id('runid')
-        self.jobs = self._get_jobs('jobid')
-        self.tasks = self._get_tasks('taskid')
+        self.session = Session(self)
 
     def _partition_logs(self, lfile):
         plogs = {}
@@ -47,10 +41,61 @@ class Run(object):
                 logs.append(line)
         return logs
 
+    def _make_re(self, res):
+        re = ''
+        for tag in res:
+            re += run.conf['re'][tag]
+        return re
+
+    def add_state(self, obj, name):
+        regex = self._make_re(['date', 'time', name])
+        if type(obj) == Task:
+            regex = regex % obj.id
+        state = State(name, regex, self)
+        if type(obj) == Session:
+            if state.name == 'failed' and state.tstamp.stamp:
+                obj.failed += 1
+            elif state.name == 'completed' and state.tstamp.stamp:
+                obj.completed += 1
+        obj.states.append(state)
+
+    def save_to_json(self):
+        d = {}
+        d["Run"] = {"ID": self.id}
+        d["Session"] = {"ID": self.session.id,
+                        "hosts": self.session.hosts,
+                        "ntasks": self.session.ntasks,
+                        "failed": self.session.failed,
+                        "completed": self.session.completed}
+        d["Tasks"] = {}
+        for state in self.session.states:
+            d["Session"][state.name] = state.tstamp.epoch
+        for task in self.session.tasks:
+            d["Tasks"][task.id] = {}
+            d["Tasks"][task.id]["host"] = task.host
+            for state in task.states:
+                d["Tasks"][task.id][state.name] = state.tstamp.epoch
+        fout = open(conf['file_json'], 'w')
+        json.dump(d, fout, indent=4)
+
+
+# -----------------------------------------------------------------------------
+class Session(object):
+    def __init__(self, run):
+        self.run = run
+        self.states = []
+        self.ntasks = None
+        self.hosts = []
+        self.failed = 0
+        self.completed = 0
+        self.id = self._get_id('runid')
+        self.jobs = self._get_jobs('jobid')
+        self.tasks = self._get_tasks('taskid')
+
     def _get_id(self, retag):
         runid = None
-        regex = re.compile(self.conf['re'][retag])
-        for line in self.logs[retag]:
+        regex = re.compile(self.run.conf['re'][retag])
+        for line in self.run.logs[retag]:
             m = re.search(regex, line)
             if m and not runid:
                 runid = m.group(1)
@@ -60,12 +105,12 @@ class Run(object):
     def _get_jobs(self, retag):
         ids = []
         jobs = []
-        jobid = re.compile(self.conf['re'][retag])
-        for line in self.logs[retag]:
+        jobid = re.compile(self.run.conf['re'][retag])
+        for line in self.run.logs[retag]:
             m = re.search(jobid, line)
             if m and m.group(1) not in ids:
                 ids.append(m.group(1))
-                jobs.append(Job(m.group(1), self))
+                jobs.append(Job(m.group(1), self.run))
         for job in jobs:
             if job.host not in self.hosts:
                 self.hosts.append(job.host)
@@ -74,40 +119,14 @@ class Run(object):
     def _get_tasks(self, retag):
         ids = []
         tasks = []
-        taskid = re.compile(self.conf['re'][retag])
-        for line in self.logs[retag]:
+        taskid = re.compile(self.run.conf['re'][retag])
+        for line in self.run.logs[retag]:
             m = re.search(taskid, line)
             if m and m.group(1) not in ids:
                 ids.append(m.group(1))
-                tasks.append(Task(m.group(1), self, self.jobs))
+                tasks.append(Task(m.group(1), self.run, self.jobs))
         self.ntasks = len(tasks)
         return tasks
-
-    def _make_re(self, retags):
-        re = ''
-        for tag in retags:
-            re += run.conf['re'][tag]+'.*'
-        return re
-
-    def add_state(self, name):
-        regex = self._make_re(['date', 'time', name])
-        state = State(name, regex, self)
-        self.states.append(state)
-
-    def save_to_json(self):
-        d = {}
-        d["Run"] = {"ID": self.id, "hosts": self.hosts, "ntasks": self.ntasks,
-                    "failed": self.failed, "completed": self.completed}
-        d["Tasks"] = {}
-        for state in self.states:
-            d["Run"][state.name] = state.tstamp.epoch
-        for task in self.tasks:
-            d["Tasks"][task.id] = {}
-            d["Tasks"][task.id]["host"] = task.host
-            for state in task.states:
-                d["Tasks"][task.id][state.name] = state.tstamp.epoch
-        fout = open(conf['file_json'], 'w')
-        json.dump(d, fout, indent=4)
 
 
 # -----------------------------------------------------------------------------
@@ -153,22 +172,6 @@ class Task(object):
             if self.id in job.tids:
                 return job.host
 
-    def _make_re(self, res):
-        re = ''
-        for tag in res:
-            re += run.conf['re'][tag]
-        return re
-
-    def add_state(self, name, taskid):
-        regex = self._make_re(['date', 'time', name])
-        regex = regex % taskid
-        state = State(name, regex, self.run)
-        if state.name == 'failed' and state.tstamp.stamp:
-            self.run.failed += 1
-        elif state.name == 'completed' and state.tstamp.stamp:
-            self.run.completed += 1
-        self.states.append(state)
-
 
 # -----------------------------------------------------------------------------
 class State(object):
@@ -177,6 +180,7 @@ class State(object):
         self.tstamp = TimeStamp(regex, self, run)
 
 
+# -----------------------------------------------------------------------------
 class TimeStamp(object):
     def __init__(self, regex, state, run):
         self.regex = re.compile(regex)
@@ -217,21 +221,6 @@ def usage(msg=None, noexit=False):
 
 # ------------------------------------------------------------------------------
 if __name__ == "__main__":
-    """
-    status codes:
-    COASTER_STATUS_UNSUBMITTED = 0,
-    COASTER_STATUS_SUBMITTING = 8,
-    COASTER_STATUS_SUBMITTED = 1,
-    COASTER_STATUS_ACTIVE = 2,
-    COASTER_STATUS_SUSPENDED = 3,
-    COASTER_STATUS_RESUMED = 4,
-    COASTER_STATUS_FAILED = 5,
-    COASTER_STATUS_CANCELED = 6,
-    COASTER_STATUS_COMPLETED = 7,
-    COASTER_STATUS_STAGE_IN = 16,
-    COASTER_STATUS_STAGE_OUT = 17,
-    COASTER_STATUS_UNKNOWN = 9999
-    """
 
     if len(sys.argv) <= 2:
         usage("insufficient arguments -- need swift log file and output file")
@@ -267,12 +256,12 @@ if __name__ == "__main__":
         conf['re'][name] = "TASK_STATUS_CHANGE taskid=urn:%s.*"+status
 
     run = Run(conf)
-    run.add_state('start')
-    run.add_state('finish')
+    run.add_state(run.session, 'start')
+    run.add_state(run.session, 'finish')
 
-    for task in run.tasks:
-        task.add_state('new', task.id)
+    for task in run.session.tasks:
+        run.add_state(task, 'new')
         for name, code in conf['tcodes'].iteritems():
-            task.add_state(name, task.id)
+            run.add_state(task, name)
 
     run.save_to_json()
