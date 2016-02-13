@@ -9,8 +9,6 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
 
 ## Experimental Workflow
 
-Yadu: Please add a descitpion of how to run experiments with one or two XSEDE resources.
-
 1. Prerequisites:
 1. Clone this repository:
 
@@ -24,7 +22,6 @@ Yadu: Please add a descitpion of how to run experiments with one or two XSEDE re
     git clone https://github.com/swift-lang/swift-k.git
     cd swift-k
     git fetch
-  ...
   ```
 
 1. Install the Swift software stack:
@@ -34,7 +31,6 @@ Yadu: Please add a descitpion of how to run experiments with one or two XSEDE re
     cd swift-k
     ant redist
     export PATH=$PWD/dist/swift-svn/bin:$PATH
-  ...
   ```
 
 1. Set up experiment environment:
@@ -50,7 +46,6 @@ Yadu: Please add a descitpion of how to run experiments with one or two XSEDE re
 
     # If this simple test doesn't pass for both sites, please fix before
     # proceeding.
-  ...
   ```
 
 1. Edit the file ```...``` to set:
@@ -67,8 +62,7 @@ Yadu: Please add a descitpion of how to run experiments with one or two XSEDE re
 
   ```
     ./test_runner_runner.sh
-  ...
-
+  ```
 
 ## Data Analysis Workflow
 
