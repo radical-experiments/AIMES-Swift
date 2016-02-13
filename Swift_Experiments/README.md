@@ -35,30 +35,31 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
 
 1. Set up experiment environment: To run swift only experiments, ensure that you have ssh keys setup to allow for passwordless access to stampede and gordon. You should be able to ssh to ```stampede.tacc.utexas.edu``` and ```gordon.sdsc.edu```, without a password prompt.
 
-1. Edit the files:
-  * ```AIMES-Swift/Swift_Experiments/swift.conf``` to set:
+1. ```cd AIMES-Swift/Swift_Experiments``` and edit the following files:
+
+  * ```swift.conf``` and set:
     
     ```
     sites: [stampede, gordon]  # runs both sites
     sites: stampede            # runs only stampede
     ```
     
-  * test_runner_runner.sh:
+  * ```test_runner_runner.sh``` and set:
   
     ```
     REPEAT determines the times the experiment is repeated [4])
     ```
   
-  * test_runner.sh:
+  * ```test_runner.sh``` and set:
   
     ```
-    Set emails, remote sleep DUR, etc
+    emails, remote sleep DUR, etc
     ```
 
 1. Run the script...:
 
   ```
-    ./test_runner_runner.sh
+  ./test_runner_runner.sh
   ```
 
 ## Data Analysis Workflow
