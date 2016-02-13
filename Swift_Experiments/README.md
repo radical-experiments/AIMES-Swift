@@ -33,30 +33,27 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
     export PATH=$PWD/dist/swift-svn/bin:$PATH
   ```
 
-1. Set up experiment environment:
+1. Set up experiment environment: To run swift only experiments, ensure that you have ssh keys setup to allow for passwordless access to stampede and gordon. You should be able to ssh to ```stampede.tacc.utexas.edu``` and ```gordon.sdsc.edu```, without a password prompt.
 
-  ```
-    cd AIMES-Swift/Swift_Experiments
+1. Edit the files:
+  * ```AIMES-Swift/Swift_Experiments/swift.conf``` to set:
     
-    # To run swift only experiments, ensure that you have ssh keys setup
-    # to allow for passwordless access to stampede and gordon.
-    # You should be able to ssh to stampede.tacc.utexas.edu
-    # and gordon.sdsc.edu, without a password prompt.
-    ./test_ssh.sh
-
-    # If this simple test doesn't pass for both sites, please fix before
-    # proceeding.
-  ```
-
-1. Edit the file ```...``` to set:
-
-   Relevant files are int AIMES-Swift/Swift_Experiments
-  * swift.conf (All swift site params are here)
-     ** sites: [stampede, gordon]  # runs both sites
-     ** sites: stampede            # runs only stampede
-
-  * test_runner_runner.sh ( REPEAT determines the times the experiment is repeated [4])
-  * test_runner.sh (Set emails, remote sleep DUR, etc)
+    ```
+    sites: [stampede, gordon]  # runs both sites
+    sites: stampede            # runs only stampede
+    ```
+    
+  * test_runner_runner.sh:
+  
+    ```
+    REPEAT determines the times the experiment is repeated [4])
+    ```
+  
+  * test_runner.sh:
+  
+    ```
+    Set emails, remote sleep DUR, etc
+    ```
 
 1. Run the script...:
 
