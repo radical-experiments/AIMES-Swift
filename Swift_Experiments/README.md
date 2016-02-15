@@ -21,19 +21,19 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
 
 1. Clone the Swift software stack:
 
-  ```
-    git clone https://github.com/swift-lang/swift-k.git
-    cd swift-k
-    git fetch
-  ```
+   ```
+   git clone https://github.com/swift-lang/swift-k.git
+   cd swift-k
+   git fetch
+   ```
 
 1. Install the Swift software stack:
 
   ```
-    # Please make sure you have java and ant installed
-    cd swift-k
-    ant redist
-    export PATH=$PWD/dist/swift-svn/bin:$PATH
+  # Please make sure you have java and ant installed
+  cd swift-k
+  ant redist
+  export PATH=$PWD/dist/swift-svn/bin:$PATH
   ```
 
 1. Set up experiment environment: To run swift only experiments, ensure that you have ssh keys setup to allow for passwordless access to stampede and gordon. You should be able to ssh to ```stampede.tacc.utexas.edu``` and ```gordon.sdsc.edu```, without a password prompt.
