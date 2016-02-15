@@ -10,6 +10,9 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
 ## Experimental Workflow
 
 1. Prerequisites:
+
+  * Coreutils. Under OSX install with ```brew install coreutils```, and modify ```runner.sh``` to use ```gshuf``` instead of ```shuf``` or create a ```shuf``` symlink to ```gshuf``` with ```sudo ln -s /usr/local/bin/gshuf /usr/local/bin/shuf```.
+
 1. Clone this repository:
 
   ```
@@ -44,16 +47,19 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
     sites: stampede            # runs only stampede
     ```
     
-  * ```test_runner_runner.sh``` and set:
+  * ```experiment.sh``` and set:
   
     ```
     REPEAT determines the times the experiment is repeated [4])
     ```
   
-  * ```test_runner.sh``` and set:
+  * ```runner.sh``` and set:
   
     ```
-    emails, remote sleep DUR, etc
+    TESTLOG=test_$(date +%Y-%m-%d:%H:%M:%S).log # The name of the run log file
+    SLEEPDUR=900                                # Task duration
+    EMAIL_TO="matteo.turilli@gmail.com"         # E-mail where to send exec report
+    EMAIL_FROM="matteo.turilli@gmail.com"
     ```
 
 1. Run the script...:
