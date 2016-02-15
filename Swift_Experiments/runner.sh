@@ -2,9 +2,8 @@
 
 TESTLOG=test_$(date +%Y-%m-%d:%H:%M:%S).log
 SLEEPDUR=900
-AIMES_CONFIG=conf/yadu_test_config.json
-EMAIL_TO="yadudoc1729@gmail.com"
-EMAIL_FROM="swift@midway.rcc.uchicago.edu"
+EMAIL_TO="matteo.turilli@gmail.com"
+EMAIL_FROM="matteo.turilli@gmail.com"
 
 arg_generate_full()
 {

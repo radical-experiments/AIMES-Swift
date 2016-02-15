@@ -5,6 +5,6 @@ for i in $(seq 1 1 $REPEAT)
 do
     echo "Run $i"
     echo "******************************************"
-    ./test_runner.sh
+    ./runner.sh
     echo "******************************************"
 done
