@@ -75,7 +75,37 @@ The analysis wrokflow is designed to be automated, reusable, and extensible. The
 
 1. Raw data are kept in the directory ```raw_data/name_of_resource(s)/exp-xxx```. Raw data are **NOT** uploaded to git dur to space limitations. Raw data are tarred and b2zipped into a single file for archive purposes.
 
-1. Data wrangling:
+1. Data wrangling. Raw data are recorded in ```swift.log```. Here an annotated sample of the logs for a task execution:
+
+  ```
+  22:57:48,775 JOB_INIT           swift            jobid=sleep-koblgxkm
+  22:57:48,775 JOB_SITE_SELECT    swift            jobid=sleep-koblgxkm
+  22:57:48,785 JOB_START          swift            jobid=sleep-koblgxkm host=stampede 
+  22:57:48,785 JOB_TASK           Execute          jobid=sleep-koblgxkm taskid=urn:R-2-13-1453935467203 
+
+  22:58:10,682 BLOCK_REQUESTED    RemoteLogHandler                                                                      id=0127-5804100-000000, cores=16, coresPerWorker=1, walltime=1440
+
+  22:58:22,743 TASK_STATUS_CHANGE Execute                               taskid=urn:R-2-13-1453935467203 status=8
+  22:58:22,815 TASK_STATUS_CHANGE Execute                               taskid=urn:R-2-13-1453935467203 status=1
+
+  01:01:14,281 BLOCK_ACTIVE       RemoteLogHandler                                                                      id=0127-5804100-000000
+
+  01:02:19,467 WORKER_ACTIVE      RemoteLogHandler                                                                 blockid=0127-5804100-000000 id=000000 node=c401-403.stampede.tacc.utexas.edu cores=16
+
+  01:02:19,780 TASK_STATUS_CHANGE Execute                               taskid=urn:R-2-13-1453935467203 status=16 workerid=0127-5804100-000000:000000
+  01:02:19,952 TASK_STATUS_CHANGE Execute                               taskid=urn:R-2-13-1453935467203 status=2  workerid=0127-5804100-000000:000000
+  01:17:20,124 TASK_STATUS_CHANGE Execute                               taskid=urn:R-2-13-1453935467203 status=17
+  01:17:20,267 TASK_STATUS_CHANGE Execute                               taskid=urn:R-2-13-1453935467203 status=7
+
+  01:17:20,267 JOB_END            swift            jobid=sleep-koblgxkm
+
+  01:17:20,664 BLOCK_SHUTDOWN     RemoteLogHandler                                                                       id=0127-5804100-000000
+  01:17:20,665 WORKER_LOST        RemoteLogHandler                                                                  blockid=0127-5804100-000000 id=000000
+  01:17:20,665 WORKER_SHUTDOWN    RemoteLogHandler                                                                  blockid=0127-5804100-000000 id=000000
+  01:17:21,718 BLOCK_DONE         RemoteLogHandler                                                                       id=0127-5804100-000000
+  ```
+
+ The following filters the log file calculating the timings for each relevant event. Each event is delimited by a state transition:
 
    ```
    for d in `find . -iname "exp-*"`; do echo "python ../../bin/swift-timestamps.py $d/swift.log $d/durations.json"; python ../../bin/swift-timestamps.py $d/swift.log $d/durations.json; done
