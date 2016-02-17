@@ -130,6 +130,7 @@ class Session(object):
 
 # -----------------------------------------------------------------------------
 class Job(object):
+    '''A job is a task in the Coaster lingo'''
     def __init__(self, jid, run):
         self.run = run
         self.id = jid
@@ -159,7 +160,26 @@ class Job(object):
 
 
 # -----------------------------------------------------------------------------
+class Worker(object):
+    '''A worker is a pilot in the Coaster lingo.
+
+    States:
+        BLOCK_REQUESTED
+        BLOCK_ACTIVE
+        WORKER_ACTIVE
+        BLOCK_SHUTDOWN
+        BLOCK_UTILIZATION
+        WORKER_LOST
+        WORKER_SHUTDOWN
+        BLOCK_DONE
+    '''
+    pass
+
+
+# -----------------------------------------------------------------------------
 class Task(object):
+    '''TODO: merge job and task into a single class as they logically are the
+    same entity'''
     def __init__(self, tid, run, jobs):
         self.run = run
         self.id = tid
