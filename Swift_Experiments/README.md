@@ -11,6 +11,7 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
 
 1. Prerequisites:
 
+  * Execute the experiment from a machine with a **public IP**.
   * Coreutils. Under OSX install with ```brew install coreutils```, and modify ```runner.sh``` to use ```gshuf``` instead of ```shuf``` or create a ```shuf``` symlink to ```gshuf``` with ```sudo ln -s /usr/local/bin/gshuf /usr/local/bin/shuf```.
 
 1. Clone this repository:
@@ -19,28 +20,25 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
   git clone git@github.com:radical-experiments/AIMES-Swift.git
   ```
 
-1. Clone the Swift software stack:
+1. Download Swift:
 
    ```
-   git clone https://github.com/swift-lang/swift-k.git
-   cd swift-k
-   git fetch
+   wget http://swift-lang.org/packages/swift-0.96.2.tar.gz
+   tar xvfz swift-0.96.2.tar.gz
    ```
 
-1. Install the Swift software stack:
+1. Make Swift available in your PATH:
 
   ```
-  # Please make sure you have java and ant installed
-  cd swift-k
-  ant redist
-  export PATH=$PWD/dist/swift-svn/bin:$PATH
+  cd swift-0.96.2
+  export PATH=$PWD/bin:$PATH
   ```
 
 1. Set up experiment environment: To run swift only experiments, ensure that you have ssh keys setup to allow for passwordless access to stampede and gordon. You should be able to ssh to ```stampede.tacc.utexas.edu``` and ```gordon.sdsc.edu```, without a password prompt.
 
 1. ```cd AIMES-Swift/Swift_Experiments``` and edit the following files:
 
-  * ```swift.conf``` and set:
+  * ```swift.conf``` and set the sites where you want to run your experiment(s). For example:
     
     ```
     sites: [stampede, gordon]  # runs both sites
@@ -62,9 +60,10 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
     EMAIL_FROM="matteo.turilli@gmail.com"
     ```
 
-1. Run the script...:
+1. Run the experiments:
 
   ```
+  export GLOBUS_HOSTNAME="YOUR_IP"
   ./test_runner_runner.sh
   ```
 
