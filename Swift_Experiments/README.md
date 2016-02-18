@@ -104,6 +104,28 @@ The analysis wrokflow is designed to be automated, reusable, and extensible. The
   01:17:20,665 WORKER_SHUTDOWN    RemoteLogHandler                                                                  blockid=0127-5804100-000000 id=000000
   01:17:21,718 BLOCK_DONE         RemoteLogHandler                                                                       id=0127-5804100-000000
   ```
+  
+ Description of relevant log entries:
+
+ | #  | Log tag            | Location           | Component | Description |
+ |----|--------------------|--------------------|-----------|-------------|
+ | 1  | JOB_INIT           | Workstation (WS)   | Swift     | Creates a job |
+ | 2  | JOB_SITE_SELECT    | WS                 | Swift     | Selects a site for that job
+ | 3  | JOB_START          | WS                 | Swift     | Schedules that job on the selected site (meaning that is scheduled, not that has started to execute it) |
+ | 4  | JOB_TASK           | Head node (HN)     | Coaster   | Gets the job on the selected site and assigns to it a taskid. For Coaster, a job is a task. |
+ | 5  | BLOCK_REQUESTED    | HN                 | Coaster   | Submits to the local LRMS one or more blocks depending on the amount of tasks it gets, the user configuration, and its own algorithms. Blocks are therefore jobs on a resource LRMS. |
+ | 6  | TASK_STATUS_CHANGE | HN                 | Coaster   | (Meanwhile?) marks tasks as submitting (state 8) |
+ | 7  | TASK_STATUS_CHANGE | HN                 | Coaster   | Marks tasks as submitted (state 1) |
+ | 7  | BLOCK_ACTIVE       | Compute nodes (CN) | LRMS      | Schedules blocks/jobs on the compute nodes. Active blocks are therefore pilots. |
+ | 8  | WORKER_ACTIVE      | CN                 | Worker(s) | Bootstrap on each active block. More than one worker can bootstrap for each block/pilot depending on how many cores each worker needs as indicated by the user in swift.conf. Workers are pilot agents. |
+ | 9  | TASK_STATUS_CHANGE | HN, WS, CN         | Coaster   | Stages in the input files of the tasks that are ready to be executed on the workers that have become active, if any (task state 16). |
+ | 10 | TASK_STATUS_CHANGE | HN, CN             | Worker    | Executes tasks (state 2). |
+ | 11 | TASK_STATUS_CHANGE | HN, CN, (WS?)      | Coaster   | Stages out the output files of the tasks that have terminated (state 17). Note that this includes stderr.txt, stdout.txt, wrapper.error, wrapper.log for every task. |
+ | 12 | TASK_STATUS_CHANGE | HN                 | Coaster   | Marks tasks as completed (state 7). |
+ | 13 | JOB_END            | WS                 | Swift     | Marks the jobs referring to the completed tasks as ended. | 
+ | 14 | BLOCK_SHUTDOWN     | HN                 | Coaster   | Shuts down the blocks (i.e. jobs running on the compute node(s)). **NOTE**: this happens also when jobs are waiting for execution on the resource on which this block is active. This means that in its current configuration, Swift+Coaster do not reuse pilots. After executing the first batch of tasks, the pilot is shut down. Coaster queue enough pilots of the maximum size (i.e. with the maximum amount of compute node configured by the user in swift.config) to guarantee as much concurrency as the maximum amount of jobs allowed to be queue on that specific resource (also configured in swift.conf). This should be visible in our measurements as multiple (and concurrent) queue time for each scheduled pilot. |
+ | 15 | WORKER_SHUTDOWN    | HN                 | Coaster   | Marks the workers that were running on the blocks that have been shut down as shut down too. |
+ | 16 | BLOCK_DONE         | HN                 | Coaster   | Marks the blocks as done. 
 
  The following filters the log file calculating the timings for each relevant event. Each event is delimited by a state transition:
 
