@@ -16,22 +16,21 @@ __license__ = "MIT"
 
 # -----------------------------------------------------------------------------
 class Log(object):
-    def __init__(self, flog, regexs):
+    def __init__(self, flog, run):
         self.entries = [line.strip() for line in open(flog)]
-        self.regexs = regexs
-        self.partitions = self._partition_logs()
+        self.run = run
+        self._partition_logs()
 
     def _partition_logs(self):
-        partitions = []
         filters = []
-        for regex in self.regexs:
-            if regex.filter and regex.filter not in filters:
-                filters.append(regex.filter)
-                # print "DEBUG: _partition_logs:\n\tfilters = %s" % filters
-                # print "DEBUG: _partition_logs:\n\tre.id = %s;\n\tre.entity = %s;\n\tre.filter = %s\n" % (regex.id, regex.entity, regex.filter)
-                regex.lpartition = self._grep_logs(regex.filter)
-                partitions.append(regex.lpartition)
-        return partitions
+        for entity, value in self.run.res.iteritems():
+            for tag, patterns in value.iteritems():
+                if patterns['lfilter'] and patterns['lfilter'] not in filters:
+                    filters.append(patterns['lfilter'])
+                    # print "DEBUG: _partition_logs:\n\tfilters = %s" % filters
+                    # print "DEBUG: _partition_logs:\n\tre.id = %s;\n\tre.entity = %s;\n\tre.filter = %s\n" % (tag, entity, patterns['lfilter'])
+                    partition = self._grep_logs(patterns['lfilter'])
+                    patterns['flogs'] = partition
 
     def _grep_logs(self, lfilter):
         partition = []
@@ -46,10 +45,10 @@ class Log(object):
 
 # -----------------------------------------------------------------------------
 class Run(object):
-    def __init__(self, flog, regexs, dtpattern):
-        self.res = regexs
+    def __init__(self, flog, res, dtpattern):
+        self.res = res
         self.dtpattern = dtpattern
-        self.log = Log(flog, self.res)
+        self.log = Log(flog, self)
         self.session = Session(self)
 
     # def _make_re(self, res):
@@ -58,12 +57,12 @@ class Run(object):
     #         re += run.re[tag]
     #     return re
 
-    def get_res(self, entityid):
-        res = []
-        for regex in self.res:
-            if regex.entityid == entityid:
-                res.append(regex)
-        return res
+    # def get_res(self, entityid):
+    #     res = []
+    #     for regex in self.res:
+    #         if regex.entityid == entityid:
+    #             res.append(regex)
+    #     return res
 
     def add_state(self, obj, name):
         regex = self._make_re(['date', 'time', name])
@@ -96,14 +95,14 @@ class Run(object):
 
 
 # -----------------------------------------------------------------------------
-class Re(object):
-    def __init__(self, entityid, name, pattern, lfilter=None):
-        self.id = name
-        self.entityid = entityid
-        self.pattern = pattern
-        self.filter = lfilter
-        self.compiled = None
-        self.lpartition = None
+# class Re(object):
+#     def __init__(self, entityid, name, pattern, lfilter=None):
+#         self.id = name
+#         self.entityid = entityid
+#         self.pattern = pattern
+#         self.filter = lfilter
+#         self.compiled = None
+#         self.lpartition = None
 
 
 # -----------------------------------------------------------------------------
@@ -115,10 +114,29 @@ class Session(object):
         self.hosts = []
         self.failed = 0
         self.completed = 0
-        self.res = self.run.get_res('session')
         self.id = self._get_id()
+
+        print self.id
+        print
+
         self.jobs = self._get_jobs()
+
+        print len(self.jobs)
+        for i in self.jobs:
+            print i.id
+            print i.host
+            print
+
         self.tasks = self._get_tasks()
+
+        print len(self.tasks)
+        for i in self.tasks:
+            print i.id
+            print i.jid
+            print i.host
+            print
+        sys.exit(0)
+
         self.blocks = self._get_blocks()
 
         # print len(self.blocks)
@@ -132,31 +150,30 @@ class Session(object):
     def _get_id(self):
         sid = None
         logs = self.run.log.entries
-        for regex in self.res:
-            if regex.id == 'id':
-                if regex.lpartition:
-                    logs = regex.lpartition
-                for line in logs:
-                    m = re.search(regex.pattern, line)
-                    if m and not sid:
-                        sid = m.group(1)
-                        break
+        pattern = self.run.res['session']['id']['pattern']
+        flogs = self.run.res['session']['id']['flogs']
+        if flogs:
+            logs = flogs
+        for line in logs:
+            m = re.search(pattern, line)
+            if m and not sid:
+                sid = m.group(1)
+                break
         return sid
 
     def _get_jobs(self):
         ids = []
         jobs = []
-        res = self.run.get_res('job')
         logs = self.run.log.entries
-        for regex in res:
-            if regex.id == 'id':
-                if regex.lpartition:
-                    logs = regex.lpartition
-                for line in logs:
-                    m = re.search(regex.pattern, line)
-                    if m and m.group(1) not in ids:
-                        ids.append(m.group(1))
-                        jobs.append(Job(m.group(1), res, self.run))
+        pattern = self.run.res['job']['id']['pattern']
+        flogs = self.run.res['session']['id']['flogs']
+        if flogs:
+            logs = flogs
+        for line in logs:
+            m = re.search(pattern, line)
+            if m and m.group(1) not in ids:
+                ids.append(m.group(1))
+                jobs.append(Job(m.group(1), res, self.run))
         for job in jobs:
             if job.host not in self.hosts:
                 self.hosts.append(job.host)
@@ -165,17 +182,17 @@ class Session(object):
     def _get_tasks(self):
         ids = []
         tasks = []
-        res = self.run.get_res('task')
+
         logs = self.run.log.entries
-        for regex in res:
-            if regex.id == 'id':
-                if regex.lpartition:
-                    logs = regex.lpartition
-                for line in logs:
-                    m = re.search(regex.pattern, line)
-                    if m and m.group(1) not in ids:
-                        ids.append(m.group(1))
-                        tasks.append(Task(m.group(1), res, self.run))
+        pattern = self.run.res['task']['id']['pattern']
+        flogs = self.run.res['task']['id']['flogs']
+        if flogs:
+            logs = flogs
+        for line in logs:
+            m = re.search(pattern, line)
+            if m and m.group(1) not in ids:
+                ids.append(m.group(1))
+                tasks.append(Task(m.group(1), res, self.run))
         for job in self.jobs:
             for task in tasks:
                 if job.tid == task.id:
@@ -207,34 +224,31 @@ class Job(object):
         self.run = run
         self.res = res
         self.id = jid
-        self.logs = self.run.log.entries
         self.host = self._get_host()
         self.tid = self._get_task_id()
 
     def _get_host(self):
-        logs = self.logs
-        for regex in res:
-            if regex.id == 'host':
-                pattern = regex.pattern % self.id
-                if regex.lpartition:
-                    logs = regex.lpartition
-                for line in logs:
-                    m = re.search(pattern, line)
-                    if m and m.group(1):
-                        return m.group(1)
+        logs = self.run.log.entries
+        pattern = self.run.res['job']['host']['pattern'] % self.id
+        flogs = self.run.res['job']['host']['flogs']
+        if flogs:
+            logs = flogs
+        for line in logs:
+            m = re.search(pattern, line)
+            if m and m.group(1):
+                return m.group(1)
         return None
 
     def _get_task_id(self):
-        logs = self.logs
-        for regex in res:
-            if regex.id == 'taskid':
-                pattern = regex.pattern % self.id
-                if regex.lpartition:
-                    logs = regex.lpartition
-                for line in logs:
-                    m = re.search(pattern, line)
-                    if m and m.group(1):
-                        return m.group(1)
+        logs = self.run.log.entries
+        pattern = self.run.res['job']['taskid']['pattern'] % self.id
+        flogs = self.run.res['job']['host']['flogs']
+        if flogs:
+            logs = flogs
+        for line in logs:
+            m = re.search(pattern, line)
+            if m and m.group(1):
+                return m.group(1)
         return None
 
 
@@ -353,8 +367,7 @@ def usage(msg=None, noexit=False):
 if __name__ == "__main__":
 
     DTPATTERN = "%Y-%m-%d %H:%M:%S"
-    DATE = "(\d+-\d+-\d+) "
-    TIME = "(\d+:\d+:\d+),\d+[-,+]\d{4}[\w\s]+"
+    DT = "(\d+-\d+-\d+) (\d+:\d+:\d+),\d+[-,+]\d{4}[\w\s]+"
 
     # Check whether the parser is run with the required arguments.
     if len(sys.argv) <= 2:
@@ -379,135 +392,114 @@ if __name__ == "__main__":
                           'utilization'    , 'done'],
               'worker' : ['active'         , 'lost'          , 'shutdown']}
 
-    res = [Re('session',
-              'id',
-              'RUN_ID (run\d{3})'),
-           Re('session',
-              'start',
-              DATE+TIME+'INFO  Loader JAVA'),
-           Re('session',
-              'finish',
-              DATE+TIME+'INFO  Loader Swift finished with no errors'),
-           Re('job',
-              'id',
-              'JOB_START jobid=([\w-]+) tr',
-              'JOB_START jobid='),
-           Re('job',
-              'host',
-              'JOB_START jobid=%s[\w\s/:.\-=\+\[\]]*host=([\w.]*)',
-              'JOB_START jobid='),
-           Re('job',
-              'taskid',
-              'JOB_TASK jobid=%s\s+taskid=urn:(R-\d+[-,x]\d+[-,x]\d+)',
-              'JOB_TASK jobid='),
-           Re('job',
-              'init',
-              DATE+TIME+'JOB_INIT jobid=%s',
-              'JOB_INIT jobid='),
-           Re('job',
-              'siteselect',
-              DATE+TIME+'JOB_SITE_SELECT jobid=%s',
-              'JOB_SITE_SELECT jobid='),
-           Re('job',
-              'start',
-              DATE+TIME+'JOB_START jobid=%s',
-              'JOB_START jobid='),
-           Re('job',
-              'task',
-              DATE+TIME+'JOB_TASK jobid=%s taskid=urn:%s',
-              'JOB_TASK jobid='),
-           Re('job',
-              'end',
-              DATE+TIME+'JOB_END jobid=%s',
-              'JOB_END jobid='),
-           Re('task',
-              'id',
-              'JOB_TASK jobid=[\w-]+\s+taskid=urn:(R-\d+[-,x]\d+[-,x]\d+)',
-              'JOB_TASK jobid='),
-           Re('task',
-              'jobid',
-              'JOB_TASK jobid=([\w-]+)\s+taskid=urn:%s',
-              'JOB_TASK jobid='),
-           Re('task',
-              'blockid',
-              'taskid=urn:%s\s+status=2\s+workerid=([\d\-]+):',
-              'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ status=2'),
-           Re('task',
-              'workerid',
-              'taskid=urn:%s\s+status=2\s+workerid=%s:(\d+)',
-              'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ status=2'),
-           Re('block',
-              'id',
-              'BLOCK_REQUESTED id=([\d\-]+),',
-              'BLOCK_REQUESTED id='),
-           Re('block',
-              'cores',
-              'BLOCK_REQUESTED id=%s, cores=(\d+),',
-              'BLOCK_REQUESTED id='),
-           Re('block',
-              'coresworker',
-              'BLOCK_REQUESTED id=%s[\w\s,=]+coresPerWorker=(\d+),',
-              'BLOCK_REQUESTED id='),
-           Re('block',
-              'walltime',
-              'BLOCK_REQUESTED id=%s[\w\s,=]+walltime=(\d+)',
-              'BLOCK_REQUESTED id='),
-           Re('block',
-              'utilization',
-              'BLOCK_UTILIZATION id=%s, u=([\d\.]+)',
-              'BLOCK_UTILIZATION id='),
-           Re('block',
-              'requested',
-              DATE+TIME+'BLOCK_REQUESTED id=%s',
-              'BLOCK_REQUESTED id='),
-           Re('block',
-              'active',
-              DATE+TIME+'BLOCK_ACTIVE id=%s',
-              'BLOCK_ACTIVE id='),
-           Re('block',
-              'shutdown',
-              DATE+TIME+'BLOCK_SHUTDOWN id=%s',
-              'BLOCK_SHUTDOWN id='),
-           Re('block',
-              'done',
-              DATE+TIME+'BLOCK_DONE id=%s',
-              'BLOCK_DONE id='),
-           Re('worker',
-              'id',
-              'WORKER_ACTIVE blockid=[\d\-]+ id=(\d+)',
-              'WORKER_ACTIVE blockid='),
-           Re('worker',
-              'blockid',
-              'WORKER_ACTIVE blockid=([\d\-]+)',
-              'WORKER_ACTIVE blockid='),
-           Re('worker',
-              'node',
-              'WORKER_ACTIVE blockid=%s id=%s node=([\w\d\-\.]+)',
-              'WORKER_ACTIVE blockid='),
-           Re('worker',
-              'coresnode',
-              'WORKER_ACTIVE blockid=%s id=%s[\w\d\s\-\.]+cores=(\d+)',
-              'WORKER_ACTIVE blockid='),
-           Re('worker',
-              'active',
-              DATE+TIME+'WORKER_ACTIVE blockid=%s id=%s',
-              'WORKER_ACTIVE blockid='),
-           Re('worker',
-              'lost',
-              DATE+TIME+'WORKER_LOST blockid=%s id=%s',
-              'WORKER_LOST blockid='),
-           Re('worker',
-              'shutdown',
-              DATE+TIME+'WORKER_SHUTDOWN blockid=%s id=%s',
-              'WORKER_SHUTDOWN blockid=')]
+    resession = {'id'    : {'pattern': 'RUN_ID (run\d{3})',
+                            'lfilter': None,
+                            'flogs'  : None},
+                 'start' : {'pattern': DT+'INFO  Loader JAVA',
+                            'lfilter': None,
+                            'flogs'  : None},
+                 'finish': {'pattern': DT+'finished with no errors',
+                            'lfilter': None,
+                            'flogs'  : None}}
+
+    rejob = {'id'     : {'pattern': 'JOB_START jobid=([\w-]+) tr',
+                         'lfilter': 'JOB_START jobid=',
+                         'flogs'  : None},
+             'host'   : {'pattern': 'JOB_START jobid=%s[\w\s/:.\-=\+\[\]]*host=([\w.]*)',
+                         'lfilter': 'JOB_START jobid=',
+                         'flogs'  : None},
+             'taskid' : {'pattern': 'JOB_TASK jobid=%s\s+taskid=urn:(R-\d+[-,x]\d+[-,x]\d+)',
+                         'lfilter': 'JOB_TASK jobid=',
+                         'flogs'  : None},
+             'init'   : {'pattern': DT+'JOB_INIT jobid=%s',
+                         'lfilter': 'JOB_INIT jobid=',
+                         'flogs'  : None},
+             'sselect': {'pattern': DT+'JOB_SITE_SELECT jobid=%s',
+                         'lfilter': 'JOB_SITE_SELECT jobid=',
+                         'flogs'  : None},
+             'start'  : {'pattern': DT+'JOB_START jobid=%s',
+                         'lfilter': 'JOB_START jobid=',
+                         'flogs'  : None},
+             'task'   : {'pattern': DT+'JOB_TASK jobid=%s taskid=urn:%s',
+                         'lfilter': 'JOB_TASK jobid=',
+                         'flogs'  : None},
+             'end'    : {'pattern': DT+'JOB_END jobid=%s',
+                         'lfilter': 'JOB_END jobid=',
+                         'flogs'  : None}}
+
+    retask = {'id'      : {'pattern': 'JOB_TASK jobid=[\w-]+\s+taskid=urn:(R-\d+[-,x]\d+[-,x]\d+)',
+                           'lfilter': 'JOB_TASK jobid=',
+                           'flogs'  : None},
+              'jobid'   : {'pattern': 'JOB_TASK jobid=([\w-]+)\s+taskid=urn:%s',
+                           'lfilter': 'JOB_TASK jobid=',
+                           'flogs'  : None},
+              'blockid' : {'pattern': 'taskid=urn:%s\s+status=2\s+workerid=([\d\-]+):',
+                           'lfilter': 'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ status=2',
+                           'flogs'  : None},
+              'workerid': {'pattern': 'taskid=urn:%s\s+status=2\s+workerid=%s:(\d+)',
+                           'lfilter': 'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ status=2',
+                           'flogs'  : None}}
+
+    reblock = {'id'         : {'pattern': 'BLOCK_REQUESTED id=([\d\-]+),',
+                               'lfilter': 'BLOCK_REQUESTED id=',
+                               'flogs'  : None},
+               'cores'      : {'pattern': 'BLOCK_REQUESTED id=%s, cores=(\d+),',
+                               'lfilter': 'BLOCK_REQUESTED id=',
+                               'flogs'  : None},
+               'coresworker': {'pattern': 'BLOCK_REQUESTED id=%s[\w\s,=]+coresPerWorker=(\d+),',
+                               'lfilter': 'BLOCK_REQUESTED id=',
+                               'flogs'  : None},
+               'walltime'   : {'pattern': 'BLOCK_REQUESTED id=%s[\w\s,=]+walltime=(\d+)',
+                               'lfilter': 'BLOCK_REQUESTED id=',
+                               'flogs'  : None},
+               'utilization': {'pattern': 'BLOCK_UTILIZATION id=%s, u=([\d\.]+)',
+                               'lfilter': 'BLOCK_UTILIZATION id=',
+                               'flogs'  : None},
+               'requested'  : {'pattern': DT+'BLOCK_REQUESTED id=%s',
+                               'lfilter': 'BLOCK_REQUESTED id=',
+                               'flogs'  : None},
+               'active'     : {'pattern': DT+'BLOCK_ACTIVE id=%s',
+                               'lfilter': 'BLOCK_ACTIVE id=',
+                               'flogs'  : None},
+               'shutdown'   : {'pattern': DT+'BLOCK_SHUTDOWN id=%s',
+                               'lfilter': 'BLOCK_SHUTDOWN id=',
+                               'flogs'  : None},
+               'done'       : {'pattern': DT+'BLOCK_DONE id=%s',
+                               'lfilter': 'BLOCK_DONE id=',
+                               'flogs'  : None}}
+
+    reworker = {'id'       : {'pattern': 'WORKER_ACTIVE blockid=[\d\-]+ id=(\d+)',
+                              'lfilter': 'WORKER_ACTIVE blockid=',
+                              'flogs'  : None},
+                'blockid'  : {'pattern': 'WORKER_ACTIVE blockid=([\d\-]+)',
+                              'lfilter': 'WORKER_ACTIVE blockid=',
+                              'flogs'  : None},
+                'node'     : {'pattern': 'WORKER_ACTIVE blockid=%s id=%s node=([\w\d\-\.]+)',
+                              'lfilter': 'WORKER_ACTIVE blockid=',
+                              'flogs'  : None},
+                'coresnode': {'pattern': 'WORKER_ACTIVE blockid=%s id=%s[\w\d\s\-\.]+cores=(\d+)',
+                              'lfilter': 'WORKER_ACTIVE blockid=',
+                              'flogs'  : None},
+                'active'   : {'pattern': DT+'WORKER_ACTIVE blockid=%s id=%s',
+                              'lfilter': 'WORKER_ACTIVE blockid=',
+                              'flogs'  : None},
+                'lost'     : {'pattern': DT+'WORKER_LOST blockid=%s id=%s',
+                              'lfilter': 'WORKER_LOST blockid=',
+                              'flogs'  : None},
+                'shutdown' : {'pattern': DT+'WORKER_SHUTDOWN blockid=%s id=%s',
+                              'lfilter': 'WORKER_SHUTDOWN blockid=',
+                              'flogs'  : None}}
 
     for name, code in states['task'].iteritems():
         status = "status=%s" % code
-        r = Re('task',
-               name,
-               DATE+TIME+'TASK_STATUS_CHANGE taskid=urn:%s[\w\s\-]*'+status,
-               'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ '+status)
-        res.append(r)
+        retask[name] = {'pattern': DT+'TASK_STATUS_CHANGE taskid=urn:%s[\w\s\-]*'+status,
+                        'lfilter': 'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ '+status}
+
+    res = {'session': resession,
+           'job'    : rejob,
+           'task'   : retask,
+           'block'  : reblock,
+           'worker' : reworker}
 
     # Run initialization instantiate a session with all its jobs, tasks, blocks,
     # and workers. Each object initialization sets the object's IDs.
