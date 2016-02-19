@@ -75,7 +75,75 @@ The analysis wrokflow is designed to be automated, reusable, and extensible. The
 
 1. Raw data are kept in the directory ```raw_data/name_of_resource(s)/exp-xxx```. Raw data are **NOT** uploaded to git dur to space limitations. Raw data are tarred and b2zipped into a single file for archive purposes.
 
-1. Data wrangling:
+1. Data wrangling. Raw data are recorded in ```swift.log```. Here an cleaned up sample of the logs for a task execution:
+
+  ```
+  22:57:48,775 JOB_INIT           swift            jobid=sleep-koblgxkm
+  22:57:48,775 JOB_SITE_SELECT    swift            jobid=sleep-koblgxkm
+  22:57:48,785 JOB_START          swift            jobid=sleep-koblgxkm host=stampede 
+  22:57:48,785 JOB_TASK           Execute          jobid=sleep-koblgxkm taskid=urn:R-2-13-1453935467203 
+
+  22:58:10,682 BLOCK_REQUESTED    RemoteLogHandler                                                                      id=0127-5804100-000000, cores=16, coresPerWorker=1, walltime=1440
+
+  22:58:22,743 TASK_STATUS_CHANGE Execute                               taskid=urn:R-2-13-1453935467203 status=8
+  22:58:22,815 TASK_STATUS_CHANGE Execute                               taskid=urn:R-2-13-1453935467203 status=1
+
+  01:01:14,281 BLOCK_ACTIVE       RemoteLogHandler                                                                      id=0127-5804100-000000
+
+  01:02:19,467 WORKER_ACTIVE      RemoteLogHandler                                                                 blockid=0127-5804100-000000 id=000000 node=c401-403.stampede.tacc.utexas.edu cores=16
+
+  01:02:19,780 TASK_STATUS_CHANGE Execute                               taskid=urn:R-2-13-1453935467203 status=16 workerid=0127-5804100-000000:000000
+  01:02:19,952 TASK_STATUS_CHANGE Execute                               taskid=urn:R-2-13-1453935467203 status=2  workerid=0127-5804100-000000:000000
+  01:17:20,124 TASK_STATUS_CHANGE Execute                               taskid=urn:R-2-13-1453935467203 status=17
+  01:17:20,267 TASK_STATUS_CHANGE Execute                               taskid=urn:R-2-13-1453935467203 status=7
+
+  01:17:20,267 JOB_END            swift            jobid=sleep-koblgxkm
+
+  01:17:20,664 BLOCK_SHUTDOWN                                                                            id=0127-5804100-000000
+  01:17:20,665 WORKER_LOST        RemoteLogHandler                                                                  blockid=0127-5804100-000000 id=000000
+  01:17:20,665 WORKER_SHUTDOWN    RemoteLogHandler                                                                  blockid=0127-5804100-000000 id=000000
+  01:17:21,718 BLOCK_DONE         RemoteLogHandler                                                                       id=0127-5804100-000000
+  ```
+  
+ Description of relevant log entries:
+
+ | #  | Log tag            | Location           | Component | Description |
+ |----|--------------------|--------------------|-----------|-------------|
+ | 1  | JOB_INIT           | Workstation (WS)   | Swift     | Creates a job |
+ | 2  | JOB_SITE_SELECT    | WS                 | Swift     | Selects a site for that job
+ | 3  | JOB_START          | WS                 | Swift     | Schedules that job on the selected site (meaning that is scheduled, not that has started to execute it) |
+ | 4  | JOB_TASK           | Head node (HN)     | Coaster   | Gets the job on the selected site and assigns to it a taskid. For Coaster, a job is a task. |
+ | 5  | BLOCK_REQUESTED    | HN                 | Coaster   | Submits to the local LRMS one or more blocks depending on the amount of tasks it gets, the user configuration, and its own algorithms. Blocks are therefore jobs on a resource LRMS. |
+ | 6  | TASK_STATUS_CHANGE | HN                 | Coaster   | (Meanwhile?) marks tasks as submitting (state 8) |
+ | 7  | TASK_STATUS_CHANGE | HN                 | Coaster   | Marks tasks as submitted (state 1) |
+ | 7  | BLOCK_ACTIVE       | Compute nodes (CN) | LRMS      | Schedules blocks/jobs on the compute nodes. Active blocks are therefore pilots. |
+ | 8  | WORKER_ACTIVE      | CN                 | Worker(s) | Bootstrap on each active block. More than one worker can bootstrap for each block/pilot depending on how many cores each worker needs as indicated by the user in swift.conf. Workers are pilot agents. |
+ | 9  | TASK_STATUS_CHANGE | HN, WS, CN         | Coaster   | Stages in the input files of the tasks that are ready to be executed on the workers that have become active, if any (task state 16). |
+ | 10 | TASK_STATUS_CHANGE | HN, CN             | Worker    | Executes tasks (state 2). |
+ | 11 | TASK_STATUS_CHANGE | HN, CN, (WS?)      | Coaster   | Stages out the output files of the tasks that have terminated (state 17). Note that this includes stderr.txt, stdout.txt, wrapper.error, wrapper.log for every task. |
+ | 12 | TASK_STATUS_CHANGE | HN                 | Coaster   | Marks tasks as completed (state 7). |
+ | 13 | JOB_END            | WS                 | Swift     | Marks the jobs referring to the completed tasks as ended. | 
+ | 14 | BLOCK_SHUTDOWN     | HN                 | Coaster   | Shuts down the blocks (i.e. jobs running on the compute node(s)). **NOTE**: this happens also when jobs are waiting for execution on the resource on which this block is active. This means that in its current configuration, Swift+Coaster do not reuse pilots. After executing the first batch of tasks, the pilot is shut down. Coaster queue enough pilots of the maximum size (i.e. with the maximum amount of compute node configured by the user in swift.config) to guarantee as much concurrency as the maximum amount of jobs allowed to be queue on that specific resource (also configured in swift.conf). This should be visible in our measurements as multiple (and concurrent) queue time for each scheduled pilot. |
+ | 15 | WORKER_SHUTDOWN    | HN                 | Coaster   | Marks the workers that were running on the blocks that have been shut down as shut down too. |
+ | 16 | BLOCK_DONE         | HN                 | Coaster   | Marks the blocks as done. 
+
+  Duration derived from the logs:
+  
+  | Owner   | Entity | Duration      | Start log tag   | End log tag     | Description |
+  |---------|--------|---------------|-----------------|-----------------|-------------|
+  | Swift   | Job    | Setting_up    | JOB_INIT        | JOB_TASK        | Time taken by Swift to set up each task for execution. Can be used to determine the percentage of TTC spent on interpreting the given swift script. |
+  |         |        | Executing     | JOB_TASK        | JOB_END         | Time taken to execute each task as logged by Swift. It can be compared to the executing time recorded by Coaster for sanity/consistenty check purposes. |
+  | Coaster | Task   | Submitting    | JOB_TASK        | status=2        | Time taken by Coaster to queue/schedule each task to a pilot. It can be used to determine the overhead of Coaster indipendently from those of the resource. |
+  |         |        | Executing     | status=2        | status=7        | Time taken by Coaster to execute each task on a worker (i.e., pilot). This is the equivalent of AIMES Tx. |
+  |         |        | Staging_in    | status=16       | status=2        | Time taken by Coaster to stage the task's input file(s) if any. Useful if we will decide to include data-related timings in the paper. |
+  |         |        | Staging_out   | status=17       | status=7        | Time taken by Coaster to stage the task's output file(s).  Useful to measure Coaster's overhead in saving STD* files after task execution. |
+  |         | Block  | Queuing       | BLOCK_REQUESTED | BLOCK_ACTIVE    | Time spent by each Block, i.e. pilot job, in the resource's queue. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
+  |         |        | Executing     | BLOCK_ACTIVE    | BLOCK_DONE      | Time spent by each block, i.e. pilot job, executing. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
+  |         | Worker | Bootstrapping | BLOCK_ACTIVE    | WORKER_ACTIVE   | Time required by the worker, i.e. pilot agent, to bootstrap. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
+  |         |        | Executing     | WORKER_ACTIVE   | WORKER_SHUTDOWN | Time spent by each worker, i.e, pilot agent, executing. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
+
+
+  The following filters the log file calculating the timings for each relevant event. Each event is delimited by a state transition:
 
    ```
    for d in `find . -iname "exp-*"`; do echo "python ../../bin/swift-timestamps.py $d/swift.log $d/durations.json"; python ../../bin/swift-timestamps.py $d/swift.log $d/durations.json; done
