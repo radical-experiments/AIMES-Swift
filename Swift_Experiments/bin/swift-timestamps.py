@@ -15,37 +15,55 @@ __license__ = "MIT"
 
 
 # -----------------------------------------------------------------------------
-class Run(object):
-    def __init__(self, conf):
-        self.id = time.clock()
-        self.conf = conf
-        self.logs = self._partition_logs(conf['file_logs'])
-        self.dtpattern = conf['date_time_pattern']
-        self.session = Session(self)
+class Log(object):
+    def __init__(self, flog, regexs):
+        self.entries = [line.strip() for line in open(flog)]
+        self.regexs = regexs
+        self.partitions = self._partition_logs()
 
-    def _partition_logs(self, lfile):
-        plogs = {}
-        logs = [line.strip() for line in open(lfile)]
-        for tag in self.conf['re']:
-            plogs[tag] = self._grep_logs(logs, self.conf['re'][tag])
-        return plogs
+    def _partition_logs(self):
+        partitions = []
+        filters = []
+        for regex in self.regexs:
+            if regex.filter and regex.filter not in filters:
+                filters.append(regex.filter)
+                # print "DEBUG: _partition_logs:\n\tfilters = %s" % filters
+                # print "DEBUG: _partition_logs:\n\tre.id = %s;\n\tre.entity = %s;\n\tre.filter = %s\n" % (regex.id, regex.entity, regex.filter)
+                regex.lpartition = self._grep_logs(regex.filter)
+                partitions.append(regex.lpartition)
+        return partitions
 
-    def _grep_logs(self, lfile, regex):
-        logs = []
-        if "%s" in regex:
-            regex = regex % ".*"
-        lfilter = re.compile(regex)
-        for line in lfile:
+    def _grep_logs(self, lfilter):
+        partition = []
+        # clf = re.compile(lfilter)
+        for line in self.entries:
             m = re.search(lfilter, line)
             if m:
-                logs.append(line)
-        return logs
+                partition.append(line)
+        # print "DEBUG: _grep_logs:\n\tfilter = %s;\n\tpartition = %s\n\n" % (lfilter, partition)
+        return partition
 
-    def _make_re(self, res):
-        re = ''
-        for tag in res:
-            re += run.conf['re'][tag]
-        return re
+
+# -----------------------------------------------------------------------------
+class Run(object):
+    def __init__(self, flog, regexs, dtpattern):
+        self.res = regexs
+        self.dtpattern = dtpattern
+        self.log = Log(flog, self.res)
+        self.session = Session(self)
+
+    # def _make_re(self, res):
+    #     re = ''
+    #     for tag in res:
+    #         re += run.re[tag]
+    #     return re
+
+    def get_res(self, entityid):
+        res = []
+        for regex in self.res:
+            if regex.entityid == entityid:
+                res.append(regex)
+        return res
 
     def add_state(self, obj, name):
         regex = self._make_re(['date', 'time', name])
@@ -58,9 +76,8 @@ class Run(object):
             self.session.completed += 1
         obj.states.append(state)
 
-    def save_to_json(self):
+    def save_to_json(self, jfile):
         d = {}
-        d["Run"] = {"ID": self.id}
         d["Session"] = {"ID": self.session.id,
                         "hosts": self.session.hosts,
                         "ntasks": self.session.ntasks,
@@ -74,8 +91,19 @@ class Run(object):
             d["Tasks"][task.id]["host"] = task.host
             for state in task.states:
                 d["Tasks"][task.id][state.name] = state.tstamp.epoch
-        fout = open(conf['file_json'], 'w')
+        fout = open(jfile, 'w')
         json.dump(d, fout, indent=4)
+
+
+# -----------------------------------------------------------------------------
+class Re(object):
+    def __init__(self, entityid, name, pattern, lfilter=None):
+        self.id = name
+        self.entityid = entityid
+        self.pattern = pattern
+        self.filter = lfilter
+        self.compiled = None
+        self.lpartition = None
 
 
 # -----------------------------------------------------------------------------
@@ -87,109 +115,192 @@ class Session(object):
         self.hosts = []
         self.failed = 0
         self.completed = 0
-        self.id = self._get_id('runid')
-        self.jobs = self._get_jobs('jobid')
-        self.tasks = self._get_tasks('taskid')
+        self.res = self.run.get_res('session')
+        self.id = self._get_id()
+        self.jobs = self._get_jobs()
+        self.tasks = self._get_tasks()
+        self.blocks = self._get_blocks()
 
-    def _get_id(self, retag):
-        runid = None
-        regex = re.compile(self.run.conf['re'][retag])
-        for line in self.run.logs[retag]:
-            m = re.search(regex, line)
-            if m and not runid:
-                runid = m.group(1)
-                break
-        return runid
+        # print len(self.blocks)
+        # for block in self.blocks:
+        #     print block.id
+        #     print
+        sys.exit(0)
 
-    def _get_jobs(self, retag):
+        self.workers = self._get_workers()
+
+    def _get_id(self):
+        sid = None
+        logs = self.run.log.entries
+        for regex in self.res:
+            if regex.id == 'id':
+                if regex.lpartition:
+                    logs = regex.lpartition
+                for line in logs:
+                    m = re.search(regex.pattern, line)
+                    if m and not sid:
+                        sid = m.group(1)
+                        break
+        return sid
+
+    def _get_jobs(self):
         ids = []
         jobs = []
-        jobid = re.compile(self.run.conf['re'][retag])
-        for line in self.run.logs[retag]:
-            m = re.search(jobid, line)
-            if m and m.group(1) not in ids:
-                ids.append(m.group(1))
-                jobs.append(Job(m.group(1), self.run))
+        res = self.run.get_res('job')
+        logs = self.run.log.entries
+        for regex in res:
+            if regex.id == 'id':
+                if regex.lpartition:
+                    logs = regex.lpartition
+                for line in logs:
+                    m = re.search(regex.pattern, line)
+                    if m and m.group(1) not in ids:
+                        ids.append(m.group(1))
+                        jobs.append(Job(m.group(1), res, self.run))
         for job in jobs:
             if job.host not in self.hosts:
                 self.hosts.append(job.host)
         return jobs
 
-    def _get_tasks(self, retag):
+    def _get_tasks(self):
         ids = []
         tasks = []
-        taskid = re.compile(self.run.conf['re'][retag])
-        for line in self.run.logs[retag]:
-            m = re.search(taskid, line)
-            if m and m.group(1) not in ids:
-                ids.append(m.group(1))
-                tasks.append(Task(m.group(1), self.run, self.jobs))
+        res = self.run.get_res('task')
+        logs = self.run.log.entries
+        for regex in res:
+            if regex.id == 'id':
+                if regex.lpartition:
+                    logs = regex.lpartition
+                for line in logs:
+                    m = re.search(regex.pattern, line)
+                    if m and m.group(1) not in ids:
+                        ids.append(m.group(1))
+                        tasks.append(Task(m.group(1), res, self.run))
+        for job in self.jobs:
+            for task in tasks:
+                if job.tid == task.id:
+                    task.host = job.host
+                    task.jid = job.id
         self.ntasks = len(tasks)
         return tasks
+
+    def _get_blocks(self):
+        pass
+
+    def _get_workers(self):
+        pass
 
 
 # -----------------------------------------------------------------------------
 class Job(object):
-    '''A job is a task in the Coaster lingo'''
-    def __init__(self, jid, run):
-        self.run = run
-        self.id = jid
-        self.host = self._get_host('jobidhost')
-        self.tids = self._get_task_ids('jobidtaskid')
-
-    def _get_host(self, retag):
-        regex = self.run.conf['re'][retag] % self.id
-        logs = self.run._grep_logs(self.run.logs['jobid'], regex)
-        host = re.compile(regex)
-        for line in logs:
-            m = re.search(host, line)
-            if m and m.group(1):
-                return m.group(1)
-        return None
-
-    def _get_task_ids(self, retag):
-        regex = self.run.conf['re'][retag] % self.id
-        logs = self.run._grep_logs(self.run.logs['jobtaskid'], regex)
-        jobtaskid = re.compile(regex)
-        tids = []
-        for line in logs:
-            m = re.search(jobtaskid, line)
-            if m and m.group(1) not in tids:
-                tids.append(m.group(1))
-        return tids
-
-
-# -----------------------------------------------------------------------------
-class Worker(object):
-    '''A worker is a pilot in the Coaster lingo.
+    '''A job is a task in the Swift lingo.
 
     States:
-        BLOCK_REQUESTED
-        BLOCK_ACTIVE
-        WORKER_ACTIVE
-        BLOCK_SHUTDOWN
-        BLOCK_UTILIZATION
-        WORKER_LOST
-        WORKER_SHUTDOWN
-        BLOCK_DONE
+        JOB_INIT
+        JOB_SITE_SELECT
+        JOB_START
+        JOB_TASK
+        JOB_END
     '''
-    pass
+
+    def __init__(self, jid, res, run):
+        self.run = run
+        self.res = res
+        self.id = jid
+        self.logs = self.run.log.entries
+        self.host = self._get_host()
+        self.tid = self._get_task_id()
+
+    def _get_host(self):
+        logs = self.logs
+        for regex in res:
+            if regex.id == 'host':
+                pattern = regex.pattern % self.id
+                if regex.lpartition:
+                    logs = regex.lpartition
+                for line in logs:
+                    m = re.search(pattern, line)
+                    if m and m.group(1):
+                        return m.group(1)
+        return None
+
+    def _get_task_id(self):
+        logs = self.logs
+        for regex in res:
+            if regex.id == 'taskid':
+                pattern = regex.pattern % self.id
+                if regex.lpartition:
+                    logs = regex.lpartition
+                for line in logs:
+                    m = re.search(pattern, line)
+                    if m and m.group(1):
+                        return m.group(1)
+        return None
 
 
 # -----------------------------------------------------------------------------
 class Task(object):
-    '''TODO: merge job and task into a single class as they logically are the
-    same entity'''
-    def __init__(self, tid, run, jobs):
+    '''Coaster gets a job from Swift and calls it a task. Swift uses jobids
+    while coaster taskids.
+
+    States:
+        | Name        | Code |
+        |-------------|------|
+        | unsubmitted | 0    |
+        | submitting  | 8    |
+        | submitted   | 1    |
+        | active      | 2    |
+        | suspended   | 3    |
+        | resumed     | 4    |
+        | failed      | 5    |
+        | canceled    | 6    |
+        | completed   | 7    |
+        | stage_in    | 16   |
+        | stage_out   | 17   |
+        | unknown     | 9999 |
+    '''
+    def __init__(self, tid, res, run):
         self.run = run
         self.id = tid
+        self.jid = None
         self.states = []
-        self.host = self._get_task_host(jobs)
+        self.host = None
 
-    def _get_task_host(self, jobs):
-        for job in jobs:
-            if self.id in job.tids:
-                return job.host
+
+# -----------------------------------------------------------------------------
+class Block(object):
+    '''A block is a pilot job in the Coaster lingo. Each worker belong to a
+    block, i.e. a job scheduled on a resource.
+
+    States:
+        BLOCK_REQUESTED
+        BLOCK_ACTIVE
+        BLOCK_SHUTDOWN
+        BLOCK_UTILIZATION
+        BLOCK_DONE
+    '''
+    def __init__(self, run):
+        self.run = run
+        self.res = self.run.get_res('block')
+        self.id = run.get_id(self.res)
+        self.workers = None
+
+
+# -----------------------------------------------------------------------------
+class Worker(object):
+    '''A worker is a pilot agent in the Coaster lingo. Each worker belong to a
+    block, i.e. a job scheduled on a resource.
+
+    States:
+        WORKER_ACTIVE
+        WORKER_LOST
+        WORKER_SHUTDOWN
+    '''
+    def __init__(self, run):
+        self.run = run
+        self.res = self.run.get_res('job')
+        self.id = run.get_id(self.res)
+        self.tasks = None
 
 
 # -----------------------------------------------------------------------------
@@ -241,46 +352,177 @@ def usage(msg=None, noexit=False):
 # ------------------------------------------------------------------------------
 if __name__ == "__main__":
 
+    DTPATTERN = "%Y-%m-%d %H:%M:%S"
+    DATE = "(\d+-\d+-\d+) "
+    TIME = "(\d+:\d+:\d+),\d+[-,+]\d{4}[\w\s]+"
+
+    # Check whether the parser is run with the required arguments.
     if len(sys.argv) <= 2:
         usage("insufficient arguments -- need swift log file and output file")
 
     if len(sys.argv) > 3:
         usage("too many arguments -- no more than 2")
 
-    conf = {}
-    conf['re'] = {}
-    conf['file_logs'] = sys.argv[1]
-    conf['file_json'] = sys.argv[2]
-    conf['tcodes'] = {'unsubmitted': 0, 'submitting': 8, 'submitted': 1,
-                      'active': 2, 'suspended': 3, 'resumed': 4, 'failed': 5,
-                      'canceled': 6, 'completed': 7, 'stage_in': 16,
-                      'stage_out': 17, 'unknown': 9999}
+    # Input swift log and json output files.
+    flogs = sys.argv[1]
+    fjson = sys.argv[2]
 
-    conf['date_time_pattern'] = "%Y-%m-%d %H:%M:%S"
+    # Define the identities of the Swift logs and their states.
+    states = {'session': ['start'          , 'finish'],
+              'job'    : ['init'           , 'site_select'   ,
+                          'start'          , 'task'          , 'end'],
+              'task'   : {'unsubmitted': 0 , 'submitting': 8 , 'submitted': 1,
+                          'active'     : 2 , 'suspended' : 3 , 'resumed'  : 4,
+                          'failed'     : 5 , 'canceled'  : 6 , 'completed': 7,
+                          'stage_in'   : 16, 'stage_out' : 17, 'unknown'  : 9999},
+              'block'  : ['requested'      , 'active'        , 'shutdown',
+                          'utilization'    , 'done'],
+              'worker' : ['active'         , 'lost'          , 'shutdown']}
 
-    conf['re']['date'] = "(\d+-\d+-\d+) "
-    conf['re']['time'] = "(\d+:\d+:\d+),\d+[-,+]\d+.*"
-    conf['re']['start'] = "INFO  Loader JAVA"
-    conf['re']['finish'] = "INFO  Loader Swift finished with no errors"
-    conf['re']['runid'] = "RUN_ID (run\d{3})"
-    conf['re']['taskid'] = "taskid=urn:(R-\d+[-,x]\d+[-,x]\d+)"
-    conf['re']['jobid'] = "JOB_START jobid=([\d\w-]+) tr"
-    conf['re']['jobidhost'] = "JOB_START jobid=%s.*host=(.*)"
-    conf['re']['jobtaskid'] = "JOB_TASK jobid=([\d\w-]+).*"+conf['re']['taskid']
-    conf['re']['jobidtaskid'] = "JOB_TASK jobid=%s.*"+conf['re']['taskid']
-    conf['re']['new'] = "JOB_TASK jobid=[\d\w-]+ taskid=urn:%s"
+    res = [Re('session',
+              'id',
+              'RUN_ID (run\d{3})'),
+           Re('session',
+              'start',
+              DATE+TIME+'INFO  Loader JAVA'),
+           Re('session',
+              'finish',
+              DATE+TIME+'INFO  Loader Swift finished with no errors'),
+           Re('job',
+              'id',
+              'JOB_START jobid=([\w-]+) tr',
+              'JOB_START jobid='),
+           Re('job',
+              'host',
+              'JOB_START jobid=%s[\w\s/:.\-=\+\[\]]*host=([\w.]*)',
+              'JOB_START jobid='),
+           Re('job',
+              'taskid',
+              'JOB_TASK jobid=%s\s+taskid=urn:(R-\d+[-,x]\d+[-,x]\d+)',
+              'JOB_TASK jobid='),
+           Re('job',
+              'init',
+              DATE+TIME+'JOB_INIT jobid=%s',
+              'JOB_INIT jobid='),
+           Re('job',
+              'siteselect',
+              DATE+TIME+'JOB_SITE_SELECT jobid=%s',
+              'JOB_SITE_SELECT jobid='),
+           Re('job',
+              'start',
+              DATE+TIME+'JOB_START jobid=%s',
+              'JOB_START jobid='),
+           Re('job',
+              'task',
+              DATE+TIME+'JOB_TASK jobid=%s taskid=urn:%s',
+              'JOB_TASK jobid='),
+           Re('job',
+              'end',
+              DATE+TIME+'JOB_END jobid=%s',
+              'JOB_END jobid='),
+           Re('task',
+              'id',
+              'JOB_TASK jobid=[\w-]+\s+taskid=urn:(R-\d+[-,x]\d+[-,x]\d+)',
+              'JOB_TASK jobid='),
+           Re('task',
+              'jobid',
+              'JOB_TASK jobid=([\w-]+)\s+taskid=urn:%s',
+              'JOB_TASK jobid='),
+           Re('task',
+              'blockid',
+              'taskid=urn:%s\s+status=2\s+workerid=([\d\-]+):',
+              'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ status=2'),
+           Re('task',
+              'workerid',
+              'taskid=urn:%s\s+status=2\s+workerid=%s:(\d+)',
+              'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ status=2'),
+           Re('block',
+              'id',
+              'BLOCK_REQUESTED id=([\d\-]+),',
+              'BLOCK_REQUESTED id='),
+           Re('block',
+              'cores',
+              'BLOCK_REQUESTED id=%s, cores=(\d+),',
+              'BLOCK_REQUESTED id='),
+           Re('block',
+              'coresworker',
+              'BLOCK_REQUESTED id=%s[\w\s,=]+coresPerWorker=(\d+),',
+              'BLOCK_REQUESTED id='),
+           Re('block',
+              'walltime',
+              'BLOCK_REQUESTED id=%s[\w\s,=]+walltime=(\d+)',
+              'BLOCK_REQUESTED id='),
+           Re('block',
+              'utilization',
+              'BLOCK_UTILIZATION id=%s, u=([\d\.]+)',
+              'BLOCK_UTILIZATION id='),
+           Re('block',
+              'requested',
+              DATE+TIME+'BLOCK_REQUESTED id=%s',
+              'BLOCK_REQUESTED id='),
+           Re('block',
+              'active',
+              DATE+TIME+'BLOCK_ACTIVE id=%s',
+              'BLOCK_ACTIVE id='),
+           Re('block',
+              'shutdown',
+              DATE+TIME+'BLOCK_SHUTDOWN id=%s',
+              'BLOCK_SHUTDOWN id='),
+           Re('block',
+              'done',
+              DATE+TIME+'BLOCK_DONE id=%s',
+              'BLOCK_DONE id='),
+           Re('worker',
+              'id',
+              'WORKER_ACTIVE blockid=[\d\-]+ id=(\d+)',
+              'WORKER_ACTIVE blockid='),
+           Re('worker',
+              'blockid',
+              'WORKER_ACTIVE blockid=([\d\-]+)',
+              'WORKER_ACTIVE blockid='),
+           Re('worker',
+              'node',
+              'WORKER_ACTIVE blockid=%s id=%s node=([\w\d\-\.]+)',
+              'WORKER_ACTIVE blockid='),
+           Re('worker',
+              'coresnode',
+              'WORKER_ACTIVE blockid=%s id=%s[\w\d\s\-\.]+cores=(\d+)',
+              'WORKER_ACTIVE blockid='),
+           Re('worker',
+              'active',
+              DATE+TIME+'WORKER_ACTIVE blockid=%s id=%s',
+              'WORKER_ACTIVE blockid='),
+           Re('worker',
+              'lost',
+              DATE+TIME+'WORKER_LOST blockid=%s id=%s',
+              'WORKER_LOST blockid='),
+           Re('worker',
+              'shutdown',
+              DATE+TIME+'WORKER_SHUTDOWN blockid=%s id=%s',
+              'WORKER_SHUTDOWN blockid=')]
 
-    for name, code in conf['tcodes'].iteritems():
+    for name, code in states['task'].iteritems():
         status = "status=%s" % code
-        conf['re'][name] = "TASK_STATUS_CHANGE taskid=urn:%s.*"+status
+        r = Re('task',
+               name,
+               DATE+TIME+'TASK_STATUS_CHANGE taskid=urn:%s[\w\s\-]*'+status,
+               'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ '+status)
+        res.append(r)
 
-    run = Run(conf)
+    # Run initialization instantiate a session with all its jobs, tasks, blocks,
+    # and workers. Each object initialization sets the object's IDs.
+    run = Run(flogs, res, DTPATTERN)
+
+    sys.exit(0)
+
+    # Add the desired timestamps to each object.
     run.add_state(run.session, 'start')
     run.add_state(run.session, 'finish')
 
     for task in run.session.tasks:
         run.add_state(task, 'new')
-        for name, code in conf['tcodes'].iteritems():
+        for name, code in stask.iteritems():
             run.add_state(task, name)
 
-    run.save_to_json()
+    run.save_to_json(fjson)
+
