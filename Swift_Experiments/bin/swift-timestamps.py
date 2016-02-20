@@ -4,6 +4,8 @@ import re
 import sys
 import json
 import time
+import pprint
+import datetime
 
 '''Reads Swift+Coaster log file and returns a json file with timestamps of each
 task's state and a summary of the run properties
@@ -22,18 +24,17 @@ class Run(object):
         self.log = Log(flog, self)
         self.session = Session(self)
 
-    # worker, 'worker', state, code, (worker.bid, worker.id)
-    def add_state(self, entity, ename, sname, code, args=None):
+    def add_state(self, entity, ename, sname, args=None):
         logs = self.log.entries
         pattern = self.res[ename][sname]['pattern']
+        flogs = self.res[ename][sname]['flogs']
         if args:
             pattern = pattern % args
-        if not self.res[ename][sname]['cpattern']:
-            cpattern = re.compile(pattern)
-        flogs = self.res[ename][sname]['flogs']
+        # if not self.res[ename][sname]['cpattern']:
+        #     cpattern = re.compile(pattern)
         if flogs:
             logs = flogs
-        state = State(sname, ename, cpattern, logs, self)
+        state = State(sname, ename, pattern, logs, self)
         if state.id == 'failed' and state.tstamp.stamp:
             self.session.failed += 1
         elif state.id == 'completed' and state.tstamp.stamp:
@@ -110,28 +111,33 @@ class Log(object):
     def __init__(self, flog, run):
         self.entries = [line.strip() for line in open(flog)]
         self.run = run
-        self._partition_logs()
+        self.partitions = self._partition_logs()
 
     def _partition_logs(self):
-        filters = []
+        partitions = {}
         for entity, value in self.run.res.iteritems():
             for tag, patterns in value.iteritems():
-                if patterns['lfilter'] and patterns['lfilter'] not in filters:
-                    filters.append(patterns['lfilter'])
-                    # print "DEBUG: _partition_logs:\n\tfilters = %s" % filters
-                    # print "DEBUG: _partition_logs:\n\tre.id = %s;\n\tre.entity = %s;\n\tre.filter = %s\n" % (tag, entity, patterns['lfilter'])
+                if patterns['lfilter']:
                     partition = self._grep_logs(patterns['lfilter'])
                     patterns['flogs'] = partition
+                    partitions[entity+'-'+tag] = partition
+        return partitions
 
     def _grep_logs(self, lfilter):
         partition = []
-        # clf = re.compile(lfilter)
         for line in self.entries:
             m = re.search(lfilter, line)
             if m:
                 partition.append(line)
-        # print "DEBUG: _grep_logs:\n\tfilter = %s;\n\tpartition = %s\n\n" % (lfilter, partition)
+        if not partition:
+            partition.append('empty')
         return partition
+
+    def profile(self):
+        stats = {'logs': len(self.entries)}
+        for name, partition in self.partitions.iteritems():
+            stats[name] = len(partition)
+        return stats
 
 
 # -----------------------------------------------------------------------------
@@ -336,24 +342,49 @@ class Worker(object):
 # -----------------------------------------------------------------------------
 class State(object):
     def __init__(self, sname, ename, cpattern, logs, run):
+        # if ename == 'job':
+        #     print "%s - DEBUG State Job %s IN" % (datetime.datetime.now().time(), sname)
+        # if ename == 'task':
+        #     print "%s - DEBUG State Task %s IN" % (datetime.datetime.now().time(), sname)
         self.id = sname
         self.eid = ename
-        self.tstamp = TimeStamp(cpattern, logs, self, run)
+        if len(logs) == 0:
+            self.stamp = None
+        elif self.eid == 'session' and self.id == 'start':
+            self.tstamp = TimeStamp(cpattern, logs[:10], self, run)
+        elif self.eid == 'session' and self.id == 'finish':
+            self.tstamp = TimeStamp(cpattern, logs[-600:], self, run)
+        else:
+            self.tstamp = TimeStamp(cpattern, logs, self, run)
+            # if self.eid == 'job':
+            #     print "%s - DEBUG State Job %s OUT" % (datetime.datetime.now().time(), self.id)
+            # if self.eid == 'task':
+            #     print "%s - DEBUG State Task %s OUT" % (datetime.datetime.now().time(), self.id)
 
 
 # -----------------------------------------------------------------------------
 class TimeStamp(object):
     def __init__(self, cpattern, logs, state, run):
+        # if state.eid == 'job':
+        #     print "%s - DEBUG TimeStamp Job %s IN" % (datetime.datetime.now().time(), state.id)
+        # if state.eid == 'task':
+        #     print "%s - DEBUG TimeStamp Task %s IN" % (datetime.datetime.now().time(), state.id)
         self.state = state
         self.cpattern = cpattern
         self.logs = logs
         self.run = run
         self.epoch = None
         self.stamp = self._get_stamp()
-        if self.state.eid == 'job' and self.state.id == 'end':
-            print "DEBUG:TimeStamp:\n\tentity = %s;\n\tstate = %s;\n\tstamp = %s" % (self.state.eid, self.state.id, self.stamp)
+        # if state.eid == 'job':
+        #     print "%s - DEBUG TimeStamp Job %s OUT" % (datetime.datetime.now().time(), state.eid)
+        # if state.eid == 'task':
+        #     print "%s - DEBUG TimeStamp Task %s OUT" % (datetime.datetime.now().time(), state.eid)
 
     def _get_stamp(self):
+        # if self.state.eid == 'job':
+        #     print "%s - DEBUG _get_stamp Job %s; %s log lines IN" % (datetime.datetime.now().time(), self.state.id, len(self.logs))
+        # if self.state.eid == 'task':
+        #     print "%s - DEBUG _get_stamp Task %s; %s log lines IN" % (datetime.datetime.now().time(), self.state.id, len(self.logs))
         stamp = None
         for line in self.logs:
             m = re.search(self.cpattern, line)
@@ -362,6 +393,10 @@ class TimeStamp(object):
                 self.epoch = int(time.mktime(time.strptime(stamp,
                                  self.run.dtpattern)))
                 break
+        # if self.state.eid == 'job':
+        #     print "%s - DEBUG _get_stamp Job %s; %s log lines OUT" % (datetime.datetime.now().time(), self.state.id, len(self.logs))
+        # if self.state.eid == 'task':
+        #     print "%s - DEBUG _get_stamp Task %s; %s log lines OUT" % (datetime.datetime.now().time(), self.state.id, len(self.logs))
         return stamp
 
 
@@ -386,7 +421,7 @@ def usage(msg=None, noexit=False):
 if __name__ == "__main__":
 
     DTPATTERN = "%Y-%m-%d %H:%M:%S"
-    DT = "(\d+-\d+-\d+) (\d+:\d+:\d+),\d+[-,+]\d{4}[\w\s]+"
+    DT = "(\d+-\d+-\d+) (\d+:\d+:\d+),\d+[-,+]\d{4}[\w\s]+?"
 
     # Check whether the parser is run with the required arguments.
     if len(sys.argv) <= 2:
@@ -537,8 +572,8 @@ if __name__ == "__main__":
 
     for name, code in states['task'].iteritems():
         status = "status=%s" % code
-        retask[name] = {'pattern': DT+'TASK_STATUS_CHANGE taskid=urn:%s[\w\s\-]*'+status,
-                        'lfilter': 'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ '+status,
+        retask[name] = {'pattern': DT+'TASK_STATUS_CHANGE taskid=urn:%s '+status,
+                        'lfilter': 'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ '+status+'(?:\s+|$)',
                         'flogs'   : None,
                         'cpattern': None}
 
@@ -555,29 +590,33 @@ if __name__ == "__main__":
     # Calculate time stamps for all the states of Swift components as logged in
     # swift.log
     for state, code in stsession.iteritems():
-        run.add_state(run.session, 'session', state, code)
+        run.add_state(run.session, 'session', state)
 
     for job in run.session.jobs:
+        # print "\n%s - DEBUG JobState %s" % (datetime.datetime.now().time(), job.id)
         for state, code in stjob.iteritems():
             if state == 'task':
-                run.add_state(job, 'job', state, code, (job.id, job.tid))
+                run.add_state(job, 'job', state, (job.id, job.tid))
                 continue
-            run.add_state(job, 'job', state, code, job.id)
+            run.add_state(job, 'job', state, job.id)
 
     for task in run.session.tasks:
+        # print "\n%s - DEBUG TaskState %s" % (datetime.datetime.now().time(), task.id)
         for state, code in sttask.iteritems():
-            run.add_state(task, 'task', state, code, task.id)
+            run.add_state(task, 'task', state, task.id)
 
     for block in run.session.blocks:
         for state, code in stblock.iteritems():
-            run.add_state(block, 'block', state, code, block.id)
+            run.add_state(block, 'block', state, block.id)
 
     for worker in run.session.workers:
         for state, code in stworker.iteritems():
-            run.add_state(worker, 'worker', state, code, (worker.bid, worker.id))
+            run.add_state(worker, 'worker', state, (worker.bid, worker.id))
 
     # Save the timestamps to a json file.
-    run.save_to_json(fjson)
-    run.save_to_json_full(fjson+'.full')
+    # run.save_to_json(fjson)
+    run.save_to_json_full('full_'+fjson)
+
+    # pprint.pprint(run.log.profile())
 
     sys.exit(0)
