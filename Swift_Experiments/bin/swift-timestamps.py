@@ -4,11 +4,9 @@ import re
 import sys
 import json
 import time
-import pprint
-import datetime
 
 '''Reads Swift+Coaster log file and returns a json file with timestamps of each
-task's state and a summary of the run properties
+job, task, block and worker's state and the key properties of the run.
 '''
 
 __author__ = "Matteo Turilli"
@@ -24,14 +22,26 @@ class Run(object):
         self.log = Log(flog, self)
         self.session = Session(self)
 
+    def add_property(self, entity, tag, args=None):
+        logs = self.log.entries
+        pattern = self.res[entity][tag]['pattern']
+        if args:
+            pattern = pattern % args
+        flogs = self.res[entity][tag]['flogs']
+        if flogs:
+            logs = flogs
+        for line in logs:
+            m = re.search(pattern, line)
+            if m and m.group(1):
+                return m.group(1)
+        return None
+
     def add_state(self, entity, ename, sname, args=None):
         logs = self.log.entries
         pattern = self.res[ename][sname]['pattern']
         flogs = self.res[ename][sname]['flogs']
         if args:
             pattern = pattern % args
-        # if not self.res[ename][sname]['cpattern']:
-        #     cpattern = re.compile(pattern)
         if flogs:
             logs = flogs
         state = State(sname, ename, pattern, logs, self)
@@ -40,70 +50,6 @@ class Run(object):
         elif state.id == 'completed' and state.tstamp.stamp:
             self.session.completed += 1
         entity.states.append(state)
-
-    def save_to_json(self, jfile):
-        d = {}
-        d['Session'] = {'ID': self.session.id,
-                        'hosts': self.session.hosts,
-                        'ntasks': self.session.ntasks,
-                        'failed': self.session.failed,
-                        'completed': self.session.completed}
-        d['Tasks'] = {}
-        for state in self.session.states:
-            d['Session'][state.id] = state.tstamp.epoch
-        for task in self.session.tasks:
-            d['Tasks'][task.id] = {}
-            d['Tasks'][task.id]['host'] = task.host
-            for state in task.states:
-                d['Tasks'][task.id][state.id] = state.tstamp.epoch
-        fout = open(jfile, 'w')
-        json.dump(d, fout, indent=4)
-
-    def save_to_json_full(self, jfile):
-        d = {}
-        d['Session'] = {'ID': self.session.id,
-                        'hosts': self.session.hosts,
-                        'ntasks': self.session.ntasks,
-                        'failed': self.session.failed,
-                        'completed': self.session.completed}
-        for state in self.session.states:
-            d['Session'][state.id] = state.tstamp.epoch
-        d['Jobs'] = {}
-        for job in self.session.jobs:
-            d['Jobs'][job.id] = {}
-            d['Jobs'][job.id]['host'] = job.host
-            d['Jobs'][job.id]['task_id'] = job.tid
-            for state in job.states:
-                d['Jobs'][job.id][state.id] = state.tstamp.epoch
-        d['Tasks'] = {}
-        for task in self.session.tasks:
-            d['Tasks'][task.id] = {}
-            d['Tasks'][task.id]['host'] = task.host
-            for state in task.states:
-                d['Tasks'][task.id][state.id] = state.tstamp.epoch
-        d['Blocks'] = {}
-        for block in self.session.blocks:
-            d['Blocks'][block.id] = {}
-            d['Blocks'][block.id]['host'] = block.host
-            d['Blocks'][block.id]['nodes'] = block.nodes
-            d['Blocks'][block.id]['workers'] = block.workers
-            d['Blocks'][block.id]['cores'] = block.cores
-            d['Blocks'][block.id]['cores_per_worker'] = block.coresworker
-            d['Blocks'][block.id]['walltime'] = block.walltime
-            d['Blocks'][block.id]['utilization'] = block.utilization
-            for state in block.states:
-                d['Blocks'][block.id][state.id] = state.tstamp.epoch
-        d['Workers'] = {}
-        for worker in self.session.workers:
-            d['Workers'][worker.id] = {}
-            d['Workers'][worker.id]['tasks'] = worker.tasks
-            d['Workers'][worker.id]['block'] = worker.bid
-            d['Workers'][worker.id]['node'] = worker.node
-            d['Workers'][worker.id]['cores_node'] = worker.coresnode
-            for state in worker.states:
-                d['Workers'][worker.id][state.id] = state.tstamp.epoch
-        fout = open(jfile, 'w')
-        json.dump(d, fout, indent=4)
 
 
 # -----------------------------------------------------------------------------
@@ -133,12 +79,6 @@ class Log(object):
             partition.append('empty')
         return partition
 
-    def profile(self):
-        stats = {'logs': len(self.entries)}
-        for name, partition in self.partitions.iteritems():
-            stats[name] = len(partition)
-        return stats
-
 
 # -----------------------------------------------------------------------------
 class Session(object):
@@ -148,7 +88,7 @@ class Session(object):
         self.hosts = []
         self.failed = 0
         self.completed = 0
-        self.id = self._get_entity('session')
+        self.id = self.run.add_property('session', 'id')
         self.jobs = self._get_entity('job')
         self.tasks = self._get_entity('task')
         self.blocks = self._get_entity('block')
@@ -168,9 +108,7 @@ class Session(object):
             m = re.search(pattern, line)
             if m and m.group(1) not in ids:
                 eid = m.group(1)
-                if entity == 'session':
-                    return eid
-                elif entity == 'job':
+                if entity == 'job':
                     job = Job(eid, self.run)
                     if job.host not in self.hosts:
                         self.hosts.append(job.host)
@@ -211,32 +149,8 @@ class Job(object):
         self.run = run
         self.id = jid
         self.states = []
-        self.host = self._get_host()
-        self.tid = self._get_task_id()
-
-    def _get_host(self):
-        logs = self.run.log.entries
-        pattern = self.run.res['job']['host']['pattern'] % self.id
-        flogs = self.run.res['job']['host']['flogs']
-        if flogs:
-            logs = flogs
-        for line in logs:
-            m = re.search(pattern, line)
-            if m and m.group(1):
-                return m.group(1)
-        return None
-
-    def _get_task_id(self):
-        logs = self.run.log.entries
-        pattern = self.run.res['job']['taskid']['pattern'] % self.id
-        flogs = self.run.res['job']['host']['flogs']
-        if flogs:
-            logs = flogs
-        for line in logs:
-            m = re.search(pattern, line)
-            if m and m.group(1):
-                return m.group(1)
-        return None
+        self.host = self.run.add_property('job', 'host', self.id)
+        self.tid = self.run.add_property('job', 'taskid', self.id)
 
 
 # -----------------------------------------------------------------------------
@@ -287,22 +201,10 @@ class Block(object):
         self.states = []
         self.nodes = []
         self.workers = []
-        self.cores = self._get_property('cores')
-        self.coresworker = self._get_property('coresworker')
-        self.walltime = self._get_property('walltime')
-        self.utilization = self._get_property('utilization')
-
-    def _get_property(self, tag):
-        logs = self.run.log.entries
-        pattern = self.run.res['block'][tag]['pattern'] % self.id
-        flogs = self.run.res['block'][tag]['flogs']
-        if flogs:
-            logs = flogs
-        for line in logs:
-            m = re.search(pattern, line)
-            if m and m.group(1):
-                return m.group(1)
-        return None
+        self.cores = self.run.add_property('block', 'cores', self.id)
+        self.coresworker = self.run.add_property('block', 'coresworker', self.id)
+        self.walltime = self.run.add_property('block', 'walltime', self.id)
+        self.utilization = self.run.add_property('block', 'utilization', self.id)
 
 
 # -----------------------------------------------------------------------------
@@ -320,34 +222,18 @@ class Worker(object):
         self.run = run
         self.tasks = None
         self.states = []
-        self.bid = self._get_property('blockid')
-        self.node = self._get_property('node', (self.bid, self.id))
-        self.coresnode = self._get_property('coresnode', (self.bid, self.id))
-
-    def _get_property(self, tag, args=None):
-        logs = self.run.log.entries
-        pattern = self.run.res['worker'][tag]['pattern']
-        if args:
-            pattern = pattern % args
-        flogs = self.run.res['worker'][tag]['flogs']
-        if flogs:
-            logs = flogs
-        for line in logs:
-            m = re.search(pattern, line)
-            if m and m.group(1):
-                return m.group(1)
-        return None
+        self.bid = self.run.add_property('worker', 'blockid')
+        self.node = self.run.add_property('worker', 'node', (self.bid, self.id))
+        self.coresnode = self.run.add_property('worker', 'coresnode', (self.bid, self.id))
 
 
 # -----------------------------------------------------------------------------
 class State(object):
     def __init__(self, sname, ename, cpattern, logs, run):
-        # if ename == 'job':
-        #     print "%s - DEBUG State Job %s IN" % (datetime.datetime.now().time(), sname)
-        # if ename == 'task':
-        #     print "%s - DEBUG State Task %s IN" % (datetime.datetime.now().time(), sname)
         self.id = sname
         self.eid = ename
+
+        # Some ugly minor optimizations.
         if len(logs) == 0:
             self.stamp = None
         elif self.eid == 'session' and self.id == 'start':
@@ -356,35 +242,19 @@ class State(object):
             self.tstamp = TimeStamp(cpattern, logs[-600:], self, run)
         else:
             self.tstamp = TimeStamp(cpattern, logs, self, run)
-            # if self.eid == 'job':
-            #     print "%s - DEBUG State Job %s OUT" % (datetime.datetime.now().time(), self.id)
-            # if self.eid == 'task':
-            #     print "%s - DEBUG State Task %s OUT" % (datetime.datetime.now().time(), self.id)
 
 
 # -----------------------------------------------------------------------------
 class TimeStamp(object):
     def __init__(self, cpattern, logs, state, run):
-        # if state.eid == 'job':
-        #     print "%s - DEBUG TimeStamp Job %s IN" % (datetime.datetime.now().time(), state.id)
-        # if state.eid == 'task':
-        #     print "%s - DEBUG TimeStamp Task %s IN" % (datetime.datetime.now().time(), state.id)
         self.state = state
         self.cpattern = cpattern
         self.logs = logs
         self.run = run
         self.epoch = None
         self.stamp = self._get_stamp()
-        # if state.eid == 'job':
-        #     print "%s - DEBUG TimeStamp Job %s OUT" % (datetime.datetime.now().time(), state.eid)
-        # if state.eid == 'task':
-        #     print "%s - DEBUG TimeStamp Task %s OUT" % (datetime.datetime.now().time(), state.eid)
 
     def _get_stamp(self):
-        # if self.state.eid == 'job':
-        #     print "%s - DEBUG _get_stamp Job %s; %s log lines IN" % (datetime.datetime.now().time(), self.state.id, len(self.logs))
-        # if self.state.eid == 'task':
-        #     print "%s - DEBUG _get_stamp Task %s; %s log lines IN" % (datetime.datetime.now().time(), self.state.id, len(self.logs))
         stamp = None
         for line in self.logs:
             m = re.search(self.cpattern, line)
@@ -393,11 +263,122 @@ class TimeStamp(object):
                 self.epoch = int(time.mktime(time.strptime(stamp,
                                  self.run.dtpattern)))
                 break
-        # if self.state.eid == 'job':
-        #     print "%s - DEBUG _get_stamp Job %s; %s log lines OUT" % (datetime.datetime.now().time(), self.state.id, len(self.logs))
-        # if self.state.eid == 'task':
-        #     print "%s - DEBUG _get_stamp Task %s; %s log lines OUT" % (datetime.datetime.now().time(), self.state.id, len(self.logs))
         return stamp
+
+
+# -----------------------------------------------------------------------------
+class Reporter(object):
+    def __init__(self, run):
+        self.run = run
+        self.session = self.run.session
+
+    def write_json(self, jfile):
+        d = {}
+        d['Session'] = {'ID': self.session.id,
+                        'hosts': self.session.hosts,
+                        'ntasks': self.session.ntasks,
+                        'failed': self.session.failed,
+                        'completed': self.session.completed}
+        for state in self.session.states:
+            d['Session'][state.id] = state.tstamp.epoch
+        d['Jobs'] = {}
+        for job in self.session.jobs:
+            d['Jobs'][job.id] = {}
+            d['Jobs'][job.id]['host'] = job.host
+            d['Jobs'][job.id]['task_id'] = job.tid
+            for state in job.states:
+                d['Jobs'][job.id][state.id] = state.tstamp.epoch
+        d['Tasks'] = {}
+        for task in self.session.tasks:
+            d['Tasks'][task.id] = {}
+            d['Tasks'][task.id]['host'] = task.host
+            for state in task.states:
+                d['Tasks'][task.id][state.id] = state.tstamp.epoch
+        d['Blocks'] = {}
+        for block in self.session.blocks:
+            d['Blocks'][block.id] = {}
+            d['Blocks'][block.id]['host'] = block.host
+            d['Blocks'][block.id]['nodes'] = block.nodes
+            d['Blocks'][block.id]['workers'] = block.workers
+            d['Blocks'][block.id]['cores'] = block.cores
+            d['Blocks'][block.id]['cores_per_worker'] = block.coresworker
+            d['Blocks'][block.id]['walltime'] = block.walltime
+            d['Blocks'][block.id]['utilization'] = block.utilization
+            for state in block.states:
+                d['Blocks'][block.id][state.id] = state.tstamp.epoch
+        d['Workers'] = {}
+        for worker in self.session.workers:
+            d['Workers'][worker.id] = {}
+            d['Workers'][worker.id]['tasks'] = worker.tasks
+            d['Workers'][worker.id]['block'] = worker.bid
+            d['Workers'][worker.id]['node'] = worker.node
+            d['Workers'][worker.id]['cores_node'] = worker.coresnode
+            for state in worker.states:
+                d['Workers'][worker.id][state.id] = state.tstamp.epoch
+        fout = open(jfile, 'w')
+        json.dump(d, fout, indent=4)
+
+
+# -----------------------------------------------------------------------------
+class Profiler(object):
+    '''
+    import datetime
+
+    if ename == 'job':
+        print "%s - DEBUG State Job %s IN" % \
+            (datetime.datetime.now().time(), sname)
+    if ename == 'task':
+        print "%s - DEBUG State Task %s IN" % \
+            (datetime.datetime.now().time(), sname)
+    if self.eid == 'job':
+        print "%s - DEBUG State Job %s OUT" % \
+            (datetime.datetime.now().time(), self.id)
+    if self.eid == 'task':
+        print "%s - DEBUG State Task %s OUT" % \
+            (datetime.datetime.now().time(), self.id)
+
+
+    if state.eid == 'job':
+        print "%s - DEBUG TimeStamp Job %s IN" % \
+            (datetime.datetime.now().time(), state.id)
+    if state.eid == 'task':
+        print "%s - DEBUG TimeStamp Task %s IN" % \
+            (datetime.datetime.now().time(), state.id)
+    if state.eid == 'job':
+        print "%s - DEBUG TimeStamp Job %s OUT" % \
+            (datetime.datetime.now().time(), state.eid)
+    if state.eid == 'task':
+        print "%s - DEBUG TimeStamp Task %s OUT" % \
+            (datetime.datetime.now().time(), state.eid)
+
+
+    if self.state.eid == 'job':
+        print "%s - DEBUG _get_stamp Job %s; %s log lines IN" % \
+            (datetime.datetime.now().time(), self.state.id, len(self.logs))
+    if self.state.eid == 'task':
+        print "%s - DEBUG _get_stamp Task %s; %s log lines IN" % \
+            (datetime.datetime.now().time(), self.state.id, len(self.logs))
+    if self.state.eid == 'job':
+        print "%s - DEBUG _get_stamp Job %s; %s log lines OUT" % \
+            (datetime.datetime.now().time(), self.state.id, len(self.logs))
+    if self.state.eid == 'task':
+        print "%s - DEBUG _get_stamp Task %s; %s log lines OUT" % \
+            (datetime.datetime.now().time(), self.state.id, len(self.logs))
+    '''
+
+    def __init__(self, run):
+        self.run = run
+        self.log = self.run.log
+        self.jobs = self.run.session.jobs
+        self.tasks = self.run.session.tasks
+        self.blocks = self.run.session.blocks
+        self.workers = self.run.session.workers
+
+    def log_partitions(self):
+        stats = {'logs': len(self.log.entries)}
+        for name, partition in self.log.partitions.iteritems():
+            stats[name] = len(partition)
+        return stats
 
 
 # -----------------------------------------------------------------------------
@@ -434,6 +415,7 @@ if __name__ == "__main__":
     flogs = sys.argv[1]
     fjson = sys.argv[2]
 
+
     # Entities' states.
     stsession = {'start': None, 'finish': None}
 
@@ -463,12 +445,10 @@ if __name__ == "__main__":
                             'flogs'   : None},
                  'start' : {'pattern' : DT+'INFO  Loader JAVA',
                             'lfilter' : None,
-                            'flogs'   : None,
-                            'cpattern': None},
+                            'flogs'   : None},
                  'finish': {'pattern' : DT+'finished with no errors',
                             'lfilter' : None,
-                            'flogs'   : None,
-                            'cpattern': None}}
+                            'flogs'   : None}}
 
     rejob = {'id'     : {'pattern' : 'JOB_START jobid=([\w-]+) tr',
                          'lfilter' : 'JOB_START jobid=',
@@ -481,24 +461,19 @@ if __name__ == "__main__":
                          'flogs'   : None},
              'init'   : {'pattern' : DT+'JOB_INIT jobid=%s',
                          'lfilter' : 'JOB_INIT jobid=',
-                         'flogs'   : None,
-                         'cpattern': None},
+                         'flogs'   : None},
              'sselect': {'pattern' : DT+'JOB_SITE_SELECT jobid=%s',
                          'lfilter' : 'JOB_SITE_SELECT jobid=',
-                         'flogs'   : None,
-                         'cpattern': None},
+                         'flogs'   : None},
              'start'  : {'pattern' : DT+'JOB_START jobid=%s',
                          'lfilter' : 'JOB_START jobid=',
-                         'flogs'   : None,
-                         'cpattern': None},
+                         'flogs'   : None},
              'task'   : {'pattern' : DT+'JOB_TASK jobid=%s taskid=urn:%s',
                          'lfilter' : 'JOB_TASK jobid=',
-                         'flogs'   : None,
-                         'cpattern': None},
+                         'flogs'   : None},
              'end'    : {'pattern' : DT+'JOB_END jobid=%s',
                          'lfilter' : 'JOB_END jobid=',
-                         'flogs'   : None,
-                         'cpattern': None}}
+                         'flogs'   : None}}
 
     retask = {'id'      : {'pattern': 'JOB_TASK jobid=[\w-]+\s+taskid=urn:(R-\d+[-,x]\d+[-,x]\d+)',
                            'lfilter': 'JOB_TASK jobid=',
@@ -530,20 +505,16 @@ if __name__ == "__main__":
                                'flogs'   : None},
                'requested'  : {'pattern' : DT+'BLOCK_REQUESTED id=%s',
                                'lfilter' : 'BLOCK_REQUESTED id=',
-                               'flogs'   : None,
-                               'cpattern': None},
+                               'flogs'   : None},
                'active'     : {'pattern' : DT+'BLOCK_ACTIVE id=%s',
                                'lfilter' : 'BLOCK_ACTIVE id=',
-                               'flogs'   : None,
-                               'cpattern': None},
+                               'flogs'   : None},
                'shutdown'   : {'pattern' : DT+'BLOCK_SHUTDOWN id=%s',
                                'lfilter' : 'BLOCK_SHUTDOWN id=',
-                               'flogs'   : None,
-                               'cpattern': None},
+                               'flogs'   : None},
                'done'       : {'pattern' : DT+'BLOCK_DONE id=%s',
                                'lfilter' : 'BLOCK_DONE id=',
-                               'flogs'   : None,
-                               'cpattern': None}}
+                               'flogs'   : None}}
 
     reworker = {'id'       : {'pattern' : 'WORKER_ACTIVE blockid=[\d\-]+ id=(\d+)',
                               'lfilter' : 'WORKER_ACTIVE blockid=',
@@ -559,23 +530,19 @@ if __name__ == "__main__":
                               'flogs'   : None},
                 'active'   : {'pattern' : DT+'WORKER_ACTIVE blockid=%s id=%s',
                               'lfilter' : 'WORKER_ACTIVE blockid=',
-                              'flogs'   : None,
-                              'cpattern': None},
+                              'flogs'   : None},
                 'lost'     : {'pattern' : DT+'WORKER_LOST blockid=%s id=%s',
                               'lfilter' : 'WORKER_LOST blockid=',
-                              'flogs'   : None,
-                              'cpattern': None},
+                              'flogs'   : None},
                 'shutdown' : {'pattern' : DT+'WORKER_SHUTDOWN blockid=%s id=%s',
                               'lfilter' : 'WORKER_SHUTDOWN blockid=',
-                              'flogs'   : None,
-                              'cpattern': None}}
+                              'flogs'   : None}}
 
     for name, code in states['task'].iteritems():
         status = "status=%s" % code
         retask[name] = {'pattern': DT+'TASK_STATUS_CHANGE taskid=urn:%s '+status,
                         'lfilter': 'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ '+status+'(?:\s+|$)',
-                        'flogs'   : None,
-                        'cpattern': None}
+                        'flogs'   : None}
 
     res = {'session': resession,
            'job'    : rejob,
@@ -614,9 +581,12 @@ if __name__ == "__main__":
             run.add_state(worker, 'worker', state, (worker.bid, worker.id))
 
     # Save the timestamps to a json file.
-    # run.save_to_json(fjson)
-    run.save_to_json_full('full_'+fjson)
+    reporter = Reporter(run)
+    reporter.write_json(fjson)
 
-    # pprint.pprint(run.log.profile())
+    # Profile logs
+    import pprint
+    profiler = Profiler(run)
+    pprint.pprint(profiler.log_partitions())
 
     sys.exit(0)
