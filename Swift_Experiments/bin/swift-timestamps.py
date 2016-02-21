@@ -4,6 +4,8 @@ import re
 import sys
 import json
 import time
+import datetime
+
 
 '''Reads Swift+Coaster log file and returns a json file with timestamps of each
 job, task, block and worker's state and the key properties of the run.
@@ -45,10 +47,6 @@ class Run(object):
         if flogs:
             logs = flogs
         state = State(sname, ename, pattern, logs, self)
-        if state.id == 'failed' and state.tstamp.stamp:
-            self.session.failed += 1
-        elif state.id == 'completed' and state.tstamp.stamp:
-            self.session.completed += 1
         entity.states.append(state)
 
 
@@ -86,15 +84,17 @@ class Session(object):
         self.run = run
         self.states = []
         self.hosts = []
-        self.failed = 0
-        self.completed = 0
+        self.tasks_failed = 0
+        self.tasks_completed = 0
         self.id = self.run.add_property('session', 'id')
         self.jobs = self._get_entity('job')
         self.tasks = self._get_entity('task')
         self.blocks = self._get_entity('block')
         self.workers = self._get_entity('worker')
-        self.ntasks = len(self.tasks)
         self._set_tasks_host_jid()
+        self._set_tasks_failed_completed()
+        self._set_workers_tasks_host()
+        self._set_blocks_workers_nodes_host()
 
     def _get_entity(self, entity):
         ids = []
@@ -107,6 +107,7 @@ class Session(object):
         for line in logs:
             m = re.search(pattern, line)
             if m and m.group(1) not in ids:
+            # if m:
                 eid = m.group(1)
                 if entity == 'job':
                     job = Job(eid, self.run)
@@ -118,7 +119,10 @@ class Session(object):
                 elif entity == 'block':
                     entities.append(Block(eid, self.run))
                 elif entity == 'worker':
-                    entities.append(Worker(eid, self.run))
+                    bid = eid
+                    lid = m.group(2)
+                    eid = "%s:%s" % (eid, lid)
+                    entities.append(Worker(eid, lid, bid, self.run))
                 else:
                     print "ERROR: Uknown entity"
                     sys.exit(1)
@@ -131,6 +135,31 @@ class Session(object):
                 if job.tid == task.id:
                     task.host = job.host
                     task.jid = job.id
+
+    def _set_tasks_failed_completed(self):
+        for task in self.tasks:
+            for state in task.states:
+                if state.id == 'failed' and state.tstamp.stamp:
+                    self.session.tasks_failed += 1
+                elif state.id == 'completed' and state.tstamp.stamp:
+                    self.session.tasks_completed += 1
+
+    def _set_workers_tasks_host(self):
+        for task in self.tasks:
+            for worker in self.workers:
+                if task.wid == worker.id:
+                    worker.tasks.append(task.id)
+                    if not worker.host:
+                        worker.host = task.host
+
+    def _set_blocks_workers_nodes_host(self):
+        for block in self.blocks:
+            for worker in self.workers:
+                if worker.bid == block.id:
+                    block.workers.append(worker.id)
+                    block.nodes.append(worker.node)
+                    if not block.host:
+                        block.host = worker.host
 
 
 # -----------------------------------------------------------------------------
@@ -177,9 +206,11 @@ class Task(object):
     def __init__(self, tid, run):
         self.run = run
         self.id = tid
-        self.jid = None
         self.host = None
         self.states = []
+        self.jid = self.run.add_property('task', 'jobid', self.id)
+        self.bid = self.run.add_property('task', 'blockid', self.id)
+        self.wid = self.run.add_property('task', 'workerid', (self.id, self.bid))
 
 
 # -----------------------------------------------------------------------------
@@ -217,14 +248,16 @@ class Worker(object):
         WORKER_LOST
         WORKER_SHUTDOWN
     '''
-    def __init__(self, wid, run):
+    def __init__(self, wid, lid, bid, run):
         self.id = wid
+        self.lid = lid
+        self.bid = bid
         self.run = run
-        self.tasks = None
+        self.host = None
+        self.tasks = []
         self.states = []
-        self.bid = self.run.add_property('worker', 'blockid')
-        self.node = self.run.add_property('worker', 'node', (self.bid, self.id))
-        self.coresnode = self.run.add_property('worker', 'coresnode', (self.bid, self.id))
+        self.node = self.run.add_property('worker', 'node', (self.bid, self.lid))
+        self.coresnode = self.run.add_property('worker', 'coresnode', (self.bid, self.lid))
 
 
 # -----------------------------------------------------------------------------
@@ -276,45 +309,53 @@ class Reporter(object):
         d = {}
         d['Session'] = {'ID': self.session.id,
                         'hosts': self.session.hosts,
-                        'ntasks': self.session.ntasks,
-                        'failed': self.session.failed,
-                        'completed': self.session.completed}
+                        'njobs': len(self.session.jobs),
+                        'ntasks': len(self.session.tasks),
+                        'nblocks': len(self.session.blocks),
+                        'nworkers': len(self.session.workers),
+                        'tasks_failed': self.session.tasks_failed,
+                        'tasks_completed': self.session.tasks_completed,
+                        'states' : {}}
         for state in self.session.states:
-            d['Session'][state.id] = state.tstamp.epoch
+            d['Session']['states'][state.id] = state.tstamp.epoch
         d['Jobs'] = {}
         for job in self.session.jobs:
-            d['Jobs'][job.id] = {}
-            d['Jobs'][job.id]['host'] = job.host
-            d['Jobs'][job.id]['task_id'] = job.tid
+            d['Jobs'][job.id] = {'host': job.host,
+                                 'task_id': job.tid,
+                                 'states': {}}
             for state in job.states:
-                d['Jobs'][job.id][state.id] = state.tstamp.epoch
+                d['Jobs'][job.id]['states'][state.id] = state.tstamp.epoch
         d['Tasks'] = {}
         for task in self.session.tasks:
-            d['Tasks'][task.id] = {}
-            d['Tasks'][task.id]['host'] = task.host
+            d['Tasks'][task.id] = {'host': task.host,
+                                   'jobid': task.jid,
+                                   'blockid': task.bid,
+                                   'workerid': task.wid,
+                                   'states': {}}
             for state in task.states:
-                d['Tasks'][task.id][state.id] = state.tstamp.epoch
+                d['Tasks'][task.id]['states'][state.id] = state.tstamp.epoch
         d['Blocks'] = {}
         for block in self.session.blocks:
-            d['Blocks'][block.id] = {}
-            d['Blocks'][block.id]['host'] = block.host
-            d['Blocks'][block.id]['nodes'] = block.nodes
-            d['Blocks'][block.id]['workers'] = block.workers
-            d['Blocks'][block.id]['cores'] = block.cores
-            d['Blocks'][block.id]['cores_per_worker'] = block.coresworker
-            d['Blocks'][block.id]['walltime'] = block.walltime
-            d['Blocks'][block.id]['utilization'] = block.utilization
+            d['Blocks'][block.id] = {'host': block.host,
+                                     'nodes': block.nodes,
+                                     'workers': block.workers,
+                                     'cores': block.cores,
+                                     'cores_per_worker': block.coresworker,
+                                     'walltime': block.walltime,
+                                     'utilization': block.utilization,
+                                     'states': {}}
             for state in block.states:
-                d['Blocks'][block.id][state.id] = state.tstamp.epoch
+                d['Blocks'][block.id]['states'][state.id] = state.tstamp.epoch
         d['Workers'] = {}
         for worker in self.session.workers:
-            d['Workers'][worker.id] = {}
-            d['Workers'][worker.id]['tasks'] = worker.tasks
-            d['Workers'][worker.id]['block'] = worker.bid
-            d['Workers'][worker.id]['node'] = worker.node
-            d['Workers'][worker.id]['cores_node'] = worker.coresnode
+            d['Workers'][worker.id] = {'host': worker.host,
+                                       'tasks': worker.tasks,
+                                       'block': worker.bid,
+                                       'node': worker.node,
+                                       'cores_node': worker.coresnode,
+                                       'states': {}}
             for state in worker.states:
-                d['Workers'][worker.id][state.id] = state.tstamp.epoch
+                d['Workers'][worker.id]['states'][state.id] = state.tstamp.epoch
         fout = open(jfile, 'w')
         json.dump(d, fout, indent=4)
 
@@ -337,7 +378,6 @@ class Profiler(object):
         print "%s - DEBUG State Task %s OUT" % \
             (datetime.datetime.now().time(), self.id)
 
-
     if state.eid == 'job':
         print "%s - DEBUG TimeStamp Job %s IN" % \
             (datetime.datetime.now().time(), state.id)
@@ -350,7 +390,6 @@ class Profiler(object):
     if state.eid == 'task':
         print "%s - DEBUG TimeStamp Task %s OUT" % \
             (datetime.datetime.now().time(), state.eid)
-
 
     if self.state.eid == 'job':
         print "%s - DEBUG _get_stamp Job %s; %s log lines IN" % \
@@ -484,7 +523,7 @@ if __name__ == "__main__":
               'blockid' : {'pattern': 'taskid=urn:%s\s+status=2\s+workerid=([\d\-]+):',
                            'lfilter': 'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ status=2',
                            'flogs'  : None},
-              'workerid': {'pattern': 'taskid=urn:%s\s+status=2\s+workerid=%s:(\d+)',
+              'workerid': {'pattern': 'taskid=urn:%s\s+status=2\s+workerid=(%s:\d+)',
                            'lfilter': 'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ status=2',
                            'flogs'  : None}}
 
@@ -516,10 +555,7 @@ if __name__ == "__main__":
                                'lfilter' : 'BLOCK_DONE id=',
                                'flogs'   : None}}
 
-    reworker = {'id'       : {'pattern' : 'WORKER_ACTIVE blockid=[\d\-]+ id=(\d+)',
-                              'lfilter' : 'WORKER_ACTIVE blockid=',
-                              'flogs'   : None},
-                'blockid'  : {'pattern' : 'WORKER_ACTIVE blockid=([\d\-]+)',
+    reworker = {'id'       : {'pattern' : 'WORKER_ACTIVE blockid=([\d\-]+) id=(\d+)',
                               'lfilter' : 'WORKER_ACTIVE blockid=',
                               'flogs'   : None},
                 'node'     : {'pattern' : 'WORKER_ACTIVE blockid=%s id=%s node=([\w\d\-\.]+)',
@@ -539,10 +575,16 @@ if __name__ == "__main__":
                               'flogs'   : None}}
 
     for name, code in states['task'].iteritems():
-        status = "status=%s" % code
-        retask[name] = {'pattern': DT+'TASK_STATUS_CHANGE taskid=urn:%s '+status,
-                        'lfilter': 'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ '+status+'(?:\s+|$)',
-                        'flogs'   : None}
+        if code in [16, 2]:
+            status = "status=%s" % code
+            retask[name] = {'pattern': DT+'TASK_STATUS_CHANGE taskid=urn:%s '+status+' workerid=%s',
+                            'lfilter': 'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ '+status+' workerid=[\d\-:]+',
+                            'flogs'   : None}
+        else:
+            status = "status=%s" % code
+            retask[name] = {'pattern': DT+'TASK_STATUS_CHANGE taskid=urn:%s '+status,
+                            'lfilter': 'TASK_STATUS_CHANGE taskid=urn:R-\d+[-,x]\d+[-,x]\d+ '+status+'$',
+                            'flogs'   : None}
 
     res = {'session': resession,
            'job'    : rejob,
@@ -570,7 +612,10 @@ if __name__ == "__main__":
     for task in run.session.tasks:
         # print "\n%s - DEBUG TaskState %s" % (datetime.datetime.now().time(), task.id)
         for state, code in sttask.iteritems():
-            run.add_state(task, 'task', state, task.id)
+            if code in [16, 2]:
+                run.add_state(task, 'task', state, (task.id, task.wid))
+            else:
+                run.add_state(task, 'task', state, task.id)
 
     for block in run.session.blocks:
         for state, code in stblock.iteritems():
@@ -578,7 +623,7 @@ if __name__ == "__main__":
 
     for worker in run.session.workers:
         for state, code in stworker.iteritems():
-            run.add_state(worker, 'worker', state, (worker.bid, worker.id))
+            run.add_state(worker, 'worker', state, (worker.bid, worker.lid))
 
     # Save the timestamps to a json file.
     reporter = Reporter(run)
