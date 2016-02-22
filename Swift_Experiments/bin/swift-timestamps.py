@@ -630,8 +630,8 @@ if __name__ == "__main__":
     reporter.write_json(fjson)
 
     # Profile logs
-    import pprint
-    profiler = Profiler(run)
-    pprint.pprint(profiler.log_partitions())
+    # import pprint
+    # profiler = Profiler(run)
+    # pprint.pprint(profiler.log_partitions())
 
     sys.exit(0)
