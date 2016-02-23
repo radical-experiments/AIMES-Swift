@@ -7,6 +7,7 @@ import os
 import sys
 import csv
 import json
+import pprint
 
 __author__ = "Matteo Turilli"
 __copyright__ = "Copyright 2015, The AIMES Project"
@@ -68,10 +69,13 @@ def usage(msg=None, noexit=False):
     if not noexit:
         sys.exit(0)
 
+
 # -----------------------------------------------------------------------------
-#
 def collapse_ranges(ranges):
-    """
+    '''
+    Input:  [[%f,%f],[%f,%f],[%f,%f],...]
+    Output: [[%f,%f]]
+
     given be a set of ranges (as a set of pairs of floats [start, end] with
     'start <= end'. This algorithm will then collapse that set into the
     smallest possible set of ranges which cover the same, but not more nor
@@ -92,7 +96,7 @@ def collapse_ranges(ranges):
 
     Termination condition is if only one range is left -- it is also moved to
     the list of final ranges then, and that list is returned.
-    """
+    '''
 
     final = []
 
@@ -124,37 +128,68 @@ def collapse_ranges(ranges):
     return final
 
 
-#------------------------------------------------------------------------------
-#
-def get_Toverlap(starts, ends):
-    '''
-    Input: two lists
-    Output:
-    Helper function to create the list of lists from which to calculate the
-    overlap of the elements between the two time boundaries passed as arguments.
-    '''
-
-    overlap = 0
-    ranges = []
-
-    ranges.append(starts)
-    ranges.append(ends)
-
-    for crange in collapse_ranges(ranges):
-        overlap += crange[1] - crange[0]
-
-    return overlap
-
-
-#------------------------------------------------------------------------------
-#
-def roundup(x, y):
-    return x if x % y == 0 else x + y - x % y
+# -----------------------------------------------------------------------------
+def get_ranges(log, entities, start_state_name, end_state_name):
+    overlap = []
+    for eid, v in log[entities].iteritems():
+        if (log[entities][eid]['states'][start_state_name] and
+            log[entities][eid]['states'][end_state_name]):
+            overlap.append([log[entities][eid]['states'][start_state_name],
+                            log[entities][eid]['states'][end_state_name]])
+        else:
+            print "WARNING: Entity '%s' states '%s' and '%s' are %s and %s:\n%s" % \
+                (eid,
+                 start_state_name,
+                 end_state_name,
+                 log[entities][eid]['states'][start_state_name],
+                 log[entities][eid]['states'][end_state_name],
+                 log[entities][eid])
+    start_end = collapse_ranges(overlap)
+    return start_end[0][1] - start_end[0][0]
 
 
 # -----------------------------------------------------------------------------
-#
+def get_range(log, entity, start_state_name, end_state_name):
+    start = log[entity]['states'][start_state_name]
+    end = log[entity]['states'][end_state_name]
+    if start and end:
+        _range = end - start
+    else:
+        print "ERROR: The entity %s has no '%s' state:\n%s" % \
+            (entity, end_state_name, log[entity])
+        sys.exit(1)
+    return _range
+
+
+# -----------------------------------------------------------------------------
+def store_range(_range, timing, ntask, store):
+    '''
+    Adds range to the list of previously calculated ranges of type timing for
+    the same BoT size ntask. If it is the first time we calculate this type of
+    range for this BoT size, it creates a dedicated list in outputs[timing].
+    '''
+    if ntask not in outputs[timing].keys():
+        outputs[timing][ntask] = []
+    outputs[timing][ntask].append(_range)
+
+
+# -----------------------------------------------------------------------------
+def csv_append_range(store, timing):
+    '''Appends a range to a dedicated cvs file.'''
+    keys = sorted(store[timing].keys())
+    fcsv = timing+'.csv'
+    with open(fcsv, "wb") as outfile:
+        writer = csv.writer(outfile)
+        writer.writerow(keys)
+        writer.writerows(zip(*[store[timing][key] for key in keys]))
+
+
+# -----------------------------------------------------------------------------
 if __name__ == '__main__':
+    '''
+    TODO:
+    - Calculate the ideal Te by fetching the workload properties.
+    '''
 
     timing = None
     timings = {}
@@ -168,32 +203,61 @@ if __name__ == '__main__':
     if len(sys.argv) > 2:
         timing = sys.argv[2]
 
+    # Make a list of the json files in the given directory.
     inputs = [f for f in os.listdir(sys.argv[1]) if os.path.isfile(os.path.join(sys.argv[1], f)) and '.json' in f]
 
     print "DEBUG: Selected input files = %s" % inputs
-    timings = ['TTC']
+    timings = ['TTC', 'Tse', 'Tw', 'Te', 'Tsi', 'Tso', 'Tq']
+    # timings = ['TTC']
     outputs = {}
 
     for timing in timings:
         outputs[timing] = {}
 
+    # Read through all the json file in the given directory.
     for f in inputs:
-        for t in timings:
+        for timing in timings:
             with open(f) as jdata:
                 slog = json.load(jdata)
-            ntasks = slog["Session"]["completed"]
-            if t == 'TTC':
-                TTC = slog["Session"]["finish"] - slog["Session"]["start"]
-                if ntasks not in outputs['TTC'].keys():
-                    outputs['TTC'][ntasks] = []
-                outputs['TTC'][ntasks].append(TTC)
 
-                keys = sorted(outputs['TTC'].keys())
-                fcsv = t+'.csv'
-                with open(fcsv, "wb") as outfile:
-                    writer = csv.writer(outfile)
-                    writer.writerow(keys)
-                    writer.writerows(zip(*[outputs['TTC'][key] for key in keys]))
+            # Get the size of the workload.
+            ntask = slog["Session"]["tasks_completed"]
 
-    print "DEBUG: Timings = %s" % outputs
+            # Calculate every timing set by name in timings.
+            if timing == 'TTC':
+                TTC = get_range(slog, 'Session', 'start', 'finish')
+                store_range(TTC, timing, ntask, outputs)
+                csv_append_range(outputs, timing)
+
+            if timing == 'Tse':
+                Tse = get_ranges(slog, 'Jobs', 'start', 'end')
+                store_range(Tse, timing, ntask, outputs)
+                csv_append_range(outputs, timing)
+
+            if timing == 'Tw':
+                Tw = get_ranges(slog, 'Jobs', 'init', 'start')
+                store_range(Tw, timing, ntask, outputs)
+                csv_append_range(outputs, timing)
+
+            if timing == 'Te':
+                Te = get_ranges(slog, 'Tasks', 'active', 'completed')
+                store_range(Te, timing, ntask, outputs)
+                csv_append_range(outputs, timing)
+
+            if timing == 'Tsi':
+                Tsi = get_ranges(slog, 'Tasks', 'stage_in', 'active')
+                store_range(Tsi, timing, ntask, outputs)
+                csv_append_range(outputs, timing)
+
+            if timing == 'Tso':
+                Tso = get_ranges(slog, 'Tasks', 'stage_out', 'completed')
+                store_range(Tso, timing, ntask, outputs)
+                csv_append_range(outputs, timing)
+
+            if timing == 'Tq':
+                Tq = get_ranges(slog, 'Blocks', 'requested', 'active')
+                store_range(Tq, timing, ntask, outputs)
+                csv_append_range(outputs, timing)
+
+    pprint.pprint("DEBUG: Timings = %s" % outputs)
 
