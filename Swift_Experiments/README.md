@@ -129,18 +129,18 @@ The analysis wrokflow is designed to be automated, reusable, and extensible. The
 
   Duration derived from the logs:
   
-  | Owner   | Entity | Duration      | Start log tag   | End log tag     | Description |
-  |---------|--------|---------------|-----------------|-----------------|-------------|
-  | Swift   | Job    | Setting_up    | JOB_INIT        | JOB_TASK        | Time taken by Swift to set up each task for execution. Can be used to determine the percentage of TTC spent on interpreting the given swift script. |
-  |         |        | Executing     | JOB_TASK        | JOB_END         | Time taken to execute each task as logged by Swift. It can be compared to the executing time recorded by Coaster for sanity/consistenty check purposes. |
-  | Coaster | Task   | Submitting    | JOB_TASK        | status=2        | Time taken by Coaster to queue/schedule each task to a pilot. It can be used to determine the overhead of Coaster indipendently from those of the resource. |
-  |         |        | Executing     | status=2        | status=7        | Time taken by Coaster to execute each task on a worker (i.e., pilot). This is the equivalent of AIMES Tx. |
-  |         |        | Staging_in    | status=16       | status=2        | Time taken by Coaster to stage the task's input file(s) if any. Useful if we will decide to include data-related timings in the paper. |
-  |         |        | Staging_out   | status=17       | status=7        | Time taken by Coaster to stage the task's output file(s).  Useful to measure Coaster's overhead in saving STD* files after task execution. |
-  |         | Block  | Queuing       | BLOCK_REQUESTED | BLOCK_ACTIVE    | Time spent by each Block, i.e. pilot job, in the resource's queue. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
-  |         |        | Executing     | BLOCK_ACTIVE    | BLOCK_DONE      | Time spent by each block, i.e. pilot job, executing. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
-  |         | Worker | Bootstrapping | BLOCK_ACTIVE    | WORKER_ACTIVE   | Time required by the worker, i.e. pilot agent, to bootstrap. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
-  |         |        | Executing     | WORKER_ACTIVE   | WORKER_SHUTDOWN | Time spent by each worker, i.e, pilot agent, executing. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
+  | Owner   | Entity | Duration      | Start log tag   | End log tag     | Name | Description |
+  |---------|--------|---------------|-----------------|-----------------|------|-------------|
+  | Swift   | Job    | Setting_up    | JOB_INIT        | JOB_TASK        | Tss  | Time taken by Swift to set up each task for execution. Can be used to determine the percentage of TTC spent on interpreting the given swift script. |
+  |         |        | Executing     | JOB_TASK        | JOB_END         | Tse  | Time taken to execute each task as logged by Swift. It can be compared to the executing time recorded by Coaster for sanity/consistenty check purposes. |
+  | Coaster | Task   | Submitting    | JOB_TASK        | status=2        | Tw   | Time taken by Coaster to queue/schedule each task to a pilot. It can be used to determine the overhead of Coaster indipendently from those of the resource. |
+  |         |        | Executing     | status=2        | status=7        | Te   | Time taken by Coaster to execute each task on a worker (i.e., pilot). This is the equivalent of AIMES Tx. |
+  |         |        | Staging_in    | status=16       | status=2        | Tsi  | Time taken by Coaster to stage the task's input file(s) if any. Useful if we will decide to include data-related timings in the paper. |
+  |         |        | Staging_out   | status=17       | status=7        | Tso  | Time taken by Coaster to stage the task's output file(s).  Useful to measure Coaster's overhead in saving STD* files after task execution. |
+  |         | Block  | Queuing       | BLOCK_REQUESTED | BLOCK_ACTIVE    | Tq   |Time spent by each Block, i.e. pilot job, in the resource's queue. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
+  |         |        | Executing     | BLOCK_ACTIVE    | BLOCK_DONE      | Ta   | Time spent by each block, i.e. pilot job, executing. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
+  |         | Worker | Bootstrapping | BLOCK_ACTIVE    | WORKER_ACTIVE   | Tb   | Time required by the worker, i.e. pilot agent, to bootstrap. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
+  |         |        | Executing     | WORKER_ACTIVE   | WORKER_SHUTDOWN | Twe  | Time spent by each worker, i.e, pilot agent, executing. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
 
 
   The following filters the log file calculating the timings for each relevant event. Each event is delimited by a state transition:
