@@ -97,24 +97,20 @@ def collapse_ranges(ranges):
     Termination condition is if only one range is left -- it is also moved to
     the list of final ranges then, and that list is returned.
     '''
-
     final = []
 
     # sort ranges into a copy list
     _ranges = sorted(ranges, key=lambda x: x[0])
-
     START = 0
     END = 1
 
-    base = _ranges[0] # smallest range
-
+    # smallest range
+    base = _ranges[0]
     for _range in _ranges[1:]:
-
         if _range[START] <= base[END]:
 
             # ranges overlap -- extend the base
             base[END] = max(base[END], _range[END])
-
         else:
 
             # ranges don't overlap -- move base to final, and current _range
@@ -124,29 +120,49 @@ def collapse_ranges(ranges):
 
     # termination: push last base to final
     final.append(base)
-
     return final
 
 
 # -----------------------------------------------------------------------------
-def get_ranges(log, entities, start_state_name, end_state_name):
-    overlap = []
-    for eid, v in log[entities].iteritems():
-        if (log[entities][eid]['states'][start_state_name] and
-            log[entities][eid]['states'][end_state_name]):
-            overlap.append([log[entities][eid]['states'][start_state_name],
-                            log[entities][eid]['states'][end_state_name]])
-        else:
-            print "WARNING: Entity '%s' states '%s' and '%s' are %s and %s:\n%s" % \
-                (eid,
-                 start_state_name,
-                 end_state_name,
-                 log[entities][eid]['states'][start_state_name],
-                 log[entities][eid]['states'][end_state_name],
-                 log[entities][eid])
-    start_end = collapse_ranges(overlap)
+def get_ranges(log, s_entities, s_state_name, e_entities, e_state_name):
+    overlaps = []
+    for seid in log[s_entities].keys():
+        for eeid in log[e_entities].keys():
+            if s_entities == e_entities:
+                if seid == eeid:
+                    overlap = get_overlap(log, s_entities, seid, s_state_name,
+                                          e_entities, eeid, e_state_name)
+                    if overlap:
+                        overlaps.append(overlap)
+            elif s_entities == 'Jobs' and e_entities == 'Tasks':
+                if seid == log[e_entities][eeid]['jobid']:
+                    overlap = get_overlap(log, s_entities, seid, s_state_name,
+                                          e_entities, eeid, e_state_name)
+                    if overlap:
+                        overlaps.append(overlap)
+            elif s_entities == 'Blocks' and e_entities == 'Workers':
+                if seid == log[e_entities][eeid]['block']:
+                    overlap = get_overlap(log, s_entities, seid, s_state_name,
+                                          e_entities, eeid, e_state_name)
+                    if overlap:
+                        overlaps.append(overlap)
+    start_end = collapse_ranges(overlaps)
     return start_end[0][1] - start_end[0][0]
 
+# -----------------------------------------------------------------------------
+def get_overlap(log, s_entities, seid, s_state_name, e_entities, eeid, e_state_name):
+    overlap = None
+    start = log[s_entities][seid]['states'][s_state_name]
+    end = log[e_entities][eeid]['states'][e_state_name]
+    if start and end:
+        overlap = [start,end]
+    else:
+        sw = "\n\tEntity '%s' state '%s' is %s:\n\t%s" % \
+             (seid, s_state_name, start, log[s_entities][seid])
+        ew = "\n\tEntity '%s' state '%s' is %s:\n\t%s" % \
+             (eeid, e_state_name, end, log[e_entities][eeid])
+        print "\nDEBUG: undefined entities %s%s" % (sw, ew)
+    return overlap
 
 # -----------------------------------------------------------------------------
 def get_range(log, entity, start_state_name, end_state_name):
@@ -190,10 +206,7 @@ if __name__ == '__main__':
     TODO:
     - Calculate the ideal Te by fetching the workload properties.
     '''
-
     timing = None
-    timings = {}
-
     if len(sys.argv) <= 1:
         usage("insufficient arguments -- need dir of json files")
 
@@ -205,10 +218,9 @@ if __name__ == '__main__':
 
     # Make a list of the json files in the given directory.
     inputs = [f for f in os.listdir(sys.argv[1]) if os.path.isfile(os.path.join(sys.argv[1], f)) and '.json' in f]
-
     print "DEBUG: Selected input files = %s" % inputs
-    timings = ['TTC', 'Tse', 'Tw', 'Te', 'Tsi', 'Tso', 'Tq']
-    # timings = ['TTC']
+
+    timings = ['TTC', 'Tss', 'Tse', 'Tw', 'Te', 'Tsi', 'Tso', 'Tq']
     outputs = {}
 
     for timing in timings:
@@ -229,35 +241,56 @@ if __name__ == '__main__':
                 store_range(TTC, timing, ntask, outputs)
                 csv_append_range(outputs, timing)
 
+            if timing == 'Tss':
+                Tss = get_ranges(slog, 'Jobs', 'init', 'Jobs', 'task')
+                store_range(Tss, timing, ntask, outputs)
+                csv_append_range(outputs, timing)
+
             if timing == 'Tse':
-                Tse = get_ranges(slog, 'Jobs', 'start', 'end')
+                Tse = get_ranges(slog, 'Jobs', 'task', 'Jobs', 'end')
                 store_range(Tse, timing, ntask, outputs)
                 csv_append_range(outputs, timing)
 
             if timing == 'Tw':
-                Tw = get_ranges(slog, 'Jobs', 'init', 'start')
+                Tw = get_ranges(slog, 'Jobs', 'task', 'Tasks', 'active')
                 store_range(Tw, timing, ntask, outputs)
                 csv_append_range(outputs, timing)
 
             if timing == 'Te':
-                Te = get_ranges(slog, 'Tasks', 'active', 'completed')
+                Te = get_ranges(slog, 'Tasks', 'active', 'Tasks', 'completed')
                 store_range(Te, timing, ntask, outputs)
                 csv_append_range(outputs, timing)
 
             if timing == 'Tsi':
-                Tsi = get_ranges(slog, 'Tasks', 'stage_in', 'active')
+                Tsi = get_ranges(slog, 'Tasks', 'stage_in', 'Tasks', 'active')
                 store_range(Tsi, timing, ntask, outputs)
                 csv_append_range(outputs, timing)
 
             if timing == 'Tso':
-                Tso = get_ranges(slog, 'Tasks', 'stage_out', 'completed')
+                Tso = get_ranges(slog, 'Tasks', 'stage_out', 'Tasks', 'completed')
                 store_range(Tso, timing, ntask, outputs)
                 csv_append_range(outputs, timing)
 
             if timing == 'Tq':
-                Tq = get_ranges(slog, 'Blocks', 'requested', 'active')
+                Tq = get_ranges(slog, 'Blocks', 'requested', 'Blocks', 'active')
                 store_range(Tq, timing, ntask, outputs)
                 csv_append_range(outputs, timing)
 
-    pprint.pprint("DEBUG: Timings = %s" % outputs)
+            if timing == 'Ta':
+                Ta = get_ranges(slog, 'Blocks', 'active', 'Blocks', 'done')
+                store_range(Ta, timing, ntask, outputs)
+                csv_append_range(outputs, timing)
+
+            if timing == 'Tb':
+                Tb = get_ranges(slog, 'Blocks', 'active', 'Workers', 'active')
+                store_range(Tb, timing, ntask, outputs)
+                csv_append_range(outputs, timing)
+
+            if timing == 'Tb':
+                Tb = get_ranges(slog, 'Workers', 'active', 'Workers', 'shutdown')
+                store_range(Tb, timing, ntask, outputs)
+                csv_append_range(outputs, timing)
+
+    print "DEBUG: Timings"
+    pprint.pprint(outputs)
 
