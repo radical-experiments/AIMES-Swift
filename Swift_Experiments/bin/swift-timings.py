@@ -211,13 +211,18 @@ def store_range(_range, timing, ntask, store):
 # -----------------------------------------------------------------------------
 def store_property(prop, _property, ntask, store):
     if _property in ['Blocks_per_host', 'Workers_per_host', 'Tasks_per_host']:
-        if ntask not in store[_property].keys():
-            store[_property][ntask] = {}
+        # Entities' properties can be null when the entity has been instantiated
+        # but for some reason it did not reached the state in which one or more
+        # properties are recorded. For example, a task that has been scheduled
+        # but failed, or a block that has been requested but never went active.
         if prop:
             for host, nentities in prop.iteritems():
-                if host not in store[_property][ntask].keys():
-                    store[_property][ntask][host] = []
-                store[_property][ntask][host].append(nentities)
+                phost = _property+'_'+host
+                if phost not in store.keys():
+                    store[phost] = {}
+                if ntask not in store[phost].keys():
+                    store[phost][ntask] = []
+                store[phost][ntask].append(nentities)
     else:
         if ntask not in store[_property].keys():
             store[_property][ntask] = []
@@ -226,35 +231,30 @@ def store_property(prop, _property, ntask, store):
 
 # -----------------------------------------------------------------------------
 def csv_append_property(store, properties, prop):
-    # input = {'Workers_per_host':
-    #           {32:  {'stampede': [3, 3, 2, 3],     'gordon': [2, 2, 1, 2]},
-    #            256: {'stampede': [17, 17, 17, 17], 'gordon':[3, 3, 2, 3]}}}
-
-    hosts = []
-    zipped = []
-    fcsv = prop+'.csv'
-    keys = sorted(store[prop].keys())
-    keys.insert(0, 'hosts')
-
-    for p, v in store[prop].iteritems():
-        for host in v.keys():
-            if host not in hosts:
-                hosts.append(host)
-
-    for host in hosts:
-        for p, v in store.iteritems():
-            for b in v.keys():
-                l = list(store[p][b][host])
-                l.insert(0,host)
-                zipped.append(l)
-                l = None
-    print store[prop]
-    print zipped
-    print
-    # with open(fcsv, "wb") as outfile:
-    #     writer = csv.writer(outfile)
-    #     writer.writerow(keys)
-    #     writer.writerows(zip(*[store[prop][key] for key in keys]))
+    props = []
+    keys = []
+    # Check whether there are _host sub-properties. Discard the base property if
+    # there are.
+    for key in store.keys():
+        if prop in key and prop != key:
+            props.append(key)
+    # If there are not _host keys, use the base. This covers for those
+    # properties for which no _host sub-properties are used.
+    if not props and prop in store.keys():
+        keys.append(prop)
+    # This implicitly verifies that the two _host sub-properties have the same
+    # set of keys. When they do not have it, something bad(tm) will happen with
+    # zip.
+    for p in props:
+        for k in store[p].keys():
+            if k not in keys:
+                keys.append(k)
+    keys = sorted(keys)
+    for p in props:
+        with open(p+'.csv', "wb") as outfile:
+            writer = csv.writer(outfile)
+            writer.writerow(keys)
+            writer.writerows(zip(*[store[p][key] for key in keys]))
 
 
 # -----------------------------------------------------------------------------
@@ -277,31 +277,15 @@ def get_tasks_per_worker(slog):
 
 
 # -----------------------------------------------------------------------------
-def get_blocks_per_host(slog):
+def get_entities_per_host(slog, entities):
     hosts = {}
     for host in slog['Session']['hosts']:
         hosts[host] = 0
-    for block in slog['Blocks'].keys():
-        if slog['Blocks'][block]['workers']:
-            hosts[str(slog['Blocks'][block]['host'])] += 1
+    for entity in slog[entities].keys():
+        if slog[entities][entity]['host']:
+            hosts[str(slog[entities][entity]['host'])] += 1
+    print "%s hosts %s" % (entities, hosts)
     return hosts
-
-
-# -----------------------------------------------------------------------------
-def get_workers_per_host(slog):
-    hosts = {}
-    for host in slog['Session']['hosts']:
-        hosts[host] = 0
-    for worker in slog['Workers'].keys():
-        if slog['Workers'][worker]['host']:
-            hosts[str(slog['Workers'][worker]['host'])] += 1
-    print hosts
-    return hosts
-
-
-# -----------------------------------------------------------------------------
-def get_tasks_per_host(slog):
-    pass
 
 
 # -----------------------------------------------------------------------------
@@ -354,20 +338,20 @@ if __name__ == '__main__':
             # Get the size of the workload.
             ntask = slog["Session"]["tasks_completed"]
 
-            # if prop == 'Pp':
-            #     Pp = slog['Session']['nblocks']
-            #     store_property(Pp, properties[prop], ntask, outputs)
-            #     csv_append_property(outputs, properties, properties[prop])
+            if prop == 'Pp':
+                Pp = slog['Session']['nblocks']
+                store_property(Pp, properties[prop], ntask, outputs)
+                csv_append_property(outputs, properties, properties[prop])
 
-            # if prop == 'Pw':
-            #     Pw = slog['Session']['nworkers']
-            #     store_property(Pw, properties[prop], ntask, outputs)
-            #     csv_append_property(outputs, properties, properties[prop])
+            if prop == 'Pw':
+                Pw = slog['Session']['nworkers']
+                store_property(Pw, properties[prop], ntask, outputs)
+                csv_append_property(outputs, properties, properties[prop])
 
-            # if prop == 'Ptw':
-            #     Ptw = get_tasks_per_worker(slog)
-            #     store_property(Ptw, properties[prop], ntask, outputs)
-            #     csv_append_property(outputs, properties, properties[prop])
+            if prop == 'Ptw':
+                Ptw = get_tasks_per_worker(slog)
+                store_property(Ptw, properties[prop], ntask, outputs)
+                csv_append_property(outputs, properties, properties[prop])
 
             # Due to how information is extracted from Swift logs, a host is
             # recorded for a block only when at least a task has been running on
@@ -379,20 +363,16 @@ if __name__ == '__main__':
             #     csv_append_property(outputs, properties, properties[prop])
 
             if prop == 'Pwr':
-                Pwr = get_workers_per_host(slog)
+                Pwr = get_entities_per_host(slog, 'Workers')
                 print Pwr
                 store_property(Pwr, properties[prop], ntask, outputs)
                 csv_append_property(outputs, properties, properties[prop])
 
-            # if prop == 'Ptr':
-            #     Ptr = get_tasks_per_host(slog)
-            #     store_property(Ptr, properties[prop], ntask, outputs)
-            #     csv_append_property(outputs, properties, properties[prop])
+            if prop == 'Ptr':
+                Ptr = get_entities_per_host(slog, 'Tasks')
+                store_property(Ptr, properties[prop], ntask, outputs)
+                csv_append_property(outputs, properties, properties[prop])
 
-    pprint.pprint(outputs)
-    sys.exit()
-    # Read through all the json file in the given directory.
-    for f in inputs:
 
         # Derive the timings of each run and save each timing to a dedicated csv
         # file named named after that timing. Each file contains the value of
