@@ -26,37 +26,58 @@ def usage(msg=None, noexit=False):
 
     arguments
         <dir>      : Directory with the json files produced by swift-timings.py
-        [<timing>] : optional -- type of timing
+        [<timing>] : optional -- type of timing (**not implemented yet**)
 
     The tool extracts timings from the Swift durations files in the given
     directory. By default, the tool output all the available timings. If a
     timing is specified, only that timing is outputted.
 
     Current timings are:
-        - TTC : total time to completion of the whole session.
-        - Tss : Job set up time as recorded by Swift.
-        - Tse : Job execution time as recorded by Swift.
-        - Tw  : Task waiting time before execution. From Swift submission time
-                to Coaster scheduling it on a worker.
-        - Te  : Task executing time as recorded by Coaster. From status 2
-                (active) to status 7 (completed). We assume no other final
-                state as we discard runs with failed/canceled jobs.
-        - Tsi : Task staging in time. From status 16 (stage_in) to status 2
-                (active).
-        - Tso : Task staging out time. From status 17 (active) to status 7
-                (completed).
-        - Tq  : Block queuing time as recorded by the RemoteLogHandler (Swift or
-                Coaster?). NOTE: the accuracy of this timing needs to be
-                verified.
-        - Ta  : Block active time as recorded by the RemoteLogHandler (Swift or
-                Coaster?). NOTE: the accuracy of this timing needs to be
-                verified.
-        - Tb  : Worker bootstrapping time as recorded by the RemoteLogHandler
-                (Swift or Coaster?). NOTE: the accuracy of this timing needs
-                to be verified.
-        - Twe : Worker executing time as recorded by the RemoteLogHandler
-                (Swift or Coaster?). NOTE: the accuracy of this timing needs
-                to be verified.
+
+    | Name | Owner   | Entities       | Duration      | Start tag | End tag   |
+    |------|---------|----------------|---------------|-----------|-----------|
+    | TTC* | Swift   | Session        | Total         | start     | end       |
+    | Tss  | Swift   | Jobs           | Setting_up    | init      | task      |
+    | Tse  | Swift   | Jobs           | Executing     | task      | end       |
+    | Tw   | Coaster | Jobs/Tasks     | Submitting    | task      | active    |
+    | Te * | Coaster | Tasks          | Executing     | active    | completed |
+    | Tsi  | Coaster | Tasks          | Staging_in    | stage_in  | active    |
+    | Tso  | Coaster | Tasks          | Staging_out   | stage_out | completed |
+    | Tq * | Coaster | Blocks         | Queuing       | requested | active    |
+    | Ta   | Coaster | Blocks         | Executing     | active    | done      |
+    | Tb   | Coaster | Blocks/Workers | Bootstrapping | active    | active    |
+    | Twe  | Coaster | Workers        | Executing     | active    | shutdown  |
+
+    - TTC : total time to completion of the whole session.
+    - Tss : Time taken by Swift to set up each task for execution. Can be used
+            to determine the percentage of TTC spent on interpreting the given
+            swift script.
+    - Tse : Time taken to execute each task as logged by Swift. It can be
+            compared to the executing time recorded by Coaster for
+            sanity/consistency check purposes.
+    - Tw  : Time taken by Coaster to queue/schedule each task to a pilot. It can
+            be used to determine the overhead of Coaster independently from
+            those of the resource.
+    - Te  : Time taken by Coaster to execute each task on a worker (i.e.,
+            pilot). This is the equivalent of AIMES Tx.
+    - Tsi : Time taken by Coaster to stage the task's input file(s) if any.
+            Useful if we will decide to include data-related timings in the
+            paper.
+    - Tso : Time taken by Coaster to stage the task's output file(s).  Useful to
+            measure Coaster's overhead in saving STD* files after task
+            execution.
+    - Tq  : Time spent by each Block, i.e. pilot job, in the resource's queue.
+            NOTE: All the time stamps recording by RemoteLogHandler may be
+            inaccurate. This needs further verification.
+    - Ta  : Time spent by each block, i.e. pilot job, executing. NOTE: All the
+            time stamps recording by RemoteLogHandler may be inaccurate. This
+            needs further verification.
+    - Tb  : Time required by the worker, i.e. pilot agent, to bootstrap. NOTE:
+            All the time stamps recording by RemoteLogHandler may be inaccurate.
+            This needs further verification.
+    - Twe : Time spent by each worker, i.e, pilot agent, executing. NOTE: All
+            the time stamps recording by RemoteLogHandler may be inaccurate.
+            This needs further verification.
 
     For more documentation see:
         https://github.com/radical-experiments/AIMES-Swift/tree/master/Swift_Experiments
@@ -157,10 +178,8 @@ def get_overlap(log, s_entities, seid, s_state_name, e_entities, eeid, e_state_n
     if start and end:
         overlap = [start,end]
     else:
-        sw = "\n\tEntity '%s' state '%s' is %s:\n\t%s" % \
-             (seid, s_state_name, start, log[s_entities][seid])
-        ew = "\n\tEntity '%s' state '%s' is %s:\n\t%s" % \
-             (eeid, e_state_name, end, log[e_entities][eeid])
+        sw = "\n\tEntity '%s' state '%s' is %s" % (seid, s_state_name, start)
+        ew = "\n\tEntity '%s' state '%s' is %s" % (eeid, e_state_name, end)
         print "\nDEBUG: undefined entities %s%s" % (sw, ew)
     return overlap
 
@@ -184,13 +203,62 @@ def store_range(_range, timing, ntask, store):
     the same BoT size ntask. If it is the first time we calculate this type of
     range for this BoT size, it creates a dedicated list in outputs[timing].
     '''
-    if ntask not in outputs[timing].keys():
-        outputs[timing][ntask] = []
-    outputs[timing][ntask].append(_range)
+    if ntask not in store[timing].keys():
+        store[timing][ntask] = []
+    store[timing][ntask].append(_range)
 
 
 # -----------------------------------------------------------------------------
-def csv_append_range(store, timing):
+def store_property(prop, _property, ntask, store):
+    if _property in ['Blocks_per_host', 'Workers_per_host', 'Tasks_per_host']:
+        if ntask not in store[_property].keys():
+            store[_property][ntask] = {}
+        if prop:
+            for host, nentities in prop.iteritems():
+                if host not in store[_property][ntask].keys():
+                    store[_property][ntask][host] = []
+                store[_property][ntask][host].append(nentities)
+    else:
+        if ntask not in store[_property].keys():
+            store[_property][ntask] = []
+        store[_property][ntask].append(prop)
+
+
+# -----------------------------------------------------------------------------
+def csv_append_property(store, properties, prop):
+    # input = {'Workers_per_host':
+    #           {32:  {'stampede': [3, 3, 2, 3],     'gordon': [2, 2, 1, 2]},
+    #            256: {'stampede': [17, 17, 17, 17], 'gordon':[3, 3, 2, 3]}}}
+
+    hosts = []
+    zipped = []
+    fcsv = prop+'.csv'
+    keys = sorted(store[prop].keys())
+    keys.insert(0, 'hosts')
+
+    for p, v in store[prop].iteritems():
+        for host in v.keys():
+            if host not in hosts:
+                hosts.append(host)
+
+    for host in hosts:
+        for p, v in store.iteritems():
+            for b in v.keys():
+                l = list(store[p][b][host])
+                l.insert(0,host)
+                zipped.append(l)
+                l = None
+    print store[prop]
+    print zipped
+    print
+    # with open(fcsv, "wb") as outfile:
+    #     writer = csv.writer(outfile)
+    #     writer.writerow(keys)
+    #     writer.writerows(zip(*[store[prop][key] for key in keys]))
+
+
+# -----------------------------------------------------------------------------
+def csv_append_range(store, timings, timing):
     '''Appends a range to a dedicated cvs file.'''
     keys = sorted(store[timing].keys())
     fcsv = timing+'.csv'
@@ -198,6 +266,42 @@ def csv_append_range(store, timing):
         writer = csv.writer(outfile)
         writer.writerow(keys)
         writer.writerows(zip(*[store[timing][key] for key in keys]))
+
+
+# -----------------------------------------------------------------------------
+def get_tasks_per_worker(slog):
+    tw = 0
+    for worker in slog['Workers'].keys():
+        tw += len(slog['Workers'][worker]['tasks'])
+    return float(tw)/float(len(slog['Workers'].keys()))
+
+
+# -----------------------------------------------------------------------------
+def get_blocks_per_host(slog):
+    hosts = {}
+    for host in slog['Session']['hosts']:
+        hosts[host] = 0
+    for block in slog['Blocks'].keys():
+        if slog['Blocks'][block]['workers']:
+            hosts[str(slog['Blocks'][block]['host'])] += 1
+    return hosts
+
+
+# -----------------------------------------------------------------------------
+def get_workers_per_host(slog):
+    hosts = {}
+    for host in slog['Session']['hosts']:
+        hosts[host] = 0
+    for worker in slog['Workers'].keys():
+        if slog['Workers'][worker]['host']:
+            hosts[str(slog['Workers'][worker]['host'])] += 1
+    print hosts
+    return hosts
+
+
+# -----------------------------------------------------------------------------
+def get_tasks_per_host(slog):
+    pass
 
 
 # -----------------------------------------------------------------------------
@@ -216,19 +320,84 @@ if __name__ == '__main__':
     if len(sys.argv) > 2:
         timing = sys.argv[2]
 
+    timings    = {'TTC': 'TTC'             , 'Tss': 'Setting_up'          ,
+                  'Tse': 'Executing_job'   , 'Tw' : 'Submitting_task'     ,
+                  'Te' : 'Executing_task'  , 'Tsi': 'Staging_in_task'     ,
+                  'Tso': 'Staging_out_task', 'Tq' : 'Queuing_block'       ,
+                  'Ta' : 'Executing_block' , 'Tb' : 'Bootstrapping_worker',
+                  'Twe': 'Executing_worker'}
+
+    properties = {'Pp' : 'Number_blocks'   , 'Pbr': 'Blocks_per_host' ,
+                  'Pw' : 'Number_workers'  , 'Pwr': 'Workers_per_host',
+                  'Ptw': 'Tasks_per_worker', 'Ptr': 'Tasks_per_host'}
+
     # Make a list of the json files in the given directory.
     inputs = [f for f in os.listdir(sys.argv[1]) if os.path.isfile(os.path.join(sys.argv[1], f)) and '.json' in f]
     print "DEBUG: Selected input files = %s" % inputs
 
-    timings = ['TTC', 'Tss', 'Tse', 'Tw', 'Te', 'Tsi', 'Tso', 'Tq']
     outputs = {}
-
-    for timing in timings:
-        outputs[timing] = {}
+    for _property, name in properties.iteritems():
+        outputs[name] = {}
+    for timing, name in timings.iteritems():
+        outputs[name] = {}
 
     # Read through all the json file in the given directory.
     for f in inputs:
-        for timing in timings:
+
+        # Derive the properties of each run and save each property to a
+        # dedicated csv file named named after that property. Each file contains
+        # the value of the measured timing for each scale of the given BoTs.
+        for prop in properties.keys():
+            with open(f) as jdata:
+                slog = json.load(jdata)
+
+            # Get the size of the workload.
+            ntask = slog["Session"]["tasks_completed"]
+
+            # if prop == 'Pp':
+            #     Pp = slog['Session']['nblocks']
+            #     store_property(Pp, properties[prop], ntask, outputs)
+            #     csv_append_property(outputs, properties, properties[prop])
+
+            # if prop == 'Pw':
+            #     Pw = slog['Session']['nworkers']
+            #     store_property(Pw, properties[prop], ntask, outputs)
+            #     csv_append_property(outputs, properties, properties[prop])
+
+            # if prop == 'Ptw':
+            #     Ptw = get_tasks_per_worker(slog)
+            #     store_property(Ptw, properties[prop], ntask, outputs)
+            #     csv_append_property(outputs, properties, properties[prop])
+
+            # Due to how information is extracted from Swift logs, a host is
+            # recorded for a block only when at least a task has been running on
+            # its worker(s). For this reason, we can extract only Workers per
+            # host, not blocks per host.
+            # if prop == 'Pbr':
+            #     Pbr = get_blocks_per_host(slog)
+            #     store_property(Pbr, properties[prop], ntask, outputs)
+            #     csv_append_property(outputs, properties, properties[prop])
+
+            if prop == 'Pwr':
+                Pwr = get_workers_per_host(slog)
+                print Pwr
+                store_property(Pwr, properties[prop], ntask, outputs)
+                csv_append_property(outputs, properties, properties[prop])
+
+            # if prop == 'Ptr':
+            #     Ptr = get_tasks_per_host(slog)
+            #     store_property(Ptr, properties[prop], ntask, outputs)
+            #     csv_append_property(outputs, properties, properties[prop])
+
+    pprint.pprint(outputs)
+    sys.exit()
+    # Read through all the json file in the given directory.
+    for f in inputs:
+
+        # Derive the timings of each run and save each timing to a dedicated csv
+        # file named named after that timing. Each file contains the value of
+        # the measured timing for each scale of the given BoTs.
+        for timing in timings.keys():
             with open(f) as jdata:
                 slog = json.load(jdata)
 
@@ -238,58 +407,58 @@ if __name__ == '__main__':
             # Calculate every timing set by name in timings.
             if timing == 'TTC':
                 TTC = get_range(slog, 'Session', 'start', 'finish')
-                store_range(TTC, timing, ntask, outputs)
-                csv_append_range(outputs, timing)
+                store_range(TTC, timings[timing], ntask, outputs)
+                csv_append_range(outputs, timings, timings[timing])
 
             if timing == 'Tss':
                 Tss = get_ranges(slog, 'Jobs', 'init', 'Jobs', 'task')
-                store_range(Tss, timing, ntask, outputs)
-                csv_append_range(outputs, timing)
+                store_range(Tss, timings[timing], ntask, outputs)
+                csv_append_range(outputs, timings, timings[timing])
 
             if timing == 'Tse':
                 Tse = get_ranges(slog, 'Jobs', 'task', 'Jobs', 'end')
-                store_range(Tse, timing, ntask, outputs)
-                csv_append_range(outputs, timing)
+                store_range(Tse, timings[timing], ntask, outputs)
+                csv_append_range(outputs, timings, timings[timing])
 
             if timing == 'Tw':
                 Tw = get_ranges(slog, 'Jobs', 'task', 'Tasks', 'active')
-                store_range(Tw, timing, ntask, outputs)
-                csv_append_range(outputs, timing)
+                store_range(Tw, timings[timing], ntask, outputs)
+                csv_append_range(outputs, timings, timings[timing])
 
             if timing == 'Te':
                 Te = get_ranges(slog, 'Tasks', 'active', 'Tasks', 'completed')
-                store_range(Te, timing, ntask, outputs)
-                csv_append_range(outputs, timing)
+                store_range(Te, timings[timing], ntask, outputs)
+                csv_append_range(outputs, timings, timings[timing])
 
             if timing == 'Tsi':
                 Tsi = get_ranges(slog, 'Tasks', 'stage_in', 'Tasks', 'active')
-                store_range(Tsi, timing, ntask, outputs)
-                csv_append_range(outputs, timing)
+                store_range(Tsi, timings[timing], ntask, outputs)
+                csv_append_range(outputs, timings, timings[timing])
 
             if timing == 'Tso':
                 Tso = get_ranges(slog, 'Tasks', 'stage_out', 'Tasks', 'completed')
-                store_range(Tso, timing, ntask, outputs)
-                csv_append_range(outputs, timing)
+                store_range(Tso, timings[timing], ntask, outputs)
+                csv_append_range(outputs, timings, timings[timing])
 
             if timing == 'Tq':
                 Tq = get_ranges(slog, 'Blocks', 'requested', 'Blocks', 'active')
-                store_range(Tq, timing, ntask, outputs)
-                csv_append_range(outputs, timing)
+                store_range(Tq, timings[timing], ntask, outputs)
+                csv_append_range(outputs, timings, timings[timing])
 
             if timing == 'Ta':
                 Ta = get_ranges(slog, 'Blocks', 'active', 'Blocks', 'done')
-                store_range(Ta, timing, ntask, outputs)
-                csv_append_range(outputs, timing)
+                store_range(Ta, timings[timing], ntask, outputs)
+                csv_append_range(outputs, timings, timings[timing])
 
             if timing == 'Tb':
                 Tb = get_ranges(slog, 'Blocks', 'active', 'Workers', 'active')
-                store_range(Tb, timing, ntask, outputs)
-                csv_append_range(outputs, timing)
+                store_range(Tb, timings[timing], ntask, outputs)
+                csv_append_range(outputs, timings, timings[timing])
 
-            if timing == 'Tb':
-                Tb = get_ranges(slog, 'Workers', 'active', 'Workers', 'shutdown')
-                store_range(Tb, timing, ntask, outputs)
-                csv_append_range(outputs, timing)
+            if timing == 'Twe':
+                Twe = get_ranges(slog, 'Workers', 'active', 'Workers', 'shutdown')
+                store_range(Twe, timings[timing], ntask, outputs)
+                csv_append_range(outputs, timings, timings[timing])
 
     print "DEBUG: Timings"
     pprint.pprint(outputs)
