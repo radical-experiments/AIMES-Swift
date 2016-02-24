@@ -13,6 +13,8 @@ __author__ = "Matteo Turilli"
 __copyright__ = "Copyright 2015, The AIMES Project"
 __license__ = "MIT"
 
+DEBUG = True
+
 
 # -----------------------------------------------------------------------------
 def usage(msg=None, noexit=False):
@@ -32,11 +34,27 @@ def usage(msg=None, noexit=False):
     directory. By default, the tool output all the available timings. If a
     timing is specified, only that timing is outputted.
 
-    Current timings are:
+    State model
+
+           | start | init | task | requested | B active | W active | stg_in | T active | stg_out | completed | shutdown | B done | end |
+    |------|---|------|------|---------|-----------|----------|---------|---------|---------|----------|----------|----------|------|--|
+    | TTC* |   |********************************************************************************************************************|  |
+    | Tss  |          |......|                                                                                                         |
+    | Tse  |                 |......................................................................................................|  |
+    | Tw * |                 |******************************************|                                                              |
+    | Te * |                                                            |******************************|                               |
+    | Tsi  |                                                            |.........|                                                    |
+    | Tso  |                                                                                |..........|                               |
+    | Tq   |                           |...........|                                                                                   |
+    | Ta   |                                       |.........................................................................|         |
+    | Tb   |                                       |..........|                                                                        |
+    | Twe  |                                                  |...................................................|                    |
+
+    Timings
 
     | Name | Owner   | Entities       | Duration      | Start tag | End tag   |
     |------|---------|----------------|---------------|-----------|-----------|
-    | TTC* | Swift   | Session        | Total         | start     | end       |
+    | TTC* | Swift   | Session        | TTC           | start     | end       |
     | Tss  | Swift   | Jobs           | Setting_up    | init      | task      |
     | Tse  | Swift   | Jobs           | Executing     | task      | end       |
     | Tw   | Coaster | Jobs/Tasks     | Submitting    | task      | active    |
@@ -170,18 +188,21 @@ def get_ranges(log, s_entities, s_state_name, e_entities, e_state_name):
     start_end = collapse_ranges(overlaps)
     return start_end[0][1] - start_end[0][0]
 
+
 # -----------------------------------------------------------------------------
 def get_overlap(log, s_entities, seid, s_state_name, e_entities, eeid, e_state_name):
     overlap = None
     start = log[s_entities][seid]['states'][s_state_name]
     end = log[e_entities][eeid]['states'][e_state_name]
     if start and end:
-        overlap = [start,end]
+        overlap = [start, end]
     else:
-        sw = "\n\tEntity '%s' state '%s' is %s" % (seid, s_state_name, start)
-        ew = "\n\tEntity '%s' state '%s' is %s" % (eeid, e_state_name, end)
-        print "\nDEBUG: undefined entities %s%s" % (sw, ew)
+        if DEBUG:
+            sw = "\n\tEntity '%s' state '%s' is %s" % (seid, s_state_name, start)
+            ew = "\n\tEntity '%s' state '%s' is %s" % (eeid, e_state_name, end)
+            print "\nDEBUG: undefined entities %s%s" % (sw, ew)
     return overlap
+
 
 # -----------------------------------------------------------------------------
 def get_range(log, entity, start_state_name, end_state_name):
@@ -284,7 +305,17 @@ def get_entities_per_host(slog, entities):
     for entity in slog[entities].keys():
         if slog[entities][entity]['host']:
             hosts[str(slog[entities][entity]['host'])] += 1
-    print "%s hosts %s" % (entities, hosts)
+    return hosts
+
+
+# -----------------------------------------------------------------------------
+def write_report(slog, entities):
+    hosts = {}
+    for host in slog['Session']['hosts']:
+        hosts[host] = 0
+    for entity in slog[entities].keys():
+        if slog[entities][entity]['host']:
+            hosts[str(slog[entities][entity]['host'])] += 1
     return hosts
 
 
@@ -317,7 +348,8 @@ if __name__ == '__main__':
 
     # Make a list of the json files in the given directory.
     inputs = [f for f in os.listdir(sys.argv[1]) if os.path.isfile(os.path.join(sys.argv[1], f)) and '.json' in f]
-    print "DEBUG: Selected input files = %s" % inputs
+    if DEBUG:
+        print "DEBUG: Selected input files = %s" % inputs
 
     outputs = {}
     for _property, name in properties.iteritems():
@@ -364,7 +396,6 @@ if __name__ == '__main__':
 
             if prop == 'Pwr':
                 Pwr = get_entities_per_host(slog, 'Workers')
-                print Pwr
                 store_property(Pwr, properties[prop], ntask, outputs)
                 csv_append_property(outputs, properties, properties[prop])
 
@@ -372,7 +403,6 @@ if __name__ == '__main__':
                 Ptr = get_entities_per_host(slog, 'Tasks')
                 store_property(Ptr, properties[prop], ntask, outputs)
                 csv_append_property(outputs, properties, properties[prop])
-
 
         # Derive the timings of each run and save each timing to a dedicated csv
         # file named named after that timing. Each file contains the value of
@@ -401,12 +431,12 @@ if __name__ == '__main__':
                 csv_append_range(outputs, timings, timings[timing])
 
             if timing == 'Tw':
-                Tw = get_ranges(slog, 'Jobs', 'task', 'Tasks', 'active')
+                Tw = get_ranges(slog, 'Jobs', 'task', 'Tasks', 'stage_in')
                 store_range(Tw, timings[timing], ntask, outputs)
                 csv_append_range(outputs, timings, timings[timing])
 
             if timing == 'Te':
-                Te = get_ranges(slog, 'Tasks', 'active', 'Tasks', 'completed')
+                Te = get_ranges(slog, 'Tasks', 'stage_in', 'Tasks', 'completed')
                 store_range(Te, timings[timing], ntask, outputs)
                 csv_append_range(outputs, timings, timings[timing])
 
@@ -440,6 +470,6 @@ if __name__ == '__main__':
                 store_range(Twe, timings[timing], ntask, outputs)
                 csv_append_range(outputs, timings, timings[timing])
 
-    print "DEBUG: Timings"
-    pprint.pprint(outputs)
-
+    if DEBUG:
+        print "DEBUG: Timings"
+        pprint.pprint(outputs)
