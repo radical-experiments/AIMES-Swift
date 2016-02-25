@@ -7,13 +7,14 @@ import os
 import sys
 import csv
 import json
+import time
 import pprint
 
 __author__ = "Matteo Turilli"
 __copyright__ = "Copyright 2015, The AIMES Project"
 __license__ = "MIT"
 
-DEBUG = True
+DEBUG = False
 
 
 # -----------------------------------------------------------------------------
@@ -33,73 +34,6 @@ def usage(msg=None, noexit=False):
     The tool extracts timings from the Swift durations files in the given
     directory. By default, the tool output all the available timings. If a
     timing is specified, only that timing is outputted.
-
-    State model
-
-           | start | init | task | requested | B active | W active | stg_in | T active | stg_out | completed | shutdown | B done | end |
-    |------|---|------|------|---------|-----------|----------|---------|---------|---------|----------|----------|----------|------|--|
-    | TTC* |   |********************************************************************************************************************|  |
-    | Tss  |          |......|                                                                                                         |
-    | Tse  |                 |......................................................................................................|  |
-    | Tw * |                 |******************************************|                                                              |
-    | Te * |                                                            |******************************|                               |
-    | Tsi  |                                                            |.........|                                                    |
-    | Tso  |                                                                                |..........|                               |
-    | Tq   |                           |...........|                                                                                   |
-    | Ta   |                                       |.........................................................................|         |
-    | Tb   |                                       |..........|                                                                        |
-    | Twe  |                                                  |...................................................|                    |
-
-    Timings
-
-    | Name | Owner   | Entities       | Duration      | Start tag | End tag   |
-    |------|---------|----------------|---------------|-----------|-----------|
-    | TTC* | Swift   | Session        | TTC           | start     | end       |
-    | Tss  | Swift   | Jobs           | Setting_up    | init      | task      |
-    | Tse  | Swift   | Jobs           | Executing     | task      | end       |
-    | Tw   | Coaster | Jobs/Tasks     | Submitting    | task      | active    |
-    | Te * | Coaster | Tasks          | Executing     | active    | completed |
-    | Tsi  | Coaster | Tasks          | Staging_in    | stage_in  | active    |
-    | Tso  | Coaster | Tasks          | Staging_out   | stage_out | completed |
-    | Tq * | Coaster | Blocks         | Queuing       | requested | active    |
-    | Ta   | Coaster | Blocks         | Executing     | active    | done      |
-    | Tb   | Coaster | Blocks/Workers | Bootstrapping | active    | active    |
-    | Twe  | Coaster | Workers        | Executing     | active    | shutdown  |
-
-    - TTC : total time to completion of the whole session.
-    - Tss : Time taken by Swift to set up each task for execution. Can be used
-            to determine the percentage of TTC spent on interpreting the given
-            swift script.
-    - Tse : Time taken to execute each task as logged by Swift. It can be
-            compared to the executing time recorded by Coaster for
-            sanity/consistency check purposes.
-    - Tw  : Time taken by Coaster to queue/schedule each task to a pilot. It can
-            be used to determine the overhead of Coaster independently from
-            those of the resource.
-    - Te  : Time taken by Coaster to execute each task on a worker (i.e.,
-            pilot). This is the equivalent of AIMES Tx.
-    - Tsi : Time taken by Coaster to stage the task's input file(s) if any.
-            Useful if we will decide to include data-related timings in the
-            paper.
-    - Tso : Time taken by Coaster to stage the task's output file(s).  Useful to
-            measure Coaster's overhead in saving STD* files after task
-            execution.
-    - Tq  : Time spent by each Block, i.e. pilot job, in the resource's queue.
-            NOTE: All the time stamps recording by RemoteLogHandler may be
-            inaccurate. This needs further verification.
-    - Ta  : Time spent by each block, i.e. pilot job, executing. NOTE: All the
-            time stamps recording by RemoteLogHandler may be inaccurate. This
-            needs further verification.
-    - Tb  : Time required by the worker, i.e. pilot agent, to bootstrap. NOTE:
-            All the time stamps recording by RemoteLogHandler may be inaccurate.
-            This needs further verification.
-    - Twe : Time spent by each worker, i.e, pilot agent, executing. NOTE: All
-            the time stamps recording by RemoteLogHandler may be inaccurate.
-            This needs further verification.
-
-    For more documentation see:
-        https://github.com/radical-experiments/AIMES-Swift/tree/master/Swift_Experiments
-
     """ % (sys.argv[0], sys.argv[0])
 
     if msg:
@@ -309,14 +243,138 @@ def get_entities_per_host(slog, entities):
 
 
 # -----------------------------------------------------------------------------
-def write_report(slog, entities):
-    hosts = {}
-    for host in slog['Session']['hosts']:
-        hosts[host] = 0
-    for entity in slog[entities].keys():
-        if slog[entities][entity]['host']:
-            hosts[str(slog[entities][entity]['host'])] += 1
-    return hosts
+def write_run_report(slog, session, f):
+    tformat = '%Y-%m-%d %H:%M:%S'
+    etag = f[:7]
+    report = etag+'-analysis.txt'
+
+    with open(report, 'w') as r:
+        r.write("Experiment: %s\n" % etag)
+        r.write("-" * 19)
+
+        r.write("\nNumber of tasks: %s\n" % slog['Session']['ntasks'])
+        r.write("Number of workers: %s\n" % slog['Session']['nworkers'])
+        r.write("hosts: %s\n\n" % ", ".join(slog['Session']['hosts']))
+
+        r.write("Averages\n")
+        r.write("--------\n")
+
+        for host in slog['Session']['hosts']:
+            r.write("Average number of tasks executed on %s: %s\n" %
+                    (host, session['Ptr'][host]))
+        for host in slog['Session']['hosts']:
+            r.write("Average number of workers on %s: %s\n" %
+                    (host,  session['Pwr'][host]))
+
+        r.write("Average number of tasks per worker: %s\n\n" %
+                session['Ptw'])
+
+        r.write("Workspans\n")
+        r.write("---------\n")
+        s = slog['Session']['states']['start']
+        e = slog['Session']['states']['finish']
+        sstart = time.strftime(tformat, time.localtime(s))
+        send = time.strftime(tformat, time.localtime(e))
+
+        r.write("Session              : start %s; end %s\n" % (sstart, send))
+        workers = {}
+        start_end = {}
+        for seid in slog['Workers'].keys():
+            if slog['Workers'][seid]['host']:
+                host = slog['Workers'][seid]['host']
+                if host not in workers.keys():
+                    workers[host] = []
+                start = slog['Workers'][seid]['states']['active']
+                end = slog['Workers'][seid]['states']['shutdown']
+                workers[host].append([start, end])
+        for host in slog['Session']['hosts']:
+            start_end[host] = collapse_ranges(workers[host])
+            wspstart = time.strftime(tformat,
+                                     time.localtime(start_end[host][0][0]))
+            wspend = time.strftime(tformat,
+                                   time.localtime(start_end[host][0][1]))
+            r.write("Workers on %-10s: start %s; end %s\n" % (host,
+                                                              wspstart,
+                                                              wspend))
+
+        r.write("\nTimings\n")
+        r.write("-------\n")
+        r.write("TTC                                        : %ss (%sm)\n" %
+                (session['TTC'], session['TTC']/60))
+        r.write("TTw (setup + queuing time + bootstrap time): %ss (%sm)\n" %
+                (session['Tw'], session['Tw']/60))
+        r.write("TTe (stage in + execution time + stage out): %ss (%sm)\n\n" %
+                (session['Te'], session['Te']/60))
+
+
+        r.write("State model\n")
+        r.write("-----------\n\n")
+
+        r.write("       | start | init | task | requested | B active | W active | stg_in | T active | stg_out | completed | shutdown | B done | end |\n")
+        r.write("|------|---|------|------|---------|-----------|----------|---------|---------|---------|----------|----------|----------|------|--|\n")
+        r.write("| TTC* |   |********************************************************************************************************************|  |\n")
+        r.write("| Tss  |          |......|                                                                                                         |\n")
+        r.write("| Tse  |                 |......................................................................................................|  |\n")
+        r.write("| Tw * |                 |******************************************|                                                              |\n")
+        r.write("| Te * |                                                            |******************************|                               |\n")
+        r.write("| Tsi  |                                                            |.........|                                                    |\n")
+        r.write("| Tso  |                                                                                |..........|                               |\n")
+        r.write("| Tq   |                           |...........|                                                                                   |\n")
+        r.write("| Ta   |                                       |.........................................................................|         |\n")
+        r.write("| Tb   |                                       |..........|                                                                        |\n")
+        r.write("| Twe  |                                                  |...................................................|                    |\n")
+
+        r.write("\n* = Marks that states we use to measure TTC and its dominant components.\n\n")
+
+        r.write("Timings\n")
+        r.write("-------\n\n")
+
+        r.write("| Name | Owner   | Entities       | Duration      | Start tag | End tag   |\n")
+        r.write("|------|---------|----------------|---------------|-----------|-----------|\n")
+        r.write("| TTC* | Swift   | Session        | TTC           | start     | end       |\n")
+        r.write("| Tss  | Swift   | Jobs           | Setting_up    | init      | task      |\n")
+        r.write("| Tse  | Swift   | Jobs           | Executing     | task      | end       |\n")
+        r.write("| Tw   | Coaster | Jobs/Tasks     | Submitting    | task      | active    |\n")
+        r.write("| Te * | Coaster | Tasks          | Executing     | active    | completed |\n")
+        r.write("| Tsi  | Coaster | Tasks          | Staging_in    | stage_in  | active    |\n")
+        r.write("| Tso  | Coaster | Tasks          | Staging_out   | stage_out | completed |\n")
+        r.write("| Tq * | Coaster | Blocks         | Queuing       | requested | active    |\n")
+        r.write("| Ta   | Coaster | Blocks         | Executing     | active    | done      |\n")
+        r.write("| Tb   | Coaster | Blocks/Workers | Bootstrapping | active    | active    |\n")
+        r.write("| Twe  | Coaster | Workers        | Executing     | active    | shutdown  |\n\n")
+
+        r.write("- TTC : total time to completion of the whole session.\n")
+        r.write("- Tss : Time taken by Swift to set up each task for execution. Can be used\n")
+        r.write("        to determine the percentage of TTC spent on interpreting the given\n")
+        r.write("        swift script. In our experiments this is very short.\n")
+        r.write("- Tse : Time taken to execute each task as logged by Swift. It can be\n")
+        r.write("        compared to the executing time recorded by Coaster for\n")
+        r.write("        sanity/consistency check purposes. Did the sanity check, seems fine.\n")
+        r.write("- Tw  : Time taken by Coaster to schedule a block (i.e., job) on the local\n")
+        r.write("        LRMS + block queuing time of that block. Equivalent to AIMES Tw\n")
+        r.write("- Te  : Time taken by Coaster to execute each task on a worker (i.e.,\n")
+        r.write("        agent). Includes staging in and out timings. Equivalent to AIMES Te.\n")
+        r.write("- Tsi : Time taken by Coaster to stage the task's input file(s) if any.\n")
+        r.write("        Useful if we will decide to include data-related timings in the\n")
+        r.write("        paper.\n")
+        r.write("- Tso : Time taken by Coaster to stage the task's output file(s).  Useful to\n")
+        r.write("        measure Coaster's overhead in saving out/err files after task\n")
+        r.write("        execution.\n")
+        r.write("- Tq  : Time spent by each Block, i.e. pilot, in the resource's queue.\n")
+        r.write("        NOTE: All the time stamps recording by RemoteLogHandler may be\n")
+        r.write("        inaccurate.\n")
+        r.write("- Ta  : Time spent by each block, i.e. pilot, executing. NOTE: All the\n")
+        r.write("        time stamps recording by RemoteLogHandler may be inaccurate. This\n")
+        r.write("        needs further verification.\n")
+        r.write("- Tb  : Time required by the worker, i.e. agent, to bootstrap. NOTE:\n")
+        r.write("        This timing is NOT accurate.\n")
+        r.write("- Twe : Time spent by each worker, i.e, agent, executing. NOTE: All\n")
+        r.write("        the time stamps recording by RemoteLogHandler may be inaccurate.\n")
+        r.write("        This needs further verification.\n")
+
+        r.write("For more documentation see:\n")
+        r.write("https://github.com/radical-experiments/AIMES-Swift/tree/master/Swift_Experiments\n")
+
 
 
 # -----------------------------------------------------------------------------
@@ -469,6 +527,12 @@ if __name__ == '__main__':
                 Twe = get_ranges(slog, 'Workers', 'active', 'Workers', 'shutdown')
                 store_range(Twe, timings[timing], ntask, outputs)
                 csv_append_range(outputs, timings, timings[timing])
+
+        session = {'Pp' : Pp , 'Pw' : Pw , 'Ptw': Ptw, 'Pwr': Pwr, 'Ptr': Ptr,
+                   'TTC': TTC, 'Tss': Tss, 'Tse': Tse, 'Tw' : Tw , 'Te' : Te ,
+                   'Tsi': Tsi, 'Tso': Tso, 'Tq' : Tq , 'Ta' : Ta , 'Tb' : Tb ,
+                   'Twe': Twe}
+        write_run_report(slog, session, f)
 
     if DEBUG:
         print "DEBUG: Timings"
