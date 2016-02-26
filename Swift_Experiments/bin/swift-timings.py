@@ -1,5 +1,5 @@
 """
-Extracts timings from the given Swift log json files. File created with
+Extracts timings from the given Swift log JSON files. File created with
 swift-timings.py
 """
 
@@ -14,7 +14,7 @@ __author__ = "Matteo Turilli"
 __copyright__ = "Copyright 2015, The AIMES Project"
 __license__ = "MIT"
 
-DEBUG = False
+DEBUG = True
 
 
 # -----------------------------------------------------------------------------
@@ -28,7 +28,7 @@ def usage(msg=None, noexit=False):
     example : %s durations.json [TTC]
 
     arguments
-        <dir>      : Directory with the json files produced by swift-timings.py
+        <dir>      : Directory with the JSON files produced by swift-timings.py
         [<timing>] : optional -- type of timing (**not implemented yet**)
 
     The tool extracts timings from the Swift durations files in the given
@@ -97,30 +97,52 @@ def collapse_ranges(ranges):
 
 
 # -----------------------------------------------------------------------------
-def get_ranges(log, s_entities, s_state_name, e_entities, e_state_name):
+def get_ranges(s_entities, s_state_name, e_entities, e_state_name, host, log):
+    # timings = {'name': {'ntasks': {'host|total': [int, int, int, ...]}}}
+    _range = 0
     overlaps = []
     for seid in log[s_entities].keys():
         for eeid in log[e_entities].keys():
-            if s_entities == e_entities:
-                if seid == eeid:
-                    overlap = get_overlap(log, s_entities, seid, s_state_name,
-                                          e_entities, eeid, e_state_name)
-                    if overlap:
-                        overlaps.append(overlap)
-            elif s_entities == 'Jobs' and e_entities == 'Tasks':
-                if seid == log[e_entities][eeid]['jobid']:
-                    overlap = get_overlap(log, s_entities, seid, s_state_name,
-                                          e_entities, eeid, e_state_name)
-                    if overlap:
-                        overlaps.append(overlap)
-            elif s_entities == 'Blocks' and e_entities == 'Workers':
-                if seid == log[e_entities][eeid]['block']:
-                    overlap = get_overlap(log, s_entities, seid, s_state_name,
-                                          e_entities, eeid, e_state_name)
-                    if overlap:
-                        overlaps.append(overlap)
+            if (log[s_entities][seid]['host'] == host and
+                    log[e_entities][eeid]['host'] == host):
+
+                if s_entities == e_entities:
+                    if seid == eeid:
+                        overlap = get_overlap(log, s_entities, seid, s_state_name,
+                                              e_entities, eeid, e_state_name)
+                        if overlap:
+                            overlaps.append(overlap)
+
+                elif s_entities == 'Jobs' and e_entities == 'Tasks':
+                    if seid == log[e_entities][eeid]['jobid']:
+                        overlap = get_overlap(log, s_entities, seid, s_state_name,
+                                              e_entities, eeid, e_state_name)
+                        if overlap:
+                            overlaps.append(overlap)
+
+                elif s_entities == 'Blocks' and e_entities == 'Workers':
+                    if seid == log[e_entities][eeid]['block']:
+                        overlap = get_overlap(log, s_entities, seid, s_state_name,
+                                              e_entities, eeid, e_state_name)
+                        if overlap:
+                            overlaps.append(overlap)
+
     start_end = collapse_ranges(overlaps)
-    return start_end[0][1] - start_end[0][0]
+    if DEBUG:
+        print "DEBUG: get_ranges\n\tstart entities: %s;\n\tstart state name: %s;\n\tend entities: %s;\n\tend state name: %s;\n\thost: %s;\n\tranges: %s" % \
+            (s_entities, s_state_name, e_entities, e_state_name, host, start_end)
+
+    # Calculate the total range by summing adjacent ranges. For example, if 66
+    # workers with 16 cores each executed a total of 1055 tasks and the max
+    # amount of scheduled blocks (with 1 worker for 1 block) is 20, we will have
+    # at least 4 adjacent ranges but possibly more depending on the time spent
+    # by each block in the LRMS queue. The total range will be then the sum of
+    # the ranges, without counting the time between each block that, in the case
+    # of this example, is spent waiting for the blocks and their workers to come
+    # online. This time is therefore accounted for in Tq.
+    for se in start_end:
+        _range += se[1] - se[0]
+    return _range
 
 
 # -----------------------------------------------------------------------------
@@ -128,6 +150,15 @@ def get_overlap(log, s_entities, seid, s_state_name, e_entities, eeid, e_state_n
     overlap = None
     start = log[s_entities][seid]['states'][s_state_name]
     end = log[e_entities][eeid]['states'][e_state_name]
+
+    # Swift fails to log some of the stage_in time stamps. When the task has
+    # executed successfully, i.e. the end state is present, we use the time
+    # stamp of the nearest adjacent state, i.e. 'active' instead of 'stage_in'.
+    # This heuristic should be revised for data intensive experiments.
+    if not start and end:
+        if s_state_name == 'stage_in':
+            s_state_name = log[s_entities][seid]['states']['active']
+            start = s_state_name
     if start and end:
         overlap = [start, end]
     else:
@@ -139,7 +170,7 @@ def get_overlap(log, s_entities, seid, s_state_name, e_entities, eeid, e_state_n
 
 
 # -----------------------------------------------------------------------------
-def get_range(log, entity, start_state_name, end_state_name):
+def get_range(entity, start_state_name, end_state_name, host, log):
     start = log[entity]['states'][start_state_name]
     end = log[entity]['states'][end_state_name]
     if start and end:
@@ -164,28 +195,34 @@ def store_range(_range, timing, ntask, store):
 
 
 # -----------------------------------------------------------------------------
-def store_property(prop, _property, ntask, store):
-    if _property in ['Blocks_per_host', 'Workers_per_host', 'Tasks_per_host']:
-        # Entities' properties can be null when the entity has been instantiated
-        # but for some reason it did not reached the state in which one or more
-        # properties are recorded. For example, a task that has been scheduled
-        # but failed, or a block that has been requested but never went active.
-        if prop:
-            for host, nentities in prop.iteritems():
-                phost = _property+'_'+host
-                if phost not in store.keys():
-                    store[phost] = {}
-                if ntask not in store[phost].keys():
-                    store[phost][ntask] = []
-                store[phost][ntask].append(nentities)
-    else:
-        if ntask not in store[_property].keys():
-            store[_property][ntask] = []
-        store[_property][ntask].append(prop)
+# def store_property(prop, _property, ntask, host, store):
+#     if _property in ['Blocks_per_host', 'Workers_per_host', 'Tasks_per_host']:
+#         # Entities' properties can be null when the entity has been instantiated
+#         # but for some reason it did not reached the state in which one or more
+#         # properties are recorded. For example, a task that has been scheduled
+#         # but failed, or a block that has been requested but never went active.
+#         if prop:
+#             for host, nentities in prop.iteritems():
+#                 phost = _property+'_'+host
+#                 if phost not in store.keys():
+#                     store[phost] = {}
+#                 if ntask not in store[phost].keys():
+#                     store[phost][ntask] = []
+#                 store[phost][ntask].append(nentities)
+#     else:
+#         if ntask not in store[_property].keys():
+#             store[_property][ntask] = {}
+#         if host not in store[_property][ntask].keys():
+#             store[_property][ntask][host] = []
+#         store[_property][ntask][host].append(prop)
 
 
 # -----------------------------------------------------------------------------
-def csv_append_property(store, properties, prop):
+def csv_append_property(prop, host, properties, store):
+
+    # TODO: Rewrite assuming we have each property for each host used by the
+    # experiment.
+
     props = []
     keys = []
     # Check whether there are _host sub-properties. Discard the base property if
@@ -221,25 +258,6 @@ def csv_append_range(store, timings, timing):
         writer = csv.writer(outfile)
         writer.writerow(keys)
         writer.writerows(zip(*[store[timing][key] for key in keys]))
-
-
-# -----------------------------------------------------------------------------
-def get_tasks_per_worker(slog):
-    tw = 0
-    for worker in slog['Workers'].keys():
-        tw += len(slog['Workers'][worker]['tasks'])
-    return float(tw)/float(len(slog['Workers'].keys()))
-
-
-# -----------------------------------------------------------------------------
-def get_entities_per_host(slog, entities):
-    hosts = {}
-    for host in slog['Session']['hosts']:
-        hosts[host] = 0
-    for entity in slog[entities].keys():
-        if slog[entities][entity]['host']:
-            hosts[str(slog[entities][entity]['host'])] += 1
-    return hosts
 
 
 # -----------------------------------------------------------------------------
@@ -292,7 +310,7 @@ def write_run_report(slog, session, f):
             wspstart = time.strftime(tformat,
                                      time.localtime(start_end[host][0][0]))
             wspend = time.strftime(tformat,
-                                   time.localtime(start_end[host][0][1]))
+                                   time.localtime(start_end[host][-1:][0][1]))
             r.write("Workers on %-10s: start %s; end %s\n" % (host,
                                                               wspstart,
                                                               wspend))
@@ -305,7 +323,6 @@ def write_run_report(slog, session, f):
                 (session['Tw'], session['Tw']/60))
         r.write("TTe (stage in + execution time + stage out): %ss (%sm)\n\n" %
                 (session['Te'], session['Te']/60))
-
 
         r.write("State model\n")
         r.write("-----------\n\n")
@@ -376,6 +393,61 @@ def write_run_report(slog, session, f):
         r.write("https://github.com/radical-experiments/AIMES-Swift/tree/master/Swift_Experiments\n")
 
 
+# -----------------------------------------------------------------------------
+def nentities_per_host(entities, host, slog):
+    nentities = 0
+    for eid in slog[entities].keys():
+        if slog[entities][eid]['host'] == host:
+            nentities += 1
+    return nentities
+
+
+# -----------------------------------------------------------------------------
+def nentities_per_entity_per_host(entities, entity, host, slog):
+    nentity = 0.0
+    for eid in slog[entity].keys():
+        if slog[entity][eid]['host'] == host:
+            nentity += len(slog[entity][eid][entities])
+    return float(nentity)/float(len(slog[entity].keys()))
+
+
+# -----------------------------------------------------------------------------
+def aggregate(measures, aggregates):
+    # {'name': {'ntasks': {'host|total': [int, int, int, ...]}}}
+    # {'Pw': {'2048' : {'stampede': [66], 'gordon': [63]}}}
+
+    print "DEBUG: measures %s" % measures
+    print "DEBUG: aggregates %s" % aggregates
+
+    for measure, values in measures.iteritems():
+        print "DEBUG: measure %s" % measure
+        print "DEBUG: values %s" % values
+        if measure not in aggregates.keys():
+            aggregates[measure] = {}
+        print "DEBUG: aggregates %s" % aggregates
+        for size, hosts in values.iteritems():
+            print "DEBUG: size %s" % size
+            print "DEBUG: hosts %s" % hosts
+            if size not in aggregates[measure].keys():
+                aggregates[measure][size] = []
+            print "DEBUG: aggregates %s" % aggregates
+            partial = 0.0
+            for host, measurements in hosts.iteritems():
+                print "DEBUG: host %s" % host
+                print "DEBUG: measurements %s" % measurements
+                for measurement in measurements:
+                    print "DEBUG: measurement %s" % measurement
+                    if measure == 'Ptw':
+                        partial += measurement/float(len(hosts.keys()))
+                        print "DEBUG: partial %s" % partial
+
+                    if measure in ['Pb', 'Pw', 'Pt']:
+                        partial += measurement
+                        print "DEBUG: partial %s" % partial
+
+            aggregates[measure][size].append(partial)
+            print "DEBUG: aggregates %s" % aggregates
+    return aggregates
 
 # -----------------------------------------------------------------------------
 if __name__ == '__main__':
@@ -385,7 +457,7 @@ if __name__ == '__main__':
     '''
     timing = None
     if len(sys.argv) <= 1:
-        usage("insufficient arguments -- need dir of json files")
+        usage("insufficient arguments -- need dir of JSON files")
 
     if len(sys.argv) > 3:
         usage("too many arguments -- no more than 2")
@@ -393,147 +465,150 @@ if __name__ == '__main__':
     if len(sys.argv) > 2:
         timing = sys.argv[2]
 
-    timings    = {'TTC': 'TTC'             , 'Tss': 'Setting_up'          ,
-                  'Tse': 'Executing_job'   , 'Tw' : 'Submitting_task'     ,
-                  'Te' : 'Executing_task'  , 'Tsi': 'Staging_in_task'     ,
-                  'Tso': 'Staging_out_task', 'Tq' : 'Queuing_block'       ,
-                  'Ta' : 'Executing_block' , 'Tb' : 'Bootstrapping_worker',
-                  'Twe': 'Executing_worker'}
+    # The label and descriptive name for each property and timing we measure for
+    # each experiment. We use these both for brevity and as mnemonic device when
+    # sharing our measurements.
+    pnames = {'Pb' : 'Blocks_per_exp'  , 'Pt' : 'Tasks_per_host',
+              'Pw' : 'Workers_per_exp' , 'Ptw': 'Tasks_per_worker'}
 
-    properties = {'Pp' : 'Number_blocks'   , 'Pbr': 'Blocks_per_host' ,
-                  'Pw' : 'Number_workers'  , 'Pwr': 'Workers_per_host',
-                  'Ptw': 'Tasks_per_worker', 'Ptr': 'Tasks_per_host'}
+    tnames = {'TTC': 'TTC'             , 'Tss': 'Setting_up'          ,
+              'Tse': 'Executing_job'   , 'Tw' : 'Submitting_task'     ,
+              'Te' : 'Executing_task'  , 'Tsi': 'Staging_in_task'     ,
+              'Tso': 'Staging_out_task', 'Tq' : 'Queuing_block'       ,
+              'Ta' : 'Executing_block' , 'Tb' : 'Bootstrapping_worker',
+              'Twe': 'Executing_worker'}
 
-    # Make a list of the json files in the given directory.
-    inputs = [f for f in os.listdir(sys.argv[1]) if os.path.isfile(os.path.join(sys.argv[1], f)) and '.json' in f]
+    # Make a list of the JSON files in the given directory.
+    inputs = [f for f in os.listdir(sys.argv[1])
+              if os.path.isfile(os.path.join(sys.argv[1], f)) and '.json' in f]
     if DEBUG:
         print "DEBUG: Selected input files = %s" % inputs
 
-    outputs = {}
-    for _property, name in properties.iteritems():
-        outputs[name] = {}
-    for timing, name in timings.iteritems():
-        outputs[name] = {}
+    # We collect properties and timings we measure for each experiment in two
+    # data structures. Measurements are organized by name of the property,
+    # number of tasks of the experiment, and hosts on which each experiment has
+    # been run. Note: this works also for experiments with a single host.
+    # properties = {'name': {'ntasks': {'host': [int, int, int, ...]}}}
+    properties = {}
+    # timings = {'name': {'ntasks': {'host': [int, int, int, ...]}}}
+    timings = {}
 
-    # Read through all the json file in the given directory.
+    # We want the aggregated value for some measurements. We create a data
+    # structure as those for properties and timings but without the host
+    # parameters. A dedicated function is used to aggregate the properties and
+    # timings we need.
+    # aggregates = {'name': {'ntasks': [int, int, int, ...]}}}
+    aggregates  = {}
+
+    # Read through all the JSON file in the given directory. One JSON file for
+    # each experiment.
     for f in inputs:
+        with open(f) as jdata:
+            slog = json.load(jdata)
 
-        # Derive the properties of each run and save each property to a
-        # dedicated csv file named named after that property. Each file contains
-        # the value of the measured timing for each scale of the given BoTs.
-        for prop in properties.keys():
-            with open(f) as jdata:
-                slog = json.load(jdata)
+        # Get the size of the workload.
+        ntask = slog['Session']['tasks_completed']
 
-            # Get the size of the workload.
-            ntask = slog["Session"]["tasks_completed"]
+        # Get the host(s) on which the workload has been executed.
+        hosts = slog['Session']['hosts']
 
-            if prop == 'Pp':
-                Pp = slog['Session']['nblocks']
-                store_property(Pp, properties[prop], ntask, outputs)
-                csv_append_property(outputs, properties, properties[prop])
+        # Derive the properties of each experiment. Note: Due to how information
+        # is extracted from Swift logs, a host is recorded for a block only when
+        # at least a task has been run by its worker(s). We can extract only
+        # Workers per host, not blocks per host.
+        for pname in pnames.keys():
+            properties[pname] = {}
+            properties[pname][ntask] = {}
 
-            if prop == 'Pw':
-                Pw = slog['Session']['nworkers']
-                store_property(Pw, properties[prop], ntask, outputs)
-                csv_append_property(outputs, properties, properties[prop])
+            for host in hosts:
+                properties[pname][ntask][host] = []
 
-            if prop == 'Ptw':
-                Ptw = get_tasks_per_worker(slog)
-                store_property(Ptw, properties[prop], ntask, outputs)
-                csv_append_property(outputs, properties, properties[prop])
+                if pname == 'Pb':
+                    Pb = nentities_per_host('Blocks', host, slog)
+                    properties[pname][ntask][host].append(Pb)
 
-            # Due to how information is extracted from Swift logs, a host is
-            # recorded for a block only when at least a task has been running on
-            # its worker(s). For this reason, we can extract only Workers per
-            # host, not blocks per host.
-            # if prop == 'Pbr':
-            #     Pbr = get_blocks_per_host(slog)
-            #     store_property(Pbr, properties[prop], ntask, outputs)
-            #     csv_append_property(outputs, properties, properties[prop])
+                if pname == 'Pw':
+                    Pw = nentities_per_host('Workers', host, slog)
+                    properties[pname][ntask][host].append(Pw)
 
-            if prop == 'Pwr':
-                Pwr = get_entities_per_host(slog, 'Workers')
-                store_property(Pwr, properties[prop], ntask, outputs)
-                csv_append_property(outputs, properties, properties[prop])
+                if pname == 'Pt':
+                    Pt = nentities_per_host('Tasks', host, slog)
+                    properties[pname][ntask][host].append(Pt)
 
-            if prop == 'Ptr':
-                Ptr = get_entities_per_host(slog, 'Tasks')
-                store_property(Ptr, properties[prop], ntask, outputs)
-                csv_append_property(outputs, properties, properties[prop])
+                if pname == 'Ptw':
+                    Ptw = nentities_per_entity_per_host('tasks', 'Workers', host, slog)
+                    properties[pname][ntask][host].append(Ptw)
 
-        # Derive the timings of each run and save each timing to a dedicated csv
-        # file named named after that timing. Each file contains the value of
-        # the measured timing for each scale of the given BoTs.
-        for timing in timings.keys():
-            with open(f) as jdata:
-                slog = json.load(jdata)
+                # if pname == 'Pbr':
+                #     Pbr = get_blocks_per_host(slog)
+                #     store_property(Pbr, pnames[pname], ntask, outputs)
+                #     csv_append_property(outputs, properties, pnames[pname])
 
-            # Get the size of the workload.
-            ntask = slog["Session"]["tasks_completed"]
+        # Derive the timings of each experiment.
+        for tname in tnames.keys():
+            timings[tname] = {}
+            timings[tname][ntask] = {}
 
-            # Calculate every timing set by name in timings.
-            if timing == 'TTC':
-                TTC = get_range(slog, 'Session', 'start', 'finish')
-                store_range(TTC, timings[timing], ntask, outputs)
-                csv_append_range(outputs, timings, timings[timing])
+            for host in hosts:
+                timings[tname][ntask][host] = []
 
-            if timing == 'Tss':
-                Tss = get_ranges(slog, 'Jobs', 'init', 'Jobs', 'task')
-                store_range(Tss, timings[timing], ntask, outputs)
-                csv_append_range(outputs, timings, timings[timing])
+            # TODO: Calculate TTC it separately as Session is not a multiple
+            # entity in the JSON file.
+            #     if timing == 'TTC':
+            #         TTC = get_range('Session', 'start', 'finish', host, slog)
 
-            if timing == 'Tse':
-                Tse = get_ranges(slog, 'Jobs', 'task', 'Jobs', 'end')
-                store_range(Tse, timings[timing], ntask, outputs)
-                csv_append_range(outputs, timings, timings[timing])
+                # if tname == 'Tss':
+                #     Tss = get_ranges('Jobs', 'init', 'Jobs', 'task', host, slog)
+                #     timings[tname][ntask][host].append(Tss)
 
-            if timing == 'Tw':
-                Tw = get_ranges(slog, 'Jobs', 'task', 'Tasks', 'stage_in')
-                store_range(Tw, timings[timing], ntask, outputs)
-                csv_append_range(outputs, timings, timings[timing])
+                # if timing == 'Tse':
+                #     Tse = get_ranges('Jobs', 'task', 'Jobs', 'end', host, slog)
+                #     timings[tname][ntask][host].append(Tse)
 
-            if timing == 'Te':
-                Te = get_ranges(slog, 'Tasks', 'stage_in', 'Tasks', 'completed')
-                store_range(Te, timings[timing], ntask, outputs)
-                csv_append_range(outputs, timings, timings[timing])
+                # if tname == 'Tw':
+                #     Tw = get_ranges('Jobs', 'task', 'Tasks', 'stage_in', host, slog)
+                #     timings[tname][ntask][host].append(Tw)
 
-            if timing == 'Tsi':
-                Tsi = get_ranges(slog, 'Tasks', 'stage_in', 'Tasks', 'active')
-                store_range(Tsi, timings[timing], ntask, outputs)
-                csv_append_range(outputs, timings, timings[timing])
+                if tname == 'Te':
+                    Te = get_ranges('Tasks', 'stage_in', 'Tasks', 'completed', host, slog)
+                    timings[tname][ntask][host].append(Te)
 
-            if timing == 'Tso':
-                Tso = get_ranges(slog, 'Tasks', 'stage_out', 'Tasks', 'completed')
-                store_range(Tso, timings[timing], ntask, outputs)
-                csv_append_range(outputs, timings, timings[timing])
+                if tname == 'Tsi':
+                    Tsi = get_ranges('Tasks', 'stage_in', 'Tasks', 'active', host, slog)
+                    timings[tname][ntask][host].append(Tsi)
 
-            if timing == 'Tq':
-                Tq = get_ranges(slog, 'Blocks', 'requested', 'Blocks', 'active')
-                store_range(Tq, timings[timing], ntask, outputs)
-                csv_append_range(outputs, timings, timings[timing])
+                if tname == 'Tso':
+                    Tso = get_ranges('Tasks', 'stage_out', 'Tasks', 'completed', host, slog)
+                    timings[tname][ntask][host].append(Tso)
 
-            if timing == 'Ta':
-                Ta = get_ranges(slog, 'Blocks', 'active', 'Blocks', 'done')
-                store_range(Ta, timings[timing], ntask, outputs)
-                csv_append_range(outputs, timings, timings[timing])
+                # if tname == 'Tq':
+                #     Tq = get_ranges('Blocks', 'requested', 'Blocks', 'active', host, slog)
+                #     timings[tname][ntask][host].append(Tq)
 
-            if timing == 'Tb':
-                Tb = get_ranges(slog, 'Blocks', 'active', 'Workers', 'active')
-                store_range(Tb, timings[timing], ntask, outputs)
-                csv_append_range(outputs, timings, timings[timing])
+                # if tname == 'Ta':
+                #     Ta = get_ranges('Blocks', 'active', 'Blocks', 'done', host, slog)
+                #     timings[tname][ntask][host].append(Ta)
 
-            if timing == 'Twe':
-                Twe = get_ranges(slog, 'Workers', 'active', 'Workers', 'shutdown')
-                store_range(Twe, timings[timing], ntask, outputs)
-                csv_append_range(outputs, timings, timings[timing])
+                # if tname == 'Tb':
+                #     Tb = get_ranges('Blocks', 'active', 'Workers', 'active', host, slog)
+                #     timings[tname][ntask][host].append(Tb)
 
-        session = {'Pp' : Pp , 'Pw' : Pw , 'Ptw': Ptw, 'Pwr': Pwr, 'Ptr': Ptr,
-                   'TTC': TTC, 'Tss': Tss, 'Tse': Tse, 'Tw' : Tw , 'Te' : Te ,
-                   'Tsi': Tsi, 'Tso': Tso, 'Tq' : Tq , 'Ta' : Ta , 'Tb' : Tb ,
-                   'Twe': Twe}
-        write_run_report(slog, session, f)
+                # if tname == 'Twe':
+                #     Twe = get_ranges('Workers', 'active', 'Workers', 'shutdown', host, slog)
+                #     timings[tname][ntask][host].append(Twe)
+
+    aggregates = aggregate(properties, aggregates)
+
+    # session = {'Pp' : Pb , 'Pw' : Pw , 'Ptw': Ptw, 'Pwr': Pwr, 'Ptr': Ptr,
+    #            'TTC': TTC, 'Tss': Tss, 'Tse': Tse, 'Tw' : Tw , 'Te' : Te ,
+    #            'Tsi': Tsi, 'Tso': Tso, 'Tq' : Tq , 'Ta' : Ta , 'Tb' : Tb ,
+    #            'Twe': Twe}
+    # write_run_report(slog, session, f)
 
     if DEBUG:
+        print "DEBUG: Properties"
+        pprint.pprint(properties)
         print "DEBUG: Timings"
-        pprint.pprint(outputs)
+        pprint.pprint(timings)
+        print "DEBUG: Aggregates"
+        pprint.pprint(aggregates)
