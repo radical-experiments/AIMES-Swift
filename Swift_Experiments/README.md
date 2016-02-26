@@ -106,43 +106,138 @@ The analysis wrokflow is designed to be automated, reusable, and extensible. The
   ```
   
  Description of relevant log entries:
+ ```
+ | #  | Log tag            | Location           | Component |
+ |----|--------------------|--------------------|-----------|
+ | 1  | JOB_INIT           | Workstation (WS)   | Swift     |
+ | 2  | JOB_SITE_SELECT    | WS                 | Swift     |
+ | 3  | JOB_START          | WS                 | Swift     |
+ | 4  | JOB_TASK           | Head node (HN)     | Coaster   |
+ | 5  | BLOCK_REQUESTED    | HN                 | Coaster   |
+ | 6  | TASK_STATUS_CHANGE | HN                 | Coaster   |
+ | 7  | TASK_STATUS_CHANGE | HN                 | Coaster   | 
+ | 7  | BLOCK_ACTIVE       | Compute nodes (CN) | LRMS      |
+ | 8  | WORKER_ACTIVE      | CN                 | Worker(s) |
+ | 9  | TASK_STATUS_CHANGE | HN, WS, CN         | Coaster   |
+ | 10 | TASK_STATUS_CHANGE | HN, CN             | Worker    | 
+ | 11 | TASK_STATUS_CHANGE | HN, CN, (WS?)      | Coaster   | 
+ | 12 | TASK_STATUS_CHANGE | HN                 | Coaster   | 
+ | 13 | JOB_END            | WS                 | Swift     | 
+ | 14 | BLOCK_SHUTDOWN     | HN                 | Coaster   | 
+ | 15 | WORKER_SHUTDOWN    | HN                 | Coaster   | 
+ | 16 | BLOCK_DONE         | HN                 | Coaster   | 
 
- | #  | Log tag            | Location           | Component | Description |
- |----|--------------------|--------------------|-----------|-------------|
- | 1  | JOB_INIT           | Workstation (WS)   | Swift     | Creates a job |
- | 2  | JOB_SITE_SELECT    | WS                 | Swift     | Selects a site for that job
- | 3  | JOB_START          | WS                 | Swift     | Schedules that job on the selected site (meaning that is scheduled, not that has started to execute it) |
- | 4  | JOB_TASK           | Head node (HN)     | Coaster   | Gets the job on the selected site and assigns to it a taskid. For Coaster, a job is a task. |
- | 5  | BLOCK_REQUESTED    | HN                 | Coaster   | Submits to the local LRMS one or more blocks depending on the amount of tasks it gets, the user configuration, and its own algorithms. Blocks are therefore jobs on a resource LRMS. |
- | 6  | TASK_STATUS_CHANGE | HN                 | Coaster   | (Meanwhile?) marks tasks as submitting (state 8) |
- | 7  | TASK_STATUS_CHANGE | HN                 | Coaster   | Marks tasks as submitted (state 1) |
- | 7  | BLOCK_ACTIVE       | Compute nodes (CN) | LRMS      | Schedules blocks/jobs on the compute nodes. Active blocks are therefore pilots. |
- | 8  | WORKER_ACTIVE      | CN                 | Worker(s) | Bootstrap on each active block. More than one worker can bootstrap for each block/pilot depending on how many cores each worker needs as indicated by the user in swift.conf. Workers are pilot agents. |
- | 9  | TASK_STATUS_CHANGE | HN, WS, CN         | Coaster   | Stages in the input files of the tasks that are ready to be executed on the workers that have become active, if any (task state 16). |
- | 10 | TASK_STATUS_CHANGE | HN, CN             | Worker    | Executes tasks (state 2). |
- | 11 | TASK_STATUS_CHANGE | HN, CN, (WS?)      | Coaster   | Stages out the output files of the tasks that have terminated (state 17). Note that this includes stderr.txt, stdout.txt, wrapper.error, wrapper.log for every task. |
- | 12 | TASK_STATUS_CHANGE | HN                 | Coaster   | Marks tasks as completed (state 7). |
- | 13 | JOB_END            | WS                 | Swift     | Marks the jobs referring to the completed tasks as ended. | 
- | 14 | BLOCK_SHUTDOWN     | HN                 | Coaster   | Shuts down the blocks (i.e. jobs running on the compute node(s)). **NOTE**: this happens also when jobs are waiting for execution on the resource on which this block is active. This means that in its current configuration, Swift+Coaster do not reuse pilots. After executing the first batch of tasks, the pilot is shut down. Coaster queue enough pilots of the maximum size (i.e. with the maximum amount of compute node configured by the user in swift.config) to guarantee as much concurrency as the maximum amount of jobs allowed to be queue on that specific resource (also configured in swift.conf). This should be visible in our measurements as multiple (and concurrent) queue time for each scheduled pilot. |
- | 15 | WORKER_SHUTDOWN    | HN                 | Coaster   | Marks the workers that were running on the blocks that have been shut down as shut down too. |
- | 16 | BLOCK_DONE         | HN                 | Coaster   | Marks the blocks as done. 
+ Descriptions
+ ------------
+ 
+ 1.  Creates a job.
+ 2.  Selects a site for that job.
+ 3.  Schedules that job on the selected site (meaning that is scheduled, 
+      not that has started to execute it).
+ 4.  Gets the job on the selected site and assigns to it a taskid. For 
+      Coaster, a job is a task.
+ 5.  Submits to the local LRMS one or more blocks depending on the amount 
+      of tasks it gets, the user configuration, and its own algorithms. 
+      Blocks are therefore jobs on a resource LRMS.
+ 6.  (Meanwhile?) marks tasks as submitting (state 8)
+ 7.  Marks tasks as submitted (state 1)
+ 8.  Schedules blocks/jobs on the compute nodes. Active blocks are 
+      therefore pilots.
+ 9.  Bootstrap on each active block. More than one worker can bootstrap 
+      for each block/pilot depending on how many cores each worker needs 
+      as indicated by the user in swift.conf. Workers are pilot agents.
+ 10. Stages in the input files of the tasks that are ready to be executed 
+      on the workers that have become active, if any (task state 16).
+ 11. Executes tasks (state 2).
+ 12. Stages out the output files of the tasks that have terminated 
+      (state 17). Note that this includes stderr.txt, stdout.txt, 
+      wrapper.error, wrapper.log for every task.
+ 13. Marks tasks as completed (state 7).
+ 14. Marks the jobs referring to the completed tasks as ended.
+ 15. Shuts down the blocks (i.e. jobs running on the compute node(s)). 
+      **NOTE**: this happens also when jobs are waiting for execution 
+      on the resource on which this block is active. This means that in its 
+      current configuration, Swift+Coaster do not reuse pilots. After 
+      executing the first batch of tasks, the pilot is shut down. Coaster 
+      queue enough pilots of the maximum size (i.e. with the maximum amount 
+      of compute node configured by the user in swift.config) to guarantee 
+      as much concurrency as the maximum amount of jobs allowed to be queue 
+      on that specific resource (also configured in swift.conf). This should 
+      be visible in our measurements as multiple (and concurrent) queue time 
+      for each scheduled pilot.
+ 16. Marks the workers that were running on the blocks that have been shut 
+      down as shut down too.
+ 17. Marks the blocks as done.
+ ```
 
-  Duration derived from the logs:
+  Timings derived from the logs:
+  ```
+ | Name | Owner   | Entities       | timing        | Start tag | End tag   |
+ |------|---------|----------------|---------------|-----------|-----------|
+ | TTC* | Swift   | Session        | TTC           | start     | end       |
+ | Tss  | Swift   | Jobs           | Setting_up    | init      | task      |
+ | Tse  | Swift   | Jobs           | Executing     | task      | end       |
+ | Tw   | Coaster | Jobs/Tasks     | Submitting    | task      | active    |
+ | Te * | Coaster | Tasks          | Executing     | active    | completed |
+ | Tsi  | Coaster | Tasks          | Staging_in    | stage_in  | active    |
+ | Tso  | Coaster | Tasks          | Staging_out   | stage_out | completed |
+ | Tq * | Coaster | Blocks         | Queuing       | requested | active    |
+ | Ta   | Coaster | Blocks         | Executing     | active    | done      |
+ | Tb   | Coaster | Blocks/Workers | Bootstrapping | active    | active    |
+ | Twe  | Coaster | Workers        | Executing     | active    | shutdown  |
+
+ Descriptions
+ ------------
+ - TTC : total time to completion of the whole session.
+ - Tss : Time taken by Swift to set up each task for execution. Can be used
+          to determine the percentage of TTC spent on interpreting the given
+          swift script. In our experiments this is very short.
+ - Tse : Time taken to execute each task as logged by Swift. It can be
+          compared to the executing time recorded by Coaster for
+          sanity/consistency check purposes. Did the sanity check, seems fine.
+ - Tw  : Time taken by Coaster to schedule a block (i.e., job) on the local
+          LRMS + block queuing time of that block. Equivalent to AIMES Tw
+ - Te  : Time taken by Coaster to execute each task on a worker (i.e.,
+          agent). Includes staging in and out timings. Equivalent to AIMES Te.
+ - Tsi : Time taken by Coaster to stage the task's input file(s) if any.
+          Useful if we will decide to include data-related timings in the
+          paper.
+ - Tso : Time taken by Coaster to stage the task's output file(s).  Useful to
+          measure Coaster's overhead in saving out/err files after task
+          execution.
+ - Tq  : Time spent by each Block, i.e. pilot, in the resource's queue.
+          NOTE: All the time stamps recording by RemoteLogHandler may be
+          inaccurate.
+ - Ta  : Time spent by each block, i.e. pilot, executing. NOTE: All the
+          time stamps recording by RemoteLogHandler may be inaccurate. This
+          needs further verification.
+ - Tb  : Time required by the worker, i.e. agent, to bootstrap. NOTE:
+          This timing is NOT accurate.
+ - Twe : Time spent by each worker, i.e, agent, executing. NOTE: All
+          the time stamps recording by RemoteLogHandler may be inaccurate.
+          This needs further verification.
+  ```
+
+  State model:
   
-  | Owner   | Entity | Duration      | Start log tag   | End log tag     | Name | Description |
-  |---------|--------|---------------|-----------------|-----------------|------|-------------|
-  | Swift   | Job    | Setting_up    | JOB_INIT        | JOB_TASK        | Tss  | Time taken by Swift to set up each task for execution. Can be used to determine the percentage of TTC spent on interpreting the given swift script. |
-  |         |        | Executing     | JOB_TASK        | JOB_END         | Tse  | Time taken to execute each task as logged by Swift. It can be compared to the executing time recorded by Coaster for sanity/consistenty check purposes. |
-  | Coaster | Task   | Submitting    | JOB_TASK        | status=2        | Tw   | Time taken by Coaster to queue/schedule each task to a pilot. It can be used to determine the overhead of Coaster indipendently from those of the resource. |
-  |         |        | Executing     | status=2        | status=7        | Te   | Time taken by Coaster to execute each task on a worker (i.e., pilot). This is the equivalent of AIMES Tx. |
-  |         |        | Staging_in    | status=16       | status=2        | Tsi  | Time taken by Coaster to stage the task's input file(s) if any. Useful if we will decide to include data-related timings in the paper. |
-  |         |        | Staging_out   | status=17       | status=7        | Tso  | Time taken by Coaster to stage the task's output file(s).  Useful to measure Coaster's overhead in saving STD* files after task execution. |
-  |         | Block  | Queuing       | BLOCK_REQUESTED | BLOCK_ACTIVE    | Tq   |Time spent by each Block, i.e. pilot job, in the resource's queue. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
-  |         |        | Executing     | BLOCK_ACTIVE    | BLOCK_DONE      | Ta   | Time spent by each block, i.e. pilot job, executing. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
-  |         | Worker | Bootstrapping | BLOCK_ACTIVE    | WORKER_ACTIVE   | Tb   | Time required by the worker, i.e. pilot agent, to bootstrap. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
-  |         |        | Executing     | WORKER_ACTIVE   | WORKER_SHUTDOWN | Twe  | Time spent by each worker, i.e, pilot agent, executing. **NOTE:** All the time stamps recording by ```RemoteLogHandler``` may be inaccurate. This needs further verification. |
-
-
+  ```
+         | start | init | task | requested | B active | W active | stg_in | T active | stg_out | completed | shutdown | B done | end |
+  |------|---|------|------|---------|-----------|----------|---------|---------|---------|----------|----------|----------|------|--|
+  | TTC* |   |********************************************************************************************************************|  |
+  | Tss  |          |......|                                                                                                         |
+  | Tse  |                 |......................................................................................................|  |
+  | Tw * |                 |******************************************|                                                              |
+  | Te * |                                                            |******************************|                               |
+  | Tsi  |                                                            |.........|                                                    |
+  | Tso  |                                                                                |..........|                               |
+  | Tq   |                           |...........|                                                                                   |
+  | Ta   |                                       |.........................................................................|         |
+  | Tb   |                                       |..........|                                                                        |
+  | Twe  |                                                  |...................................................|                    |
+  
+  NOTE: This state diagram repeats for every resource with or without temporal
+        overlapping.
+  ```
   The following filters the log file calculating the timings for each relevant event. Each event is delimited by a state transition:
 
    ```
