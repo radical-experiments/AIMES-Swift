@@ -4,8 +4,6 @@ import re
 import sys
 import json
 import time
-import datetime
-
 
 '''Reads Swift+Coaster log file and returns a json file with timestamps of each
 job, task, block and worker's state and the key properties of the run.
@@ -47,6 +45,10 @@ class Run(object):
         if flogs:
             logs = flogs
         state = State(sname, ename, pattern, logs, self)
+        if state.id == 'failed' and state.tstamp.stamp:
+            self.session.tasks_failed += 1
+        if state.id == 'completed' and state.tstamp.stamp:
+            self.session.tasks_completed += 1
         entity.states.append(state)
 
 
@@ -92,9 +94,9 @@ class Session(object):
         self.blocks = self._get_entity('block')
         self.workers = self._get_entity('worker')
         self._set_tasks_host_jid()
-        self._set_tasks_failed_completed()
         self._set_workers_tasks_host()
         self._set_blocks_workers_nodes_host()
+        # self._set_tasks_failed_completed()
 
     def _get_entity(self, entity):
         ids = []
@@ -106,8 +108,8 @@ class Session(object):
             logs = flogs
         for line in logs:
             m = re.search(pattern, line)
-            if m and m.group(1) not in ids:
             # if m:
+            if m and m.group(1) not in ids:
                 eid = m.group(1)
                 if entity == 'job':
                     job = Job(eid, self.run)
@@ -136,14 +138,6 @@ class Session(object):
                     task.host = job.host
                     task.jid = job.id
 
-    def _set_tasks_failed_completed(self):
-        for task in self.tasks:
-            for state in task.states:
-                if state.id == 'failed' and state.tstamp.stamp:
-                    self.session.tasks_failed += 1
-                elif state.id == 'completed' and state.tstamp.stamp:
-                    self.session.tasks_completed += 1
-
     def _set_workers_tasks_host(self):
         for task in self.tasks:
             for worker in self.workers:
@@ -160,6 +154,10 @@ class Session(object):
                     block.nodes.append(worker.node)
                     if not block.host:
                         block.host = worker.host
+
+    # def _set_tasks_failed_completed(self):
+    #     for task in self.tasks:
+    #         for state in task.states:
 
 
 # -----------------------------------------------------------------------------
@@ -262,26 +260,26 @@ class Worker(object):
 
 # -----------------------------------------------------------------------------
 class State(object):
-    def __init__(self, sname, ename, cpattern, logs, run):
+    def __init__(self, sname, ename, pattern, logs, run):
         self.id = sname
         self.eid = ename
 
         # Some ugly minor optimizations.
-        if len(logs) == 0:
-            self.stamp = None
-        elif self.eid == 'session' and self.id == 'start':
-            self.tstamp = TimeStamp(cpattern, logs[:10], self, run)
+        # if len(logs) == 0:
+        #     self.stamp = None
+        if self.eid == 'session' and self.id == 'start':
+            self.tstamp = TimeStamp(pattern, logs[:10], self, run)
         elif self.eid == 'session' and self.id == 'finish':
-            self.tstamp = TimeStamp(cpattern, logs[-600:], self, run)
+            self.tstamp = TimeStamp(pattern, list(reversed(logs)), self, run)
         else:
-            self.tstamp = TimeStamp(cpattern, logs, self, run)
+            self.tstamp = TimeStamp(pattern, logs, self, run)
 
 
 # -----------------------------------------------------------------------------
 class TimeStamp(object):
-    def __init__(self, cpattern, logs, state, run):
+    def __init__(self, pattern, logs, state, run):
         self.state = state
-        self.cpattern = cpattern
+        self.cpattern = pattern
         self.logs = logs
         self.run = run
         self.epoch = None
@@ -453,7 +451,6 @@ if __name__ == "__main__":
     # Input swift log and json output files.
     flogs = sys.argv[1]
     fjson = sys.argv[2]
-
 
     # Entities' states.
     stsession = {'start': None, 'finish': None}
@@ -630,8 +627,8 @@ if __name__ == "__main__":
     reporter.write_json(fjson)
 
     # Profile logs
-    import pprint
-    profiler = Profiler(run)
-    pprint.pprint(profiler.log_partitions())
+    # import pprint
+    # profiler = Profiler(run)
+    # pprint.pprint(profiler.log_partitions())
 
     sys.exit(0)
