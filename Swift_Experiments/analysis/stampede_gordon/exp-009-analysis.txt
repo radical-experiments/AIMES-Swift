@@ -1,0 +1,92 @@
+Experiment: exp-009
+-------------------
+Number of tasks: 9
+Number of workers: 2
+hosts: stampede, gordon
+
+Averages
+--------
+Average number of tasks executed on stampede: 5
+Average number of tasks executed on gordon: 3
+Average number of workers on stampede: 1
+Average number of workers on gordon: 1
+Average number of tasks per worker: 4.0
+
+Workspans
+---------
+Session              : start 2016-01-28 10:36:26; end 2016-01-28 10:53:40
+Workers on stampede  : start 2016-01-28 10:38:39; end 2016-01-28 10:53:40
+Workers on gordon    : start 2016-01-28 10:37:18; end 2016-01-28 10:52:50
+
+Timings
+-------
+TTC                                        : 1034s (17m)
+TTw (setup + queuing time + bootstrap time): 132s (2m)
+TTe (stage in + execution time + stage out): 982s (16m)
+
+State model
+-----------
+
+       | start | init | task | requested | B active | W active | stg_in | T active | stg_out | completed | shutdown | B done | end |
+|------|---|------|------|---------|-----------|----------|---------|---------|---------|----------|----------|----------|------|--|
+| TTC* |   |********************************************************************************************************************|  |
+| Tss  |          |......|                                                                                                         |
+| Tse  |                 |......................................................................................................|  |
+| Tw * |                 |******************************************|                                                              |
+| Te * |                                                            |******************************|                               |
+| Tsi  |                                                            |.........|                                                    |
+| Tso  |                                                                                |..........|                               |
+| Tq   |                           |...........|                                                                                   |
+| Ta   |                                       |.........................................................................|         |
+| Tb   |                                       |..........|                                                                        |
+| Twe  |                                                  |...................................................|                    |
+
+* = Marks that states we use to measure TTC and its dominant components.
+
+Timings
+-------
+
+| Name | Owner   | Entities       | Duration      | Start tag | End tag   |
+|------|---------|----------------|---------------|-----------|-----------|
+| TTC* | Swift   | Session        | TTC           | start     | end       |
+| Tss  | Swift   | Jobs           | Setting_up    | init      | task      |
+| Tse  | Swift   | Jobs           | Executing     | task      | end       |
+| Tw   | Coaster | Jobs/Tasks     | Submitting    | task      | active    |
+| Te * | Coaster | Tasks          | Executing     | active    | completed |
+| Tsi  | Coaster | Tasks          | Staging_in    | stage_in  | active    |
+| Tso  | Coaster | Tasks          | Staging_out   | stage_out | completed |
+| Tq * | Coaster | Blocks         | Queuing       | requested | active    |
+| Ta   | Coaster | Blocks         | Executing     | active    | done      |
+| Tb   | Coaster | Blocks/Workers | Bootstrapping | active    | active    |
+| Twe  | Coaster | Workers        | Executing     | active    | shutdown  |
+
+- TTC : total time to completion of the whole session.
+- Tss : Time taken by Swift to set up each task for execution. Can be used
+        to determine the percentage of TTC spent on interpreting the given
+        swift script. In our experiments this is very short.
+- Tse : Time taken to execute each task as logged by Swift. It can be
+        compared to the executing time recorded by Coaster for
+        sanity/consistency check purposes. Did the sanity check, seems fine.
+- Tw  : Time taken by Coaster to schedule a block (i.e., job) on the local
+        LRMS + block queuing time of that block. Equivalent to AIMES Tw
+- Te  : Time taken by Coaster to execute each task on a worker (i.e.,
+        agent). Includes staging in and out timings. Equivalent to AIMES Te.
+- Tsi : Time taken by Coaster to stage the task's input file(s) if any.
+        Useful if we will decide to include data-related timings in the
+        paper.
+- Tso : Time taken by Coaster to stage the task's output file(s).  Useful to
+        measure Coaster's overhead in saving out/err files after task
+        execution.
+- Tq  : Time spent by each Block, i.e. pilot, in the resource's queue.
+        NOTE: All the time stamps recording by RemoteLogHandler may be
+        inaccurate.
+- Ta  : Time spent by each block, i.e. pilot, executing. NOTE: All the
+        time stamps recording by RemoteLogHandler may be inaccurate. This
+        needs further verification.
+- Tb  : Time required by the worker, i.e. agent, to bootstrap. NOTE:
+        This timing is NOT accurate.
+- Twe : Time spent by each worker, i.e, agent, executing. NOTE: All
+        the time stamps recording by RemoteLogHandler may be inaccurate.
+        This needs further verification.
+For more documentation see:
+https://github.com/radical-experiments/AIMES-Swift/tree/master/Swift_Experiments
