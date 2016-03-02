@@ -24,16 +24,14 @@ def usage(msg=None, noexit=False):
         print "\nError: %s" % msg
 
     print """
-    usage   : %s <dir> [<timing>]
-    example : %s durations.json [TTC]
+    usage   : %s <dir>
+    example : %s durations.json
 
     arguments
         <dir>      : Directory with the JSON files produced by swift-timings.py
-        [<timing>] : optional -- type of timing (**not implemented yet**)
 
-    The tool extracts timings from the Swift durations files in the given
-    directory. By default, the tool output all the available timings. If a
-    timing is specified, only that timing is outputted.
+    The tool extracts timings from the Swift JSON files in the given
+    directory.
     """ % (sys.argv[0], sys.argv[0])
 
     if msg:
@@ -416,7 +414,9 @@ def get_overlap(log, s_entities, seid, s_state_name, e_entities, eeid, e_state_n
     end = log[e_entities][eeid]['states'][e_state_name]
 
     if DEBUG:
-        print "DEBUG: get_overlap\n\tstart = %s;\n\tend = %s;" % (start, end)
+        print "DEBUG: get_overlap"
+        print "\tstart '%s' = %s;" % (s_state_name, start)
+        print "\tend '%s' = %s;" % (e_state_name, end)
 
     # Swift fails to log some of the stage_in time stamps. When the task has
     # executed successfully, i.e. the end state is present, we use the time
@@ -427,17 +427,16 @@ def get_overlap(log, s_entities, seid, s_state_name, e_entities, eeid, e_state_n
             s_state_name = 'active'
             start = log[s_entities][seid]['states']['active']
     if start and not end:
-        if e_state_name == 'stage_in':
-            e_state_name == 'active'
-            end = log[e_entities][eeid]['states']['active']
-
+        if start:
+            if e_state_name == 'stage_in':
+                e_state_name = 'active'
+                end = log[e_entities][eeid]['states']['active']
     if start and end:
         overlap = [start, end]
     else:
-        if DEBUG:
-            print "WARNING: get_overlap undefined entities"
-            print "\tEntity '%s' state '%s' is %s" % (seid, s_state_name, start)
-            print "\tEntity '%s' state '%s' is %s" % (eeid, e_state_name, end)
+        print "WARNING: get_overlap undefined entities"
+        print "\tEntity '%s' state '%s' is %s" % (seid, s_state_name, start)
+        print "\tEntity '%s' state '%s' is %s" % (eeid, e_state_name, end)
 
     return overlap
 
@@ -457,51 +456,28 @@ def get_range(entity, start_state_name, end_state_name, host, log):
 
 
 # -----------------------------------------------------------------------------
-def write_csv(measures, names):
-    # {'Pb' : {2048: {u'stampede': [66],                u'gordon': [63]}},
-    #  'Ptw': {2048: {u'stampede': [8.178294573643411], u'gordon': [7.6976744186046515]}}
-    # {'Tso': {2048: [0.0]}, 'Pw': {2048: [129.0]}, 'Pt': {2048: [2048.0]}, 'Twe': {2048: [0.0]},
+def write_timings_csv(elements, names):
 
     entries = {}
     mnames = []
-    ntasks = []
+    scales = []
 
-    print measures
-    print names
-
-    if aggregates:
-        for name, scales in measures.iteritems():
-            print scales
-            for scale, measurements in scales.iteritems():
-                print measurements
-                mname = "%s-%s" % (name, names[name])
-                if scale not in ntasks:
-                    ntasks.append(scale)
+    for name, ntasks in elements.iteritems():
+        for ntask, hosts in ntasks.iteritems():
+            if ntask not in scales:
+                scales.append(ntask)
+            for host, measurements in hosts.iteritems():
+                mname = "%s-%s-%s" % (name, names[name], host)
                 if mname not in mnames:
                     mnames.append(mname)
                 if mname not in entries.keys():
                     entries[mname] = {}
-                if scale not in entries[mname].keys():
-                    entries[mname][scale] = []
+                if ntask not in entries[mname].keys():
+                    entries[mname][ntask] = []
                 for measurement in measurements:
-                    entries[mname][scale].append(measurement)
-    else:
-        for name, scales in measures.iteritems():
-            for scale, hosts in scales.iteritems():
-                if scale not in ntasks:
-                    ntasks.append(scale)
-                for host, measurements in hosts.iteritems():
-                    mname = "%s-%s-%s" % (name, names[name], host)
-                    if mname not in mnames:
-                        mnames.append(mname)
-                    if mname not in entries.keys():
-                        entries[mname] = {}
-                    if scale not in entries[mname].keys():
-                        entries[mname][scale] = []
-                    for measurement in measurements:
-                        entries[mname][scale].append(measurement)
+                    entries[mname][ntask].append(measurement)
 
-    keys = sorted(ntasks)
+    keys = sorted(scales)
 
     for nm in mnames:
         with open(nm+'.csv', "wb") as outfile:
@@ -524,6 +500,12 @@ def aggregate_timings(elements, ranges):
     example: {'Tw': {2048: {u'stampede': set([(1453969835, 1453984281)]),
                             u'gordon': set([(1453969835, 1453973305)])}}}
     '''
+    if DEBUG:
+        print "\n"
+        print '-'*79
+        print "aggregate_timings"
+        print '-'*79
+
     # Aggregated hosts tag.
     for name, ntasks in elements.iteritems():
         for ntask, hosts in ntasks.iteritems():
@@ -550,12 +532,20 @@ def aggregate_timings(elements, ranges):
                                 for _range in ranges[name][ntask][host][idx]:
                                     elements[name][ntask][hostnames][idx][idx].append(_range)
 
+    if DEBUG:
+        print "\nAggregate"
+        pprint.pprint(elements)
+
     # Collapse ranges of the same type of timing across hosts.
     for name, ntasks in elements.iteritems():
         if name != 'TTC':
             for ntask in ntasks.keys():
                 for idx, measurement in enumerate(elements[name][ntask][hostnames]):
                     elements[name][ntask][hostnames][idx] = collapse_ranges(measurement[idx])
+
+    if DEBUG:
+        print "\nCollapse"
+        pprint.pprint(elements)
 
     # Subtract ranges of the target timing from those of the other timings. This
     # gives us the time ranges during which the system was not performing a
@@ -566,13 +556,15 @@ def aggregate_timings(elements, ranges):
     # subtracting the time ranges in which the system was executing tasks from
     # all the other time ranges we measured. The target operation can be
     # changed, for example measuring the time the system has spent staging data.
-    for name, ntasks in elements.iteritems():
-        if name != 'TTC':
-            for ntask, hosts in ntasks.iteritems():
-                for idx, measurement in enumerate(elements['Tw'][ntask][hostnames]):
-                    te = elements['Tw'][ntask][hostnames][idx]
-                    tw = elements['Te'][ntask][hostnames][idx]
+    for ntask in elements['Tw'].keys():
+        for idx, measurement in enumerate(elements['Tw'][ntask][hostnames]):
+                    tw = elements['Tw'][ntask][hostnames][idx]
+                    te = elements['Te'][ntask][hostnames][idx]
                     elements['Tw'][ntask][hostnames][idx] = subtract_ranges(tw, te)
+
+    if DEBUG:
+        print "\nSubtract"
+        pprint.pprint(elements)
 
     # Sum each time range for the same type of timing across hosts.
     for name, ntasks in elements.iteritems():
@@ -583,6 +575,10 @@ def aggregate_timings(elements, ranges):
                     for _range in measurement:
                         partial += _range[1] - _range[0]
                     elements[name][ntask][hostnames][idx] = partial
+
+    if DEBUG:
+        print "\nSum"
+        pprint.pprint(elements)
 
     # TTC is recorded from session, not by aggregation. In
     # this way we can control that the sum of the other
@@ -596,6 +592,8 @@ def aggregate_timings(elements, ranges):
                     for idx, measurement in enumerate(elements[name][ntask][hostnames]):
                         elements[name][ntask][hostnames][idx] = elements[name][ntask][host][idx]
 
+    if DEBUG:
+        print "\nAdd TTC"
     return elements
 
 
@@ -619,11 +617,11 @@ if __name__ == '__main__':
     # each experiment. We use these both for brevity and as mnemonic device when
     # sharing our measurements.
     names = {'TTC': 'Time_to_completion', 'Tss': 'Setting_up'          ,
-              'Tse': 'Executing_job'     , 'Tw' : 'Submitting_task'     ,
-              'Te' : 'Executing_task'    , 'Tsi': 'Staging_in_task'     ,
-              'Tso': 'Staging_out_task'  , 'Tq' : 'Queuing_block'       ,
-              'Ta' : 'Executing_block'   , 'Tb' : 'Bootstrapping_worker',
-              'Twe': 'Executing_worker'}
+             'Tse': 'Executing_job'     , 'Tw' : 'Submitting_task'     ,
+             'Te' : 'Executing_task'    , 'Tsi': 'Staging_in_task'     ,
+             'Tso': 'Staging_out_task'  , 'Tq' : 'Queuing_block'       ,
+             'Ta' : 'Executing_block'   , 'Tb' : 'Bootstrapping_worker',
+             'Twe': 'Executing_worker'}
 
     # Make a list of the JSON files in the given directory.
     inputs = [f for f in os.listdir(sys.argv[1])
@@ -730,9 +728,8 @@ if __name__ == '__main__':
                     #     ranges[tname][ntask][host] = Twe['ranges']
 
     aggregate_timings(timings, ranges)
+    write_timings_csv(timings, names)
 
-    # write_csv_properties(aggregates, names)
-    # write_csv_timings(aggregates, names)
-
-    print "\nDEBUG: Timings"
-    pprint.pprint(timings)
+    if DEBUG:
+        print "\nDEBUG: Timings"
+        pprint.pprint(timings)

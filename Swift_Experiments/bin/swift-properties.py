@@ -23,16 +23,14 @@ def usage(msg=None, noexit=False):
         print "\nError: %s" % msg
 
     print """
-    usage   : %s <dir> [<timing>]
-    example : %s durations.json [TTC]
+    usage   : %s <dir>
+    example : %s durations.json
 
     arguments
         <dir>      : Directory with the JSON files produced by swift-timings.py
-        [<timing>] : optional -- type of timing (**not implemented yet**)
 
-    The tool extracts timings from the Swift durations files in the given
-    directory. By default, the tool output all the available timings. If a
-    timing is specified, only that timing is outputted.
+    The tool extracts properties from the Swift JSON files in the given
+    directory.
     """ % (sys.argv[0], sys.argv[0])
 
     if msg:
@@ -71,32 +69,27 @@ def write_run_report(slog, session, f):
 
 # -----------------------------------------------------------------------------
 def write_properties_csv(elements, names):
-    # {'Pb' : {2048: {u'stampede': [66],                u'gordon': [63]}},
-    #  'Ptw': {2048: {u'stampede': [8.178294573643411], u'gordon': [7.69]}}
 
     entries = {}
     mnames = []
-    ntasks = []
+    scales = []
 
-    print elements
-    print names
-
-    for name, scales in elements.iteritems():
-        for scale, hosts in scales.iteritems():
-            if scale not in ntasks:
-                ntasks.append(scale)
+    for name, ntasks in elements.iteritems():
+        for ntask, hosts in ntasks.iteritems():
+            if ntask not in scales:
+                scales.append(ntask)
             for host, measurements in hosts.iteritems():
                 mname = "%s-%s-%s" % (name, names[name], host)
                 if mname not in mnames:
                     mnames.append(mname)
                 if mname not in entries.keys():
                     entries[mname] = {}
-                if scale not in entries[mname].keys():
-                    entries[mname][scale] = []
+                if ntask not in entries[mname].keys():
+                    entries[mname][ntask] = []
                 for measurement in measurements:
-                    entries[mname][scale].append(measurement)
+                    entries[mname][ntask].append(measurement)
 
-    keys = sorted(ntasks)
+    keys = sorted(scales)
 
     for nm in mnames:
         with open(nm+'.csv', "wb") as outfile:
