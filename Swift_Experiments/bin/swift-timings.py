@@ -14,7 +14,7 @@ __author__ = "Matteo Turilli"
 __copyright__ = "Copyright 2015, The AIMES Project"
 __license__ = "MIT"
 
-DEBUG = False
+DEBUG = True
 
 
 # -----------------------------------------------------------------------------
@@ -509,6 +509,9 @@ def aggregate_timings(elements, ranges):
     # Aggregated hosts tag.
     for name, ntasks in elements.iteritems():
         for ntask, hosts in ntasks.iteritems():
+            # With less than two hosts there is nothing to aggregate.
+            if len(hosts) <= 1:
+                return elements
             hostnames = ''
             for host in hosts:
                 if hostnames == '':
