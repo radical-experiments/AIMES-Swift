@@ -14,7 +14,7 @@ __author__ = "Matteo Turilli"
 __copyright__ = "Copyright 2015, The AIMES Project"
 __license__ = "MIT"
 
-DEBUG = True
+DEBUG = False
 
 
 # -----------------------------------------------------------------------------
@@ -41,331 +41,6 @@ def usage(msg=None, noexit=False):
 
     if not noexit:
         sys.exit(0)
-
-
-# -----------------------------------------------------------------------------
-def collapse_ranges(ranges):
-    '''
-    Input:  [[%f,%f],[%f,%f],[%f,%f], ...]
-    Output: ((%f,%f), (%f,%f), ...)
-
-    given be a set of ranges (as a set of pairs of floats [start, end] with
-    'start <= end'. This algorithm will then collapse that set into the
-    smallest possible set of ranges which cover the same, but not more nor
-    less, of the domain (floats).
-
-    We first sort the ranges by their starting point. We then start with the
-    range with the smallest starting point [start_1, end_1], and compare to the
-    next following range [start_2, end_2], where we now know that start_1 <=
-    start_2. We have now two cases:
-
-    a) when start_2 <= end_1, then the ranges overlap, and we collapse them
-       into range_1: range_1 = [start_1, max[end_1, end_2]
-
-    b) when start_2 > end_2, then ranges don't overlap. Importantly, none of
-       the other later ranges can ever overlap range_1. So we move range_1 to
-       the set of final ranges, and restart the algorithm with range_2 being
-       the smallest one.
-
-    Termination condition is if only one range is left -- it is also moved to
-    the list of final ranges then, and that list is returned.
-    '''
-
-    # Ranges must be unique: we do not count timings when they start and end at
-    # exactly the same time. By using a set, we do not repeat ranges.
-    final = set()
-
-    # sort ranges into a copy list
-    _ranges = sorted(ranges, key=lambda x: x[0])
-
-    START = 0
-    END = 1
-
-    # smallest range
-    base = _ranges[0]
-    for _range in _ranges[1:]:
-
-        # range is 0: we skip it.
-        if _range[0] == _range[1]:
-            continue
-
-        # ranges overlap -- extend the base
-        if _range[START] <= base[END]:
-            base[END] = max(base[END], _range[END])
-        else:
-
-            # ranges don't overlap -- move base to final, and current _range
-            # becomes the new base
-            final.add(tuple(base))
-            base = _range
-
-    # termination: push last base to final
-    final.add(tuple(base))
-    return final
-
-
-# -----------------------------------------------------------------------------
-def subtract_ranges(bases, rangs):
-    '''
-    Input:  [[%f,%f],[%f,%f],[%f,%f],...], [[%f,%f],[%f,%f],[%f,%f],...]
-    Output: [[%f,%f], [%f,%f], ...]
-
-    Given be two sets one of bases and one of ranges, both represented as sets
-    of pairs of floats [start, end] with 'start <= end', this function
-    calculates the overlapping of each range on each base. When a range totally
-    or partially overlaps with a base, the overlap is subtracted from the base.
-    The resulting set of bases is returned.
-
-    1. Ranges must be unique as ranges with same start and end precisely
-       collapse one on another. By using a set, we guarantee the uniqueness of
-       each range.
-    2. sort ranges into a copy list. Transform immutable tuples to mutable lists
-       when needed. Ranges and every range can be immutable as we do not alter
-       them.
-    3. While there are bases, loop on the ranges to subtract from the bases
-       their overlaps.
-    4. When the range ends after the base there is some overlapping. Overlap can
-       be: (i) partial on the side of the base end; (iii) partial within the
-       base start; (iv) and total.
-    5. When the range starts within the duration of the base, there is an
-       overlap. Overlap can be: (ii) partial on the side of the base start;
-       (iii) partial within the base start and end; (iv) total.
-    6. When the overlap is partial on the side of the base start: (i.i) the
-       range ends before the base
-    7. Total overlapping = total subtraction. Move to the next comparison.
-    8. Partial overlap, new base = remainder subtraction range from base. Drop
-       the range as there will be no more overlap (sorted bases).
-    9. When the range ends within the duration of the base, The portion between
-       the start of the base and the start of the range is added to final
-       because there cannot be other ranges overlapping with that portion of the
-       base (bases and ranges are sorted).
-    10. Total overlapping for the rest of the base. Delete current base and move
-        to the next one.
-    11. Partial overlap, new base = remainder subtraction range from base.
-    12. When the range starts from the end or after the end of the base, the
-        base is added to final because there cannot be any overlapping, i.e.,
-        ranges and bases are sorted. rang[0] >= base[1]:
-    13. When the range ends before the base there is nothing to subtract from
-        the base. Drop the range, the bases are sorted so there cannot be any
-        base before the current one. We add bases but only beyond the current
-        base start. rang[1] <= bases[0]
-    14. Terminate when no more range are left, add all the remaining bases.
-    '''
-
-    final = set()
-    bases = sorted([list(b) for b in bases], key=lambda x: x[0])   # Tw
-    rangs = sorted([list(b) for b in rangs], key=lambda x: x[0])   # Te
-
-    print "DEBUG sorted bases: bases %s" % bases
-    print "DEBUG sorted rangs: rangs %s\n" % rangs
-
-    while bases:
-        base = bases[0]
-        print "\n\n-----------------------------------------------------------"
-        print "DEBUG while bases: base %s" % base
-
-        while rangs:
-            rang = rangs[0]
-            print "DEBUG while rangs: rang %s\n" % rang
-
-            if rang[1] > base[0]:
-                if rang[0] < base[1]:
-                    if rang[0] <= base[0]:
-                        if rang[1] >= base[1]:
-                            del bases[0]
-                            print "DEBUG: if rang[1] >= base[1]: bases %s\n" % bases
-                            break
-
-                        else:
-                            del bases[0]
-                            bases.insert(0, [rang[1], base[1]])
-                            del rangs[0]
-                            print "DEBUG: if rang[1] < base[1]: bases %s; rangs %s\n" % (bases, rangs)
-                            break
-
-                    else:
-
-                        final.add(tuple([base[0], rang[0]]))
-                        print "DEBUG: if rang[1] >= base[1]: final 1 %s" % final
-
-                        if rang[1] >= base[1]:
-                            del bases[0]
-                            del rangs[0]
-                            print "DEBUG: if rang[1] >= base[1]: bases %s; rangs %s\n" % (bases, rangs)
-                            break
-
-                        else:
-                            del bases[0]
-                            bases.insert(0, [rang[1], base[1]])
-                            print "DEBUG: if rang[1] < base[1]: bases %s\n" % bases
-                            break
-
-                else:
-                    final.add(tuple(base))
-                    del bases[0]
-                    print "DEBUG: if rang[0] < base[1]: final 2 %s; bases %s\n" % (final, bases)
-                    break
-
-            else:
-                del rangs[0]
-                print "DEBUG: if rang[1] < bases[0]: rangs %s\n" % rangs
-                break
-
-        if not rangs:
-            for b in bases:
-                final.add(tuple(b))
-            bases = []
-            print "DEBUG: while rangs: final 3 %s" % final
-            print "DEBUG: while rangs: bases %s" % bases
-            print "DEBUG: while rangs: rangs %s\n" % rangs
-
-    return final
-
-
-# -----------------------------------------------------------------------------
-def get_ranges(s_entities, s_state_name, e_entities, e_state_name, host, log):
-    # timings = {'name': {'ntasks': {'host|total': [int, int, int, ...]}}}
-    total = 0
-    overlaps = []
-    for seid in log[s_entities].keys():
-        for eeid in log[e_entities].keys():
-            if (log[s_entities][seid]['host'] == host and
-                    log[e_entities][eeid]['host'] == host):
-
-                if s_entities == e_entities:
-                    if seid == eeid:
-                        overlap = get_overlap(log, s_entities, seid, s_state_name,
-                                              e_entities, eeid, e_state_name)
-                        if overlap:
-                            overlaps.append(overlap)
-
-                elif s_entities == 'Jobs' and e_entities == 'Tasks':
-                    if seid == log[e_entities][eeid]['jobid']:
-                        overlap = get_overlap(log, s_entities, seid, s_state_name,
-                                              e_entities, eeid, e_state_name)
-                        if overlap:
-                            overlaps.append(overlap)
-
-                elif s_entities == 'Blocks' and e_entities == 'Workers':
-                    if seid == log[e_entities][eeid]['block']:
-                        overlap = get_overlap(log, s_entities, seid, s_state_name,
-                                              e_entities, eeid, e_state_name)
-                        if overlap:
-                            overlaps.append(overlap)
-
-    ranges = collapse_ranges(overlaps)
-    if DEBUG:
-        print "DEBUG: get_ranges\n\tstart entities: %s;\n\tstart state name: %s;\n\tend entities: %s;\n\tend state name: %s;\n\thost: %s;\n\tranges: %s" % \
-            (s_entities, s_state_name, e_entities, e_state_name, host, ranges)
-
-    # Calculate the total range by summing adjacent ranges. For example, if 66
-    # workers with 16 cores each executed a total of 1055 tasks and the max
-    # amount of scheduled blocks (with 1 worker for 1 block) is 20, we will have
-    # at least 4 adjacent ranges but possibly more depending on the time spent
-    # by each block in the LRMS queue. The total range will be then the sum of
-    # the ranges, without counting the time between each block that, in the case
-    # of this example, is spent waiting for the blocks and their workers to come
-    # online. This time is therefore accounted for in Tq.
-    for r in ranges:
-        total += r[1] - r[0]
-    return {'total': total, 'ranges': ranges}
-
-
-# -----------------------------------------------------------------------------
-def get_overlap(log, s_entities, seid, s_state_name, e_entities, eeid, e_state_name):
-    overlap = None
-    start = log[s_entities][seid]['states'][s_state_name]
-    end = log[e_entities][eeid]['states'][e_state_name]
-
-    # Swift fails to log some of the stage_in time stamps. When the task has
-    # executed successfully, i.e. the end state is present, we use the time
-    # stamp of the nearest adjacent state, i.e. 'active' instead of 'stage_in'.
-    # This heuristic should be revised for data intensive experiments.
-    if not start and end:
-        if s_state_name == 'stage_in':
-            s_state_name = 'active'
-            start = log[s_entities][seid]['states']['active']
-    if start and not end:
-        if e_state_name == 'stage_in':
-            e_state_name == 'active'
-            end = log[e_entities][eeid]['states']['active']
-
-    if start and end:
-        overlap = [start, end]
-    else:
-        if DEBUG:
-            sw = "\n\tEntity '%s' state '%s' is %s" % (seid, s_state_name, start)
-            ew = "\n\tEntity '%s' state '%s' is %s" % (eeid, e_state_name, end)
-            print "\nDEBUG: undefined entities %s%s" % (sw, ew)
-    return overlap
-
-
-# -----------------------------------------------------------------------------
-def get_range(entity, start_state_name, end_state_name, host, log):
-    start = log[entity]['states'][start_state_name]
-    end = log[entity]['states'][end_state_name]
-    if start and end:
-        _range = end - start
-    else:
-        print "ERROR: The entity %s has no '%s' state:\n%s" % \
-            (entity, end_state_name, log[entity])
-        sys.exit(1)
-    return _range
-
-
-# -----------------------------------------------------------------------------
-def store_range(_range, timing, ntask, store):
-    '''
-    Adds range to the list of previously calculated ranges of type timing for
-    the same BoT size ntask. If it is the first time we calculate this type of
-    range for this BoT size, it creates a dedicated list in outputs[timing].
-    '''
-    if ntask not in store[timing].keys():
-        store[timing][ntask] = []
-    store[timing][ntask].append(_range)
-
-
-# -----------------------------------------------------------------------------
-def csv_append_property(prop, host, properties, store):
-
-    # TODO: Rewrite assuming we have each property for each host used by the
-    # experiment.
-
-    props = []
-    keys = []
-    # Check whether there are _host sub-properties. Discard the base property if
-    # there are.
-    for key in store.keys():
-        if prop in key and prop != key:
-            props.append(key)
-    # If there are not _host keys, use the base. This covers for those
-    # properties for which no _host sub-properties are used.
-    if not props and prop in store.keys():
-        keys.append(prop)
-    # This implicitly verifies that the two _host sub-properties have the same
-    # set of keys. When they do not have it, something bad(tm) will happen with
-    # zip.
-    for p in props:
-        for k in store[p].keys():
-            if k not in keys:
-                keys.append(k)
-    keys = sorted(keys)
-    for p in props:
-        with open(p+'.csv', "wb") as outfile:
-            writer = csv.writer(outfile)
-            writer.writerow(keys)
-            writer.writerows(zip(*[store[p][key] for key in keys]))
-
-
-# -----------------------------------------------------------------------------
-def csv_append_range(store, timings, timing):
-    '''Appends a range to a dedicated cvs file.'''
-    keys = sorted(store[timing].keys())
-    fcsv = timing+'.csv'
-    with open(fcsv, "wb") as outfile:
-        writer = csv.writer(outfile)
-        writer.writerow(keys)
-        writer.writerows(zip(*[store[timing][key] for key in keys]))
 
 
 # -----------------------------------------------------------------------------
@@ -502,77 +177,427 @@ def write_run_report(slog, session, f):
 
 
 # -----------------------------------------------------------------------------
-def nentities_per_host(entities, host, slog):
-    nentities = 0
-    for eid in slog[entities].keys():
-        if slog[entities][eid]['host'] == host:
-            nentities += 1
-    return nentities
+def collapse_ranges(ranges):
+    '''
+    Input:  [[%f,%f],[%f,%f],[%f,%f], ...]
+    Output: [[%f,%f], [%f,%f], ...)
+
+    given be a set of ranges (as a set of pairs of floats [start, end] with
+    'start <= end'. This algorithm will then collapse that set into the
+    smallest possible set of ranges which cover the same, but not more nor
+    less, of the domain (floats).
+
+    We first sort the ranges by their starting point. We then start with the
+    range with the smallest starting point [start_1, end_1], and compare to the
+    next following range [start_2, end_2], where we now know that start_1 <=
+    start_2. We have now two cases:
+
+    a) when start_2 <= end_1, then the ranges overlap, and we collapse them
+       into range_1: range_1 = [start_1, max[end_1, end_2]
+
+    b) when start_2 > end_2, then ranges don't overlap. Importantly, none of
+       the other later ranges can ever overlap range_1. So we move range_1 to
+       the set of final ranges, and restart the algorithm with range_2 being
+       the smallest one.
+
+    Termination condition is if only one range is left -- it is also moved to
+    the list of final ranges then, and that list is returned.
+    '''
+
+    # Ranges must be unique: we do not count timings when they start and end at
+    # exactly the same time. By using a set, we do not repeat ranges.
+    final = set()
+
+    # sort ranges into a copy list
+    _ranges = sorted(ranges, key=lambda x: x[0])
+
+    if DEBUG:
+        print "DEBUG: collapse_ranges\n\tsorted ranges = %s" % _ranges
+
+    START = 0
+    END = 1
+
+    # smallest range
+    base = _ranges[0]
+    for _range in _ranges[1:]:
+
+        # range is 0: we skip it.
+        if _range[0] == _range[1]:
+            continue
+
+        # ranges overlap -- extend the base
+        if _range[START] <= base[END]:
+            base[END] = max(base[END], _range[END])
+        else:
+
+            # ranges don't overlap -- move base to final, and current _range
+            # becomes the new base
+            final.add(tuple(base))
+            base = _range
+
+    # termination: push last base to final
+    final.add(tuple(base))
+
+    if DEBUG:
+        print "DEBUG: collapse_ranges\n\tcollapsed ranges = %s" % final
+
+    # Return final as list of list in case a mutable type is needed.
+    return [list(b) for b in final]
 
 
 # -----------------------------------------------------------------------------
-def nentities_per_entity_per_host(entities, entity, host, slog):
-    nentity = 0.0
-    for eid in slog[entity].keys():
-        if slog[entity][eid]['host'] == host:
-            nentity += len(slog[entity][eid][entities])
-    return float(nentity)/float(len(slog[entity].keys()))
+def subtract_ranges(bases, rangs):
+    '''
+    Input:  [[%f,%f],[%f,%f],[%f,%f],...], [[%f,%f],[%f,%f],[%f,%f],...]
+    Output: [[%f,%f], [%f,%f], ...]
+
+    Given be two sets one of bases and one of ranges, both represented as sets
+    of pairs of floats [start, end] with 'start <= end', this function
+    calculates the overlapping of each range on each base. When a range totally
+    or partially overlaps with a base, the overlap is subtracted from the base.
+    The resulting set of bases is returned.
+    '''
+
+    final = set()
+    bases = sorted([list(b) for b in bases], key=lambda x: x[0])   # Tw
+    rangs = sorted([list(b) for b in rangs], key=lambda x: x[0])   # Te
+
+    if DEBUG:
+        print "DEBUG: subtract_ranges\n\tsorted bases = %s" % bases
+        print "DEBUG: subtract_ranges\n\tsorted ranges = %s" % rangs
+
+    while bases:
+        base = bases[0]
+        while rangs:
+            rang = rangs[0]
+
+            # Possible overlapping from the left side. We still do not know
+            # whether R1 ends within the base.
+            if rang[1] > base[0]:
+
+                # Possible overlapping from the right side. We now know there is
+                # an overlapping but we don't know whether partial, partial
+                # including either B0 or B1, or total including both B0 and B1.
+                if rang[0] < base[1]:
+
+                    # The overlapping includes B0 and moves to the right of an
+                    # unknown amount.
+                    if rang[0] <= base[0]:
+
+                        # total overlapping with both B0 and B1 included. All
+                        # the base goes.
+                        if rang[1] >= base[1]:
+                            del bases[0]
+                            break
+
+                        # rang[1] < base[1]. Partial overlapping of the left
+                        # side of the base. The rest might overlap with other
+                        # ranges on the right. We add that portion of the base
+                        # to the other bases to be be checked.
+                        else:
+                            del bases[0]
+                            bases.insert(0, [rang[1], base[1]])
+                            del rangs[0]
+                            break
+
+                    # rang[0] > base[0]. The overlapping does not include B0. It
+                    # can still include B1 or not. We now know that a portion of
+                    # the base on the left does not overlap with any range.
+                    else:
+                        final.add(tuple([base[0], rang[0]]))
+
+                        # From R0 onwards the rest of the base fully overlaps
+                        # with the range. We through it away.
+                        if rang[1] >= base[1]:
+                            del bases[0]
+                            del rangs[0]
+                            break
+
+                        # rang[1] < base[1]. Partial overlap within the base. We
+                        # add the remaining portion of the base at the right of
+                        # the range for future checks.
+                        else:
+                            del bases[0]
+                            bases.insert(0, [rang[1], base[1]])
+                            break
+
+                # rang[0] > base[1]: No overlapping as R0 ends after the end of
+                # the base and therefore so does also R1. The base is therefore
+                # at the left of every range and has no overlapping.
+                else:
+                    final.add(tuple(base))
+                    del bases[0]
+                    break
+
+            # rang[1] <= base[0]: No overlapping of the range on the left side.
+            # Delete range as no other bases can be more to the left than the
+            # current one (they are sorted).
+            else:
+                del rangs[0]
+                break
+
+        # Terminate when there are no more ranges to compare for subtraction.
+        if not rangs:
+            for b in bases:
+                final.add(tuple(b))
+            bases = []
+
+    if DEBUG:
+        print "DEBUG: subtract_ranges\n\tremaining bases = %s" % final
+
+    # Return final as list of list in case a mutable type is needed.
+    return [list(b) for b in final]
 
 
 # -----------------------------------------------------------------------------
-def aggregate(elements, aggregates, ranges):
-    # {'name': {'ntasks': {'host|total': [int, int, int, ...]}}}
-    # {'Pw': {'2048' : {'stampede': [66], 'gordon': [63]}}}
+def get_ranges(s_entities, s_state_name, e_entities, e_state_name, host, log):
+    '''
+    timings
+    -------
+    type: {'name': {'ntasks': {'host': [int, int, int, ...]}}}
+    '''
+    total = 0
+    overlaps = []
+    for seid in log[s_entities].keys():
+        for eeid in log[e_entities].keys():
+            if (log[s_entities][seid]['host'] == host and
+                log[e_entities][eeid]['host'] == host):
 
-    print "\nDEBUG: measures %s" % elements
-    print "DEBUG: ranges %s" % ranges
-    print "DEBUG: aggregates %s" % aggregates
+                if s_entities == e_entities:
+                    if seid == eeid:
+                        overlap = get_overlap(log, s_entities, seid, s_state_name,
+                                              e_entities, eeid, e_state_name)
+                        if overlap:
+                            overlaps.append(overlap)
 
-    for element in elements:
-        for measure, values in element.iteritems():
-            print "\nmeasure %s" % measure
-            print "\tvalues %s" % values
-            if measure not in aggregates.keys():
-                aggregates[measure] = {}
+                elif s_entities == 'Jobs' and e_entities == 'Tasks':
+                    if seid == log[e_entities][eeid]['jobid']:
+                        overlap = get_overlap(log, s_entities, seid, s_state_name,
+                                              e_entities, eeid, e_state_name)
+                        if overlap:
+                            overlaps.append(overlap)
 
-            for size, hosts in values.iteritems():
-                print "\tsize %s" % size
-                print "\thosts %s" % hosts
-                if size not in aggregates[measure].keys():
-                    aggregates[measure][size] = []
-                partial = 0.0
-                partials = []
+                elif s_entities == 'Blocks' and e_entities == 'Workers':
+                    if seid == log[e_entities][eeid]['block']:
+                        overlap = get_overlap(log, s_entities, seid, s_state_name,
+                                              e_entities, eeid, e_state_name)
+                        if overlap:
+                            overlaps.append(overlap)
 
+    ranges = collapse_ranges(overlaps)
+
+    if DEBUG:
+        print "DEBUG: get_ranges"
+        print "\tstart entities: %s;" % s_entities
+        print "\tstart state name: %s;" % s_state_name
+        print "\tend entities: %s;" % e_entities
+        print "\tend state name: %s;" % e_state_name
+        print "\thost: %s;" % host
+        print "\tranges: %s" % ranges
+
+    # Calculate the total range by summing adjacent ranges. For example, if 66
+    # workers with 16 cores each executed a total of 1055 tasks and the max
+    # amount of scheduled blocks (with 1 worker for 1 block) is 20, we will have
+    # at least 4 adjacent ranges but possibly more depending on the time spent
+    # by each block in the LRMS queue. The total range will be then the sum of
+    # the ranges, without counting the time between each block that, in the case
+    # of this example, is spent waiting for the blocks and their workers to come
+    # online. This time is therefore accounted for in Tq.
+    for r in ranges:
+        total += r[1] - r[0]
+
+    return {'total': total, 'ranges': ranges}
+
+
+# -----------------------------------------------------------------------------
+def get_overlap(log, s_entities, seid, s_state_name, e_entities, eeid, e_state_name):
+    overlap = None
+    start = log[s_entities][seid]['states'][s_state_name]
+    end = log[e_entities][eeid]['states'][e_state_name]
+
+    if DEBUG:
+        print "DEBUG: get_overlap\n\tstart = %s;\n\tend = %s;" % (start, end)
+
+    # Swift fails to log some of the stage_in time stamps. When the task has
+    # executed successfully, i.e. the end state is present, we use the time
+    # stamp of the nearest adjacent state, i.e. 'active' instead of 'stage_in'.
+    # This heuristic should be revised for data intensive experiments.
+    if not start and end:
+        if s_state_name == 'stage_in':
+            s_state_name = 'active'
+            start = log[s_entities][seid]['states']['active']
+    if start and not end:
+        if e_state_name == 'stage_in':
+            e_state_name == 'active'
+            end = log[e_entities][eeid]['states']['active']
+
+    if start and end:
+        overlap = [start, end]
+    else:
+        if DEBUG:
+            print "WARNING: get_overlap undefined entities"
+            print "\tEntity '%s' state '%s' is %s" % (seid, s_state_name, start)
+            print "\tEntity '%s' state '%s' is %s" % (eeid, e_state_name, end)
+
+    return overlap
+
+
+# -----------------------------------------------------------------------------
+def get_range(entity, start_state_name, end_state_name, host, log):
+    start = log[entity]['states'][start_state_name]
+    end = log[entity]['states'][end_state_name]
+
+    if start and end:
+        _range = end - start
+    else:
+        print "ERROR: The entity %s has no '%s' state:\n%s" % \
+            (entity, end_state_name, log[entity])
+        sys.exit(1)
+    return _range
+
+
+# -----------------------------------------------------------------------------
+def write_csv(measures, names):
+    # {'Pb' : {2048: {u'stampede': [66],                u'gordon': [63]}},
+    #  'Ptw': {2048: {u'stampede': [8.178294573643411], u'gordon': [7.6976744186046515]}}
+    # {'Tso': {2048: [0.0]}, 'Pw': {2048: [129.0]}, 'Pt': {2048: [2048.0]}, 'Twe': {2048: [0.0]},
+
+    entries = {}
+    mnames = []
+    ntasks = []
+
+    print measures
+    print names
+
+    if aggregates:
+        for name, scales in measures.iteritems():
+            print scales
+            for scale, measurements in scales.iteritems():
+                print measurements
+                mname = "%s-%s" % (name, names[name])
+                if scale not in ntasks:
+                    ntasks.append(scale)
+                if mname not in mnames:
+                    mnames.append(mname)
+                if mname not in entries.keys():
+                    entries[mname] = {}
+                if scale not in entries[mname].keys():
+                    entries[mname][scale] = []
+                for measurement in measurements:
+                    entries[mname][scale].append(measurement)
+    else:
+        for name, scales in measures.iteritems():
+            for scale, hosts in scales.iteritems():
+                if scale not in ntasks:
+                    ntasks.append(scale)
                 for host, measurements in hosts.iteritems():
-                    print "\thost %s" % host
-                    print "\tmeasurements %s" % measurements
-
+                    mname = "%s-%s-%s" % (name, names[name], host)
+                    if mname not in mnames:
+                        mnames.append(mname)
+                    if mname not in entries.keys():
+                        entries[mname] = {}
+                    if scale not in entries[mname].keys():
+                        entries[mname][scale] = []
                     for measurement in measurements:
-                        print "\tmeasurement %s" % measurement
+                        entries[mname][scale].append(measurement)
 
-                        if measure == 'Ptw':
-                            partial += measurement/float(len(hosts.keys()))
-                            print "\tpartial %s" % partial
+    keys = sorted(ntasks)
 
-                        if measure in ['Pb', 'Pw', 'Pt']:
-                            partial += measurement
-                            print "\tpartial %s" % partial
+    for nm in mnames:
+        with open(nm+'.csv', "wb") as outfile:
+            writer = csv.writer(outfile)
+            writer.writerow(keys)
+            writer.writerows(zip(*[entries[nm][key] for key in keys]))
 
-                        if measure == 'TTC':
-                            partial = ranges[measure][size][host]
 
-                        if measure in ['Tss', 'Tse', 'Tw', 'Te', 'Tsi', 'Tso', 'Tq', 'Ta', 'Tb', 'Twe']:
-                            for _range in ranges[measure][size][host]:
-                                partials.append([r for r in _range])
+# -----------------------------------------------------------------------------
+def aggregate_timings(elements, ranges):
+    '''
+    timings
+    --------
+    type:    {'name': {'ntasks': {'host': [int, ...], host: [int, ...], ...}}}
+    example: {'Pw': {'2048' : {'stampede': [66], 'gordon': [63]}}}
 
-                if partials:
-                    for r in collapse_ranges(partials):
-                        partial += r[1] - r[0]
-                    print "\tpartial %s" % partial
+    ranges
+    ------
+    type:    {'name': {'ntasks': {'host': set([(flt, flt),...], ...]), ...}}}
+    example: {'Tw': {2048: {u'stampede': set([(1453969835, 1453984281)]),
+                            u'gordon': set([(1453969835, 1453973305)])}}}
+    '''
+    # Aggregated hosts tag.
+    for name, ntasks in elements.iteritems():
+        for ntask, hosts in ntasks.iteritems():
+            hostnames = ''
+            for host in hosts:
+                if hostnames == '':
+                    hostnames = host
+                else:
+                    hostnames = hostnames+'_'+host
+            # Initialize the list of aggregated values for the aggregated hosts.
+            if hostnames not in elements[name][ntask].keys():
+                elements[name][ntask][hostnames] = [[]]*len(elements[name].keys())
 
-                aggregates[measure][size].append(partial)
-                print "\taggregates %s" % aggregates
-    return aggregates
+    # Aggregate ranges.
+    for name, ntasks in elements.iteritems():
+        if name != 'TTC':
+            for ntask, hosts in ntasks.iteritems():
+                for host, measurements in hosts.iteritems():
+                    if host != hostnames:
+                        for idx, measurement in enumerate(measurements):
+                            if len(elements[name][ntask][hostnames][idx]) <= idx:
+                                elements[name][ntask][hostnames][idx].append(ranges[name][ntask][host][idx])
+                            else:
+                                for _range in ranges[name][ntask][host][idx]:
+                                    elements[name][ntask][hostnames][idx][idx].append(_range)
+
+    # Collapse ranges of the same type of timing across hosts.
+    for name, ntasks in elements.iteritems():
+        if name != 'TTC':
+            for ntask in ntasks.keys():
+                for idx, measurement in enumerate(elements[name][ntask][hostnames]):
+                    elements[name][ntask][hostnames][idx] = collapse_ranges(measurement[idx])
+
+    # Subtract ranges of the target timing from those of the other timings. This
+    # gives us the time ranges during which the system was not performing a
+    # target operation. For example, consider an experiment measuring the
+    # execution of a bag of tasks. All the time spent not executing tasks can be
+    # considered an overhead. We therefore calculate all the time ranges in
+    # which the system was not executing tasks (our target operation) by
+    # subtracting the time ranges in which the system was executing tasks from
+    # all the other time ranges we measured. The target operation can be
+    # changed, for example measuring the time the system has spent staging data.
+    for name, ntasks in elements.iteritems():
+        if name != 'TTC':
+            for ntask, hosts in ntasks.iteritems():
+                for idx, measurement in enumerate(elements['Tw'][ntask][hostnames]):
+                    te = elements['Tw'][ntask][hostnames][idx]
+                    tw = elements['Te'][ntask][hostnames][idx]
+                    elements['Tw'][ntask][hostnames][idx] = subtract_ranges(tw, te)
+
+    # Sum each time range for the same type of timing across hosts.
+    for name, ntasks in elements.iteritems():
+        if name != 'TTC':
+            for ntask, hosts in ntasks.iteritems():
+                for idx, measurement in enumerate(elements[name][ntask][hostnames]):
+                    partial = 0
+                    for _range in measurement:
+                        partial += _range[1] - _range[0]
+                    elements[name][ntask][hostnames][idx] = partial
+
+    # TTC is recorded from session, not by aggregation. In
+    # this way we can control that the sum of the other
+    # timings is consistent with the directly observed TTC.
+    # if name == 'TTC':
+    #     elements[name][ntask][hostnames][idx] = elements[name][ntask][host][idx]
+    for name, ntasks in elements.iteritems():
+        if name == 'TTC':
+            for ntask, hosts in ntasks.iteritems():
+                for host, measurements in hosts.iteritems():
+                    for idx, measurement in enumerate(elements[name][ntask][hostnames]):
+                        elements[name][ntask][hostnames][idx] = elements[name][ntask][host][idx]
+
+    return elements
+
 
 # -----------------------------------------------------------------------------
 if __name__ == '__main__':
@@ -593,14 +618,11 @@ if __name__ == '__main__':
     # The label and descriptive name for each property and timing we measure for
     # each experiment. We use these both for brevity and as mnemonic device when
     # sharing our measurements.
-    pnames = {'Pb' : 'Blocks_per_exp'  , 'Pt' : 'Tasks_per_host',
-              'Pw' : 'Workers_per_exp' , 'Ptw': 'Tasks_per_worker'}
-
-    tnames = {'TTC': 'TTC'             , 'Tss': 'Setting_up'          ,
-              'Tse': 'Executing_job'   , 'Tw' : 'Submitting_task'     ,
-              'Te' : 'Executing_task'  , 'Tsi': 'Staging_in_task'     ,
-              'Tso': 'Staging_out_task', 'Tq' : 'Queuing_block'       ,
-              'Ta' : 'Executing_block' , 'Tb' : 'Bootstrapping_worker',
+    names = {'TTC': 'Time_to_completion', 'Tss': 'Setting_up'          ,
+              'Tse': 'Executing_job'     , 'Tw' : 'Submitting_task'     ,
+              'Te' : 'Executing_task'    , 'Tsi': 'Staging_in_task'     ,
+              'Tso': 'Staging_out_task'  , 'Tq' : 'Queuing_block'       ,
+              'Ta' : 'Executing_block'   , 'Tb' : 'Bootstrapping_worker',
               'Twe': 'Executing_worker'}
 
     # Make a list of the JSON files in the given directory.
@@ -609,26 +631,18 @@ if __name__ == '__main__':
     if DEBUG:
         print "DEBUG: Selected input files = %s" % inputs
 
-    # We collect properties and timings we measure for each experiment in two
-    # data structures. Measurements are organized by name of the property,
-    # number of tasks of the experiment, and hosts on which each experiment has
-    # been run. Note: this works also for experiments with a single host.
-    # properties = {'name': {'ntasks': {'host': [int, int, int, ...]}}}
-    properties = {}
-    # timings = {'name': {'ntasks': {'host': [int, int, int, ...]}}}
+    # Name of the timing, number of tasks of the experiment, and hosts on which
+    # each experiment has been run. Note: this is used also for experiments with
+    # a single host. {'name': {'ntasks': {'host': [int, int, int, ...]}}}
     timings = {}
-
-    # We want the aggregated value for some measurements. We create a data
-    # structure as those for properties and timings but without the host
-    # parameters. A dedicated function is used to aggregate the properties and
-    # timings we need.
-    # aggregates = {'name': {'ntasks': [int, int, int, ...]}}}
-    aggregates  = {}
 
     # We store the ranges of the timings we calculate for each host. We then sum
     # them instead of collapsing them so to avoid counting the time spent
     # waiting between one timing and the other.
     ranges = {}
+
+    # The timings we want to measure.
+    enabled = ['TTC', 'Te', 'Tw']
 
     # Read through all the JSON file in the given directory. One JSON file for
     # each experiment.
@@ -642,110 +656,83 @@ if __name__ == '__main__':
         # Get the host(s) on which the workload has been executed.
         hosts = slog['Session']['hosts']
 
-        # Derive the properties of each experiment. Note: Due to how information
-        # is extracted from Swift logs, a host is recorded for a block only when
-        # at least a task has been run by its worker(s). We can extract only
-        # Workers per host, not blocks per host.
-        for pname in pnames.keys():
-            properties[pname] = {}
-            properties[pname][ntask] = {}
-
-            for host in hosts:
-                properties[pname][ntask][host] = []
-
-                if pname == 'Pb':
-                    Pb = nentities_per_host('Blocks', host, slog)
-                    properties[pname][ntask][host].append(Pb)
-
-                if pname == 'Pw':
-                    Pw = nentities_per_host('Workers', host, slog)
-                    properties[pname][ntask][host].append(Pw)
-
-                if pname == 'Pt':
-                    Pt = nentities_per_host('Tasks', host, slog)
-                    properties[pname][ntask][host].append(Pt)
-
-                if pname == 'Ptw':
-                    Ptw = nentities_per_entity_per_host('tasks', 'Workers', host, slog)
-                    properties[pname][ntask][host].append(Ptw)
-
-                # if pname == 'Pbr':
-                #     Pbr = get_blocks_per_host(slog)
-                #     store_property(Pbr, pnames[pname], ntask, outputs)
-                #     csv_append_property(outputs, properties, pnames[pname])
-
         # Derive the timings of each experiment.
-        for tname in tnames.keys():
-            timings[tname] = {}
-            ranges[tname] = {}
-            timings[tname][ntask] = {}
-            ranges[tname][ntask] = {}
+        for tname in names.keys():
+            if tname in enabled:
+                for host in hosts:
+                    if tname not in timings.keys():
+                        timings[tname] = {}
+                    if tname not in ranges.keys():
+                        ranges[tname] = {}
+                    if ntask not in timings[tname].keys():
+                        timings[tname][ntask] = {}
+                    if ntask not in ranges[tname].keys():
+                        ranges[tname][ntask] = {}
+                    if host not in timings[tname][ntask].keys():
+                        timings[tname][ntask][host] = []
+                    if host not in ranges[tname][ntask].keys():
+                        ranges[tname][ntask][host] = []
 
-            for host in hosts:
-                timings[tname][ntask][host] = []
-                ranges[tname][ntask][host] = None
+                    if tname == 'TTC':
+                        TTC = get_range('Session', 'start', 'finish', host, slog)
+                        timings[tname][ntask][host].append(TTC)
+                        # ranges[tname][ntask][host].append([[TTC, TTC]])
+                        ranges[tname][ntask][host] = TTC
 
-                if tname == 'TTC':
-                    TTC = get_range('Session', 'start', 'finish', host, slog)
-                    timings[tname][ntask][host].append(TTC)
-                    ranges[tname][ntask][host] = TTC
+                    # if tname == 'Tss':
+                    #     Tss = get_ranges('Jobs', 'init', 'Jobs', 'task', host, slog)
+                    #     timings[tname][ntask][host].append(Tss['total'])
+                    #     ranges[tname][ntask][host] = Tss['ranges']
 
-                if tname == 'Tss':
-                    Tss = get_ranges('Jobs', 'init', 'Jobs', 'task', host, slog)
-                    timings[tname][ntask][host].append(Tss['total'])
-                    ranges[tname][ntask][host] = Tss['ranges']
+                    # if tname == 'Tse':
+                    #     Tse = get_ranges('Jobs', 'task', 'Jobs', 'end', host, slog)
+                    #     timings[tname][ntask][host].append(Tse['total'])
+                    #     ranges[tname][ntask][host] = Tse['ranges']
 
-                if tname == 'Tse':
-                    Tse = get_ranges('Jobs', 'task', 'Jobs', 'end', host, slog)
-                    timings[tname][ntask][host].append(Tse['total'])
-                    ranges[tname][ntask][host] = Tse['ranges']
+                    if tname == 'Tw':
+                        Tw = get_ranges('Jobs', 'task', 'Tasks', 'stage_in', host, slog)
+                        timings[tname][ntask][host].append(Tw['total'])
+                        ranges[tname][ntask][host].append(Tw['ranges'])
 
-                if tname == 'Tw':
-                    Tw = get_ranges('Jobs', 'task', 'Tasks', 'stage_in', host, slog)
-                    timings[tname][ntask][host].append(Tw['total'])
-                    ranges[tname][ntask][host] = Tw['ranges']
+                    if tname == 'Te':
+                        Te = get_ranges('Tasks', 'stage_in', 'Tasks', 'completed', host, slog)
+                        timings[tname][ntask][host].append(Te['total'])
+                        ranges[tname][ntask][host].append(Te['ranges'])
 
-                if tname == 'Te':
-                    Te = get_ranges('Tasks', 'stage_in', 'Tasks', 'completed', host, slog)
-                    timings[tname][ntask][host].append(Te['total'])
-                    ranges[tname][ntask][host] = Te['ranges']
+                    # if tname == 'Tsi':
+                    #     Tsi = get_ranges('Tasks', 'stage_in', 'Tasks', 'active', host, slog)
+                    #     timings[tname][ntask][host].append(Tsi['total'])
+                    #     ranges[tname][ntask][host] = Tsi['ranges']
 
-                if tname == 'Tsi':
-                    Tsi = get_ranges('Tasks', 'stage_in', 'Tasks', 'active', host, slog)
-                    timings[tname][ntask][host].append(Tsi['total'])
-                    ranges[tname][ntask][host] = Tsi['ranges']
+                    # if tname == 'Tso':
+                    #     Tso = get_ranges('Tasks', 'stage_out', 'Tasks', 'completed', host, slog)
+                    #     timings[tname][ntask][host].append(Tso['total'])
+                    #     ranges[tname][ntask][host] = Tso['ranges']
 
-                if tname == 'Tso':
-                    Tso = get_ranges('Tasks', 'stage_out', 'Tasks', 'completed', host, slog)
-                    timings[tname][ntask][host].append(Tso['total'])
-                    ranges[tname][ntask][host] = Tso['ranges']
+                    # if tname == 'Tq':
+                    #     Tq = get_ranges('Blocks', 'requested', 'Blocks', 'active', host, slog)
+                    #     timings[tname][ntask][host].append(Tq['total'])
+                    #     ranges[tname][ntask][host] = Tq['ranges']
 
-                if tname == 'Tq':
-                    Tq = get_ranges('Blocks', 'requested', 'Blocks', 'active', host, slog)
-                    timings[tname][ntask][host].append(Tq['total'])
-                    ranges[tname][ntask][host] = Tq['ranges']
+                    # if tname == 'Ta':
+                    #     Ta = get_ranges('Blocks', 'active', 'Blocks', 'done', host, slog)
+                    #     timings[tname][ntask][host].append(Ta['total'])
+                    #     ranges[tname][ntask][host] = Ta['ranges']
 
-                if tname == 'Ta':
-                    Ta = get_ranges('Blocks', 'active', 'Blocks', 'done', host, slog)
-                    timings[tname][ntask][host].append(Ta['total'])
-                    ranges[tname][ntask][host] = Ta['ranges']
+                    # if tname == 'Tb':
+                    #     Tb = get_ranges('Blocks', 'active', 'Workers', 'active', host, slog)
+                    #     timings[tname][ntask][host].append(Tb['total'])
+                    #     ranges[tname][ntask][host] = Tb['ranges']
 
-                if tname == 'Tb':
-                    Tb = get_ranges('Blocks', 'active', 'Workers', 'active', host, slog)
-                    timings[tname][ntask][host].append(Tb['total'])
-                    ranges[tname][ntask][host] = Tb['ranges']
+                    # if tname == 'Twe':
+                    #     Twe = get_ranges('Workers', 'active', 'Workers', 'shutdown', host, slog)
+                    #     timings[tname][ntask][host].append(Twe['total'])
+                    #     ranges[tname][ntask][host] = Twe['ranges']
 
-                if tname == 'Twe':
-                    Twe = get_ranges('Workers', 'active', 'Workers', 'shutdown', host, slog)
-                    timings[tname][ntask][host].append(Twe['total'])
-                    ranges[tname][ntask][host] = Twe['ranges']
+    aggregate_timings(timings, ranges)
 
-    aggregates = aggregate([properties, timings], aggregates, ranges)
+    # write_csv_properties(aggregates, names)
+    # write_csv_timings(aggregates, names)
 
-    if DEBUG:
-        print "\nDEBUG: Properties"
-        pprint.pprint(properties)
-        print "\nDEBUG: Timings"
-        pprint.pprint(timings)
-        print "\nDEBUG: Aggregates"
-        pprint.pprint(aggregates)
+    print "\nDEBUG: Timings"
+    pprint.pprint(timings)
