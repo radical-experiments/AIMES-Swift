@@ -134,19 +134,28 @@ def aggregate_properties(elements):
 
     for name, ntasks in elements.iteritems():
         for ntask, hosts in ntasks.iteritems():
+
+            # Create the name for the aggregated hosts.
             hostnames = ''
             for host in hosts:
                 if hostnames == '':
                     hostnames = host
                 else:
                     hostnames = hostnames+'_'+host
+
+            # Initialize the list of aggregated values for the aggregated hosts.
             if hostnames not in elements[name][ntask].keys():
-                elements[name][ntask][hostnames] = [0.0]*len(elements.keys())
-                print elements[name][ntask][hostnames]
+                elements[name][ntask][hostnames] = [0.0]*len(elements[name].keys())
+
+            # Aggregate the properties values for all hosts.
             for host, measurements in hosts.iteritems():
                 for idx, measurement in enumerate(measurements):
+
+                    # Average number of tasks for worker for all hosts.
                     if name == 'Ptw':
                         elements[name][ntask][hostnames][idx] += measurement/float(len(hosts.keys()))
+
+                    # Total number of blocks, workers, and tasks.
                     if name in ['Pb', 'Pw', 'Pt']:
                         elements[name][ntask][hostnames][idx] += measurement
 
