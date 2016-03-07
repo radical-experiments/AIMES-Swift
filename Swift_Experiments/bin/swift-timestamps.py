@@ -452,7 +452,6 @@ if __name__ == "__main__":
     flogs = sys.argv[1]
     fjson = sys.argv[2]
 
-
     # Entities' states.
     stsession = {'start': None, 'finish': None}
 
