@@ -14,7 +14,7 @@ __author__ = "Matteo Turilli"
 __copyright__ = "Copyright 2015, The AIMES Project"
 __license__ = "MIT"
 
-DEBUG = True
+DEBUG = False
 
 
 # -----------------------------------------------------------------------------
@@ -509,6 +509,7 @@ def aggregate_timings(elements, ranges):
     # Aggregated hosts tag.
     for name, ntasks in elements.iteritems():
         for ntask, hosts in ntasks.iteritems():
+
             # With less than two hosts there is nothing to aggregate.
             if len(hosts) <= 1:
                 return elements
@@ -518,9 +519,10 @@ def aggregate_timings(elements, ranges):
                     hostnames = host
                 else:
                     hostnames = hostnames+'_'+host
-            # Initialize the list of aggregated values for the aggregated hosts.
+
+            # Add aggregated hostname to the the host list..
             if hostnames not in elements[name][ntask].keys():
-                elements[name][ntask][hostnames] = [[]]*len(elements[name].keys())
+                elements[name][ntask][hostnames] = []
 
     # Aggregate ranges.
     for name, ntasks in elements.iteritems():
@@ -528,6 +530,11 @@ def aggregate_timings(elements, ranges):
             for ntask, hosts in ntasks.iteritems():
                 for host, measurements in hosts.iteritems():
                     if host != hostnames:
+
+                        # Initialize the list of aggregated values for the aggregated hosts.
+                        if len(elements[name][ntask][hostnames]) < len(measurements):
+                            elements[name][ntask][hostnames] = [[]]*len(measurements)
+
                         for idx, measurement in enumerate(measurements):
                             if len(elements[name][ntask][hostnames][idx]) <= idx:
                                 elements[name][ntask][hostnames][idx].append(ranges[name][ntask][host][idx])

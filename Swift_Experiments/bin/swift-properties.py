@@ -13,7 +13,7 @@ __author__ = "Matteo Turilli"
 __copyright__ = "Copyright 2015, The AIMES Project"
 __license__ = "MIT"
 
-DEBUG = False
+DEBUG = True
 
 
 # -----------------------------------------------------------------------------
@@ -125,6 +125,10 @@ def aggregate_properties(elements):
     example: {'Pw': {'2048' : {'stampede': [66], 'gordon': [63]}}}
     '''
 
+    if DEBUG:
+        print '\nDEBUG: aggregate_properties'
+        print '\telements: %s' % elements
+
     for name, ntasks in elements.iteritems():
         for ntask, hosts in ntasks.iteritems():
 
@@ -136,21 +140,29 @@ def aggregate_properties(elements):
                 else:
                     hostnames = hostnames+'_'+host
 
-            # Initialize the list of aggregated values for the aggregated hosts.
+            # Add aggregated hostname to the the host list.
             if hostnames not in elements[name][ntask].keys():
-                elements[name][ntask][hostnames] = [0.0]*len(elements[name].keys())
+                elements[name][ntask][hostnames] = []
 
             # Aggregate the properties values for all hosts.
             for host, measurements in hosts.iteritems():
-                for idx, measurement in enumerate(measurements):
+                if host != hostnames:
 
-                    # Average number of tasks for worker for all hosts.
-                    if name == 'Ptw':
-                        elements[name][ntask][hostnames][idx] += measurement/float(len(hosts.keys()))
+                    # Initialize the list of aggregated values for the aggregated hosts.
+                    if len(elements[name][ntask][hostnames]) < len(measurements):
+                        elements[name][ntask][hostnames] = [0.0]*len(measurements)
 
-                    # Total number of blocks, workers, and tasks.
-                    if name in ['Pb', 'Pw', 'Pt']:
-                        elements[name][ntask][hostnames][idx] += measurement
+                    for idx, measurement in enumerate(measurements):
+
+                        # Average number of tasks for worker for all hosts.
+                        if name == 'Ptw':
+                            elements[name][ntask][hostnames][idx] += measurement/float(len(hosts.keys()))
+
+                        # Total number of blocks, workers, and tasks.
+                        if name in ['Pb', 'Pw', 'Pt']:
+                            elements[name][ntask][hostnames][idx] += measurement
+
+                        print elements[name][ntask][hostnames][idx]
 
     return elements
 
