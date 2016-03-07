@@ -1,0 +1,1147 @@
+{
+    "Blocks": {
+        "0216-3707310-000001": {
+            "states": {
+                "active": 1455694704, 
+                "requested": 1455694670, 
+                "done": 1455695658, 
+                "shutdown": 1455695657
+            }, 
+            "host": "stampede", 
+            "cores_per_worker": "1", 
+            "utilization": null, 
+            "cores": "16", 
+            "nodes": [
+                "c429-001.stampede.tacc.utexas.edu"
+            ], 
+            "workers": [
+                "0216-3707310-000001:000000"
+            ], 
+            "walltime": "1440"
+        }, 
+        "0216-3707310-000000": {
+            "states": {
+                "active": 1455694674, 
+                "requested": 1455694651, 
+                "done": 1455695658, 
+                "shutdown": 1455695657
+            }, 
+            "host": "stampede", 
+            "cores_per_worker": "1", 
+            "utilization": "99.99", 
+            "cores": "16", 
+            "nodes": [
+                "c403-104.stampede.tacc.utexas.edu"
+            ], 
+            "workers": [
+                "0216-3707310-000000:000000"
+            ], 
+            "walltime": "1440"
+        }, 
+        "0216-3705480-000000": {
+            "states": {
+                "active": 1455694732, 
+                "requested": 1455694668, 
+                "done": null, 
+                "shutdown": 1455695657
+            }, 
+            "host": "gordon", 
+            "cores_per_worker": "1", 
+            "utilization": null, 
+            "cores": "16", 
+            "nodes": [
+                "gcn-9-41.sdsc.edu"
+            ], 
+            "workers": [
+                "0216-3705480-000000:000000"
+            ], 
+            "walltime": "1440"
+        }
+    }, 
+    "Workers": {
+        "0216-3707310-000000:000000": {
+            "node": "c403-104.stampede.tacc.utexas.edu", 
+            "tasks": [
+                "R-2-10-1455673030488", 
+                "R-2-14-1455673030484", 
+                "R-2-16-1455673030491", 
+                "R-2-3-1455673030485", 
+                "R-2-7-1455673030483", 
+                "R-2-6-1455673030487", 
+                "R-2-5-1455673030493", 
+                "R-2-9-1455673030486", 
+                "R-2-24-1455673030496", 
+                "R-2-11-1455673030499", 
+                "R-2-25-1455673030500", 
+                "R-2-15-1455673030502", 
+                "R-2x2-1455673030505", 
+                "R-2-28-1455673030510", 
+                "R-2-0-1455673030511", 
+                "R-2-30-1455673030521"
+            ], 
+            "cores_node": "16", 
+            "states": {
+                "active": 1455694730, 
+                "lost": 1455695657, 
+                "shutdown": 1455695657
+            }, 
+            "host": "stampede", 
+            "block": "0216-3707310-000000"
+        }, 
+        "0216-3705480-000000:000000": {
+            "node": "gcn-9-41.sdsc.edu", 
+            "tasks": [
+                "R-2-19-1455673030482", 
+                "R-2-21-1455673030490", 
+                "R-2-23-1455673030489", 
+                "R-2-17-1455673030492", 
+                "R-2-20-1455673030494", 
+                "R-2-4-1455673030503", 
+                "R-2-26-1455673030513", 
+                "R-2-12-1455673030515", 
+                "R-2-27-1455673030507", 
+                "R-2-8-1455673030520", 
+                "R-2-29-1455673030523", 
+                "R-2-31-1455673030525", 
+                "R-2-22-1455673030527", 
+                "R-2-18-1455673030531"
+            ], 
+            "cores_node": "16", 
+            "states": {
+                "active": 1455694726, 
+                "lost": 1455695657, 
+                "shutdown": 1455695657
+            }, 
+            "host": "gordon", 
+            "block": "0216-3705480-000000"
+        }, 
+        "0216-3707310-000001:000000": {
+            "node": "c429-001.stampede.tacc.utexas.edu", 
+            "tasks": [
+                "R-2-13-1455673030522", 
+                "R-2-1-1455673030529"
+            ], 
+            "cores_node": "16", 
+            "states": {
+                "active": 1455694755, 
+                "lost": 1455695657, 
+                "shutdown": 1455695657
+            }, 
+            "host": "stampede", 
+            "block": "0216-3707310-000001"
+        }
+    }, 
+    "Session": {
+        "states": {
+            "start": 1455694630, 
+            "finish": 1455695657
+        }, 
+        "ntasks": 32, 
+        "nblocks": 3, 
+        "hosts": [
+            "stampede", 
+            "gordon"
+        ], 
+        "tasks_failed": 0, 
+        "njobs": 32, 
+        "tasks_completed": 32, 
+        "ID": "run035", 
+        "nworkers": 3
+    }, 
+    "Jobs": {
+        "sleep-08khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695632, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-30-1455673030521"
+        }, 
+        "sleep-18khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695627, 
+                "sselect": 1455694631
+            }, 
+            "host": "gordon", 
+            "task_id": "R-2-31-1455673030525"
+        }, 
+        "sleep-i7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695656, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-13-1455673030522"
+        }, 
+        "sleep-h7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695631, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-5-1455673030493"
+        }, 
+        "sleep-g7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695631, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-10-1455673030488"
+        }, 
+        "sleep-q7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695627, 
+                "sselect": 1455694631
+            }, 
+            "host": "gordon", 
+            "task_id": "R-2-17-1455673030492"
+        }, 
+        "sleep-u7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695627, 
+                "sselect": 1455694631
+            }, 
+            "host": "gordon", 
+            "task_id": "R-2-23-1455673030489"
+        }, 
+        "sleep-o7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695627, 
+                "sselect": 1455694631
+            }, 
+            "host": "gordon", 
+            "task_id": "R-2-19-1455673030482"
+        }, 
+        "sleep-97khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695657, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-1-1455673030529"
+        }, 
+        "sleep-87khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695631, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-0-1455673030511"
+        }, 
+        "sleep-j7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695631, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-15-1455673030502"
+        }, 
+        "sleep-c7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695627, 
+                "sselect": 1455694631
+            }, 
+            "host": "gordon", 
+            "task_id": "R-2-4-1455673030503"
+        }, 
+        "sleep-38khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695627, 
+                "sselect": 1455694631
+            }, 
+            "host": "gordon", 
+            "task_id": "R-2-29-1455673030523"
+        }, 
+        "sleep-k7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695631, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-7-1455673030483"
+        }, 
+        "sleep-z7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695627, 
+                "sselect": 1455694631
+            }, 
+            "host": "gordon", 
+            "task_id": "R-2-27-1455673030507"
+        }, 
+        "sleep-t7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695627, 
+                "sselect": 1455694631
+            }, 
+            "host": "gordon", 
+            "task_id": "R-2-22-1455673030527"
+        }, 
+        "sleep-n7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695627, 
+                "sselect": 1455694631
+            }, 
+            "host": "gordon", 
+            "task_id": "R-2-12-1455673030515"
+        }, 
+        "sleep-s7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695627, 
+                "sselect": 1455694631
+            }, 
+            "host": "gordon", 
+            "task_id": "R-2-21-1455673030490"
+        }, 
+        "sleep-v7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695631, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-24-1455673030496"
+        }, 
+        "sleep-a7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695631, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2x2-1455673030505"
+        }, 
+        "sleep-e7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695631, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-9-1455673030486"
+        }, 
+        "sleep-m7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695631, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-6-1455673030487"
+        }, 
+        "sleep-28khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695631, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-28-1455673030510"
+        }, 
+        "sleep-y7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695627, 
+                "sselect": 1455694631
+            }, 
+            "host": "gordon", 
+            "task_id": "R-2-26-1455673030513"
+        }, 
+        "sleep-x7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695631, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-25-1455673030500"
+        }, 
+        "sleep-b7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695631, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-3-1455673030485"
+        }, 
+        "sleep-d7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695627, 
+                "sselect": 1455694631
+            }, 
+            "host": "gordon", 
+            "task_id": "R-2-8-1455673030520"
+        }, 
+        "sleep-r7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695627, 
+                "sselect": 1455694631
+            }, 
+            "host": "gordon", 
+            "task_id": "R-2-20-1455673030494"
+        }, 
+        "sleep-48khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695627, 
+                "sselect": 1455694631
+            }, 
+            "host": "gordon", 
+            "task_id": "R-2-18-1455673030531"
+        }, 
+        "sleep-l7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695631, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-14-1455673030484"
+        }, 
+        "sleep-f7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695631, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-11-1455673030499"
+        }, 
+        "sleep-p7khjulm": {
+            "states": {
+                "start": 1455694631, 
+                "init": 1455694631, 
+                "task": 1455694631, 
+                "end": 1455695631, 
+                "sselect": 1455694631
+            }, 
+            "host": "stampede", 
+            "task_id": "R-2-16-1455673030491"
+        }
+    }, 
+    "Tasks": {
+        "R-2-21-1455673030490": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694631, 
+                "failed": null, 
+                "stage_in": 1455694726, 
+                "unknown": null, 
+                "completed": 1455695627, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694726, 
+                "stage_out": 1455695626
+            }, 
+            "workerid": "0216-3705480-000000:000000", 
+            "host": "gordon", 
+            "blockid": "0216-3705480-000000", 
+            "jobid": "sleep-s7khjulm"
+        }, 
+        "R-2-27-1455673030507": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694668, 
+                "failed": null, 
+                "stage_in": 1455694726, 
+                "unknown": null, 
+                "completed": 1455695627, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694727, 
+                "stage_out": 1455695627
+            }, 
+            "workerid": "0216-3705480-000000:000000", 
+            "host": "gordon", 
+            "blockid": "0216-3705480-000000", 
+            "jobid": "sleep-z7khjulm"
+        }, 
+        "R-2-25-1455673030500": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694651, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695631, 
+                "submitted": 1455694651, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-x7khjulm"
+        }, 
+        "R-2-17-1455673030492": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694631, 
+                "failed": null, 
+                "stage_in": 1455694726, 
+                "unknown": null, 
+                "completed": 1455695627, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694726, 
+                "stage_out": 1455695626
+            }, 
+            "workerid": "0216-3705480-000000:000000", 
+            "host": "gordon", 
+            "blockid": "0216-3705480-000000", 
+            "jobid": "sleep-q7khjulm"
+        }, 
+        "R-2-29-1455673030523": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694668, 
+                "failed": null, 
+                "stage_in": 1455694726, 
+                "unknown": null, 
+                "completed": 1455695627, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694727, 
+                "stage_out": 1455695627
+            }, 
+            "workerid": "0216-3705480-000000:000000", 
+            "host": "gordon", 
+            "blockid": "0216-3705480-000000", 
+            "jobid": "sleep-38khjulm"
+        }, 
+        "R-2-13-1455673030522": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694668, 
+                "failed": null, 
+                "stage_in": 1455694755, 
+                "unknown": null, 
+                "completed": 1455695656, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694756, 
+                "stage_out": 1455695656
+            }, 
+            "workerid": "0216-3707310-000001:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000001", 
+            "jobid": "sleep-i7khjulm"
+        }, 
+        "R-2-3-1455673030485": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694651, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695631, 
+                "submitted": 1455694651, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-b7khjulm"
+        }, 
+        "R-2-6-1455673030487": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694631, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695631, 
+                "submitted": 1455694651, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-m7khjulm"
+        }, 
+        "R-2-8-1455673030520": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694668, 
+                "failed": null, 
+                "stage_in": 1455694726, 
+                "unknown": null, 
+                "completed": 1455695627, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694727, 
+                "stage_out": 1455695627
+            }, 
+            "workerid": "0216-3705480-000000:000000", 
+            "host": "gordon", 
+            "blockid": "0216-3705480-000000", 
+            "jobid": "sleep-d7khjulm"
+        }, 
+        "R-2-11-1455673030499": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694651, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695631, 
+                "submitted": 1455694651, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-f7khjulm"
+        }, 
+        "R-2-20-1455673030494": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694631, 
+                "failed": null, 
+                "stage_in": 1455694726, 
+                "unknown": null, 
+                "completed": 1455695627, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694726, 
+                "stage_out": 1455695626
+            }, 
+            "workerid": "0216-3705480-000000:000000", 
+            "host": "gordon", 
+            "blockid": "0216-3705480-000000", 
+            "jobid": "sleep-r7khjulm"
+        }, 
+        "R-2-9-1455673030486": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694651, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695631, 
+                "submitted": 1455694651, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-e7khjulm"
+        }, 
+        "R-2-5-1455673030493": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694651, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695631, 
+                "submitted": 1455694651, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-h7khjulm"
+        }, 
+        "R-2-15-1455673030502": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694651, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695631, 
+                "submitted": 1455694651, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-j7khjulm"
+        }, 
+        "R-2-28-1455673030510": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694651, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695631, 
+                "submitted": 1455694651, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-28khjulm"
+        }, 
+        "R-2-24-1455673030496": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694631, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695631, 
+                "submitted": 1455694651, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-v7khjulm"
+        }, 
+        "R-2x2-1455673030505": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694651, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695631, 
+                "submitted": 1455694651, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-a7khjulm"
+        }, 
+        "R-2-7-1455673030483": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694631, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695631, 
+                "submitted": 1455694651, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-k7khjulm"
+        }, 
+        "R-2-18-1455673030531": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694668, 
+                "failed": null, 
+                "stage_in": 1455694726, 
+                "unknown": null, 
+                "completed": 1455695627, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694727, 
+                "stage_out": 1455695627
+            }, 
+            "workerid": "0216-3705480-000000:000000", 
+            "host": "gordon", 
+            "blockid": "0216-3705480-000000", 
+            "jobid": "sleep-48khjulm"
+        }, 
+        "R-2-19-1455673030482": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694651, 
+                "failed": null, 
+                "stage_in": 1455694726, 
+                "unknown": null, 
+                "completed": 1455695627, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694727, 
+                "stage_out": 1455695627
+            }, 
+            "workerid": "0216-3705480-000000:000000", 
+            "host": "gordon", 
+            "blockid": "0216-3705480-000000", 
+            "jobid": "sleep-o7khjulm"
+        }, 
+        "R-2-22-1455673030527": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694668, 
+                "failed": null, 
+                "stage_in": 1455694726, 
+                "unknown": null, 
+                "completed": 1455695627, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694727, 
+                "stage_out": 1455695627
+            }, 
+            "workerid": "0216-3705480-000000:000000", 
+            "host": "gordon", 
+            "blockid": "0216-3705480-000000", 
+            "jobid": "sleep-t7khjulm"
+        }, 
+        "R-2-30-1455673030521": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694668, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695632, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-08khjulm"
+        }, 
+        "R-2-1-1455673030529": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694668, 
+                "failed": null, 
+                "stage_in": 1455694755, 
+                "unknown": null, 
+                "completed": 1455695657, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694756, 
+                "stage_out": 1455695656
+            }, 
+            "workerid": "0216-3707310-000001:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000001", 
+            "jobid": "sleep-97khjulm"
+        }, 
+        "R-2-10-1455673030488": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694651, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695631, 
+                "submitted": 1455694651, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-g7khjulm"
+        }, 
+        "R-2-0-1455673030511": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694651, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695631, 
+                "submitted": 1455694651, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-87khjulm"
+        }, 
+        "R-2-31-1455673030525": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694668, 
+                "failed": null, 
+                "stage_in": 1455694726, 
+                "unknown": null, 
+                "completed": 1455695627, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694727, 
+                "stage_out": 1455695627
+            }, 
+            "workerid": "0216-3705480-000000:000000", 
+            "host": "gordon", 
+            "blockid": "0216-3705480-000000", 
+            "jobid": "sleep-18khjulm"
+        }, 
+        "R-2-12-1455673030515": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694651, 
+                "failed": null, 
+                "stage_in": 1455694726, 
+                "unknown": null, 
+                "completed": 1455695627, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694727, 
+                "stage_out": 1455695627
+            }, 
+            "workerid": "0216-3705480-000000:000000", 
+            "host": "gordon", 
+            "blockid": "0216-3705480-000000", 
+            "jobid": "sleep-n7khjulm"
+        }, 
+        "R-2-26-1455673030513": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694651, 
+                "failed": null, 
+                "stage_in": 1455694726, 
+                "unknown": null, 
+                "completed": 1455695627, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694726, 
+                "stage_out": 1455695626
+            }, 
+            "workerid": "0216-3705480-000000:000000", 
+            "host": "gordon", 
+            "blockid": "0216-3705480-000000", 
+            "jobid": "sleep-y7khjulm"
+        }, 
+        "R-2-16-1455673030491": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694631, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695631, 
+                "submitted": 1455694651, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-p7khjulm"
+        }, 
+        "R-2-23-1455673030489": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694631, 
+                "failed": null, 
+                "stage_in": 1455694726, 
+                "unknown": null, 
+                "completed": 1455695627, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694726, 
+                "stage_out": 1455695626
+            }, 
+            "workerid": "0216-3705480-000000:000000", 
+            "host": "gordon", 
+            "blockid": "0216-3705480-000000", 
+            "jobid": "sleep-u7khjulm"
+        }, 
+        "R-2-4-1455673030503": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694651, 
+                "failed": null, 
+                "stage_in": 1455694726, 
+                "unknown": null, 
+                "completed": 1455695627, 
+                "submitted": 1455694668, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694726, 
+                "stage_out": 1455695626
+            }, 
+            "workerid": "0216-3705480-000000:000000", 
+            "host": "gordon", 
+            "blockid": "0216-3705480-000000", 
+            "jobid": "sleep-c7khjulm"
+        }, 
+        "R-2-14-1455673030484": {
+            "states": {
+                "resumed": null, 
+                "submitting": 1455694651, 
+                "failed": null, 
+                "stage_in": 1455694731, 
+                "unknown": null, 
+                "completed": 1455695631, 
+                "submitted": 1455694651, 
+                "unsubmitted": null, 
+                "canceled": null, 
+                "suspended": null, 
+                "active": 1455694731, 
+                "stage_out": 1455695631
+            }, 
+            "workerid": "0216-3707310-000000:000000", 
+            "host": "stampede", 
+            "blockid": "0216-3707310-000000", 
+            "jobid": "sleep-l7khjulm"
+        }
+    }
+}
