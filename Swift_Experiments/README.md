@@ -69,13 +69,18 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
 
 ## Data Analysis Workflow
 
-The analysis wrokflow is designed to be automated, reusable, and extensible. The wrokflow incrementally integrates new data to those previously collected. Raw, wrangled, and analysis data are all kept across runs preserving the reproducibility of the analysis and (to a certain extent) the provenance of the data. When needed, new analyses can be added to a single step of the workflow without altering the other steps.
+The analysis wrokflow is designed to be automated, reusable, and extensible. The wrokflow incrementally integrates new data to those previously collected. Raw, wrangled, and analysed data are all kept across runs preserving the reproducibility and (to a certain extent) provenance. When needed, new analyses can be added to a single step of the workflow without altering the other steps.
 
-1. Prerequisites: python and Bash on Linux or OSX.
+Experiments are categorized by execution strategy. Experiments runs are repeated multiple times for each strategy, as needed by error bars or analytical results. Currently, we have 4 strategies:
 
-1. Raw data are kept in the directory ```raw_data/name_of_resource(s)/exp-xxx```. Raw data are **NOT** uploaded to git dur to space limitations. Raw data are tarred and b2zipped into a single file for archive purposes.
+1. [strategy_1](strategy_1): BoT [8, 32, 256, 2048](strategy_1/swift.conf); 15 minutes long tasks; max 20 16-cores pilots; 0:25:00 walltime; 16 cores workers.
+2. [strategy_2](strategy_2): BoT [32](strategy_2/swift-32.conf), [128](strategy_2/swift-128.conf), [512](strategy_2/swift-512.conf), [1024](strategy_2/swift-1024.conf), [2048](strategy_2/swift-2048.conf); 30 minutes long tasks; max 1, 4, 16, 16, 16, 16-cores pilots; 1:15:00, 2:15:00, 4:15:00 walltime; 16 cores workers.
+3. [strategy_3](strategy_3): BoT 32, 128, 512, 1024, 2048; max 1 16, 64, 256, 512, 1024-cores pilot; 1:15:00 walltime; 16 cores workers.
+4. [strategy_4](strategy_4): BoT 32, 128, 512, 1024, 2048; swift free to decide.
 
-1. Data wrangling. Raw data are recorded in ```swift.log```. Here an cleaned up sample of the logs for a task execution:
+### Data Model ###
+
+Data wrangling. Raw data are recorded in ```swift.log```. Here a cleaned up sample of the logs for a task execution:
 
   ```
   22:57:48,775 JOB_INIT           swift            jobid=sleep-koblgxkm
@@ -238,7 +243,48 @@ The analysis wrokflow is designed to be automated, reusable, and extensible. The
   NOTE: This state diagram repeats for every resource with or without temporal
         overlapping.
   ```
-  The following filters the log file calculating the timings for each relevant event. Each event is delimited by a state transition:
+
+### Data Filtering ###
+
+1. Prerequisites: python and Bash on Linux or OSX.
+
+1. Directory structure:
+  ```
+  ./
+   |
+   +-- plots/
+   |    |
+   |    +-- <timing>_<host(s)>.pdf: plot of a timing measured across BoTs.
+   |    +-- <...>_paper.pdf: plot used in the paper.
+   +-- strategy_#/
+        |
+        +-- experiment.sh: runs # iteration of each BoT
+        +-- runner.sh: execute swift with each BoT and the corresponding conf file
+        +-- raw_data/
+        |    |
+        |    +-- stampede/
+        |    |    |
+        |    |    +-- stampede.tar.bz2: tarred/compressed raw data (exp-###)
+        |    +-- stampede_gordon/
+        |         |
+        |         +-- stampede_gordon.tar.bz2: tarred/compressed raw data (exp-###)
+        +-- analysis/
+             |
+             +-- stampede/
+             |    |
+             |    +-- exp-###-timings.json: file with the timestamps of all the states of tasks, pilots, workers
+             |    +-- P<initial>-<description>-<host>.csv: property file
+             |    +-- T<initial>-<description>-<host>.csv: timing file
+             +-- stampede_gordon/
+                  |
+                  +-- exp-###-timings.json: file with the timestamps of all the states of tasks, pilots, workers
+                  +-- P<initial>-<description>-<host>.csv: property file
+                  +-- T<initial>-<description>-<host>.csv: timing file
+ ```
+
+1. Raw data are kept in the directory ```raw_data/name_of_resource(s)/exp-xxx```. Raw data are **NOT** uploaded to git due to space limitations. Raw data are tarred and b2zipped into a single file for archive purposes.
+
+1. The following filters the log file calculating the timings for each relevant event. Each event is delimited by a state transition:
 
    ```
    for d in `find . -iname "exp-*"`; do echo "python ../../bin/swift-timestamps.py $d/swift.log $d/timings.json"; python ../../bin/swift-timestamps.py $d/swift.log $d/timings.json; done
@@ -249,12 +295,13 @@ The analysis wrokflow is designed to be automated, reusable, and extensible. The
   ```
   for d in `find . -iname "exp-*"`; do cp $d/durations.json ../../analysis/stampede_gordon/$d-timings.json; done
   ```
+### Data Analysis ###
 
-1. Run the analusis on the wrangled data:
+1. Run the analysis on the wrangled data:
 
   ```
   cd ../../analysis/stampede_gordon/
   python ../../bin/swift-timings.py .
   ```
 
-1. Analysis data are collected into files, each file named as the timing measured. At the moment, we measure only time to completion (TTC), so ```swift-timings.py``` saves ttc for each run in the indicated directory to a file named ```TTC.csv```. The csv file contains a first raw with the size of the bag run by the experiment and then raws of data for each size of the bag. The csv files can be further aggregated/filtered to produce the desired diagrams.
+1. Analysis data are collected into properties and timings files, each file named as the property or timing measured.
