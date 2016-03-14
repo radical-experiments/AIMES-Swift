@@ -489,7 +489,7 @@ def write_timings_csv(elements, names):
 # -----------------------------------------------------------------------------
 def aggregate_timings(elements, ranges):
     '''
-    timings
+    elements
     --------
     type:    {'name': {'ntasks': {'host': [int, ...], host: [int, ...], ...}}}
     example: {'Pw': {'2048' : {'stampede': [66], 'gordon': [63]}}}
@@ -593,17 +593,13 @@ def aggregate_timings(elements, ranges):
     # TTC is recorded from session, not by aggregation. In
     # this way we can control that the sum of the other
     # timings is consistent with the directly observed TTC.
-    # if name == 'TTC':
-    #     elements[name][ntask][hostnames][idx] = elements[name][ntask][host][idx]
     for name, ntasks in elements.iteritems():
         if name == 'TTC':
             for ntask, hosts in ntasks.iteritems():
                 for host, measurements in hosts.iteritems():
-                    for idx, measurement in enumerate(elements[name][ntask][hostnames]):
-                        elements[name][ntask][hostnames][idx] = elements[name][ntask][host][idx]
+                    if host != hostnames:
+                        elements[name][ntask][hostnames] = measurements
 
-    if DEBUG:
-        print "\nAdd TTC"
     return elements
 
 
