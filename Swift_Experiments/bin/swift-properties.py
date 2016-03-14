@@ -13,7 +13,7 @@ __author__ = "Matteo Turilli"
 __copyright__ = "Copyright 2015, The AIMES Project"
 __license__ = "MIT"
 
-DEBUG = True
+DEBUG = False
 
 
 # -----------------------------------------------------------------------------
@@ -161,8 +161,6 @@ def aggregate_properties(elements):
                         # Total number of blocks, workers, and tasks.
                         if name in ['Pb', 'Pw', 'Pt']:
                             elements[name][ntask][hostnames][idx] += measurement
-
-                        print elements[name][ntask][hostnames][idx]
 
     return elements
 
