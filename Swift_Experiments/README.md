@@ -310,10 +310,16 @@ Data wrangling. Raw data are recorded in ```swift.log```. Here a cleaned up samp
 
 ### Data Analysis ###
 
-1. Run the analysis on the wrangled data:
+1. Derive properties from wrangled data:
 
   ```
   cd ../../analysis/stampede_gordon/
+  python ../../../bin/swift-properties.py .
+  ```
+
+1. Derive timings from wrangled data:
+
+  ```
   python ../../../bin/swift-timings.py .
   ```
 
