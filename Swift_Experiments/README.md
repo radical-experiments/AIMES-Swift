@@ -299,13 +299,13 @@ Data wrangling. Raw data are recorded in ```swift.log```. Here a cleaned up samp
 1. The following filters the log file calculating the timings for each relevant event. Each event is delimited by a state transition:
 
    ```
-   for d in `find . -iname "exp-*"`; do echo "python ../../bin/swift-timestamps.py $d/swift.log $d/timings.json"; python ../../bin/swift-timestamps.py $d/swift.log $d/timings.json; done
+   for d in `find . -iname "exp-*"`; do echo "python ../../../bin/swift-timestamps.py $d/swift.log $d/timings.json"; python ../../../bin/swift-timestamps.py $d/swift.log $d/timings.json; done
    ```
 
 1. Copy wrangled data to the analysis directory:
 
   ```
-  for d in `find . -iname "exp-*"`; do cp $d/durations.json ../../analysis/stampede_gordon/$d-timings.json; done
+  for d in `find . -iname "exp-*"`; do cp $d/timings.json ../../analysis/stampede_gordon/$d-timings.json; done
   ```
 
 ### Data Analysis ###
@@ -314,7 +314,7 @@ Data wrangling. Raw data are recorded in ```swift.log```. Here a cleaned up samp
 
   ```
   cd ../../analysis/stampede_gordon/
-  python ../../bin/swift-timings.py .
+  python ../../../bin/swift-timings.py .
   ```
 
 1. Analysis data are collected into properties and timings files, each file named as the property or timing measured.
