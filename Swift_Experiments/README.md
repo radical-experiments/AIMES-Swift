@@ -241,13 +241,13 @@ The analysis wrokflow is designed to be automated, reusable, and extensible. The
   The following filters the log file calculating the timings for each relevant event. Each event is delimited by a state transition:
 
    ```
-   for d in `find . -iname "exp-*"`; do echo "python ../../bin/swift-timestamps.py $d/swift.log $d/durations.json"; python ../../bin/swift-timestamps.py $d/swift.log $d/durations.json; done
+   for d in `find . -iname "exp-*"`; do echo "python ../../bin/swift-timestamps.py $d/swift.log $d/timings.json"; python ../../bin/swift-timestamps.py $d/swift.log $d/timings.json; done
    ```
 
 1. Copy wrangled data to the analysis directory:
 
   ```
-  for d in `find . -iname "exp-*"`; do cp $d/durations.json ../../analysis/stampede_gordon/$d-durations.json; done
+  for d in `find . -iname "exp-*"`; do cp $d/durations.json ../../analysis/stampede_gordon/$d-timings.json; done
   ```
 
 1. Run the analusis on the wrangled data:
