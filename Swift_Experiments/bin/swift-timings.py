@@ -14,7 +14,7 @@ __author__ = "Matteo Turilli"
 __copyright__ = "Copyright 2015, The AIMES Project"
 __license__ = "MIT"
 
-DEBUG = False
+DEBUG = True
 
 
 # -----------------------------------------------------------------------------
