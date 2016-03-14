@@ -7,6 +7,41 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
 * [Experimental Workflow](#experimental-workflow)
 * [Data Analysis Workflow](#data-analysis-workflow)
 
+Directory structure:
+  ```
+  ./
+   |
+   +-- plots/
+   |    |
+   |    +-- <timing>_<host(s)>.pdf: plot of a timing measured across BoTs.
+   |    +-- <...>_paper.pdf: plot used in the paper.
+   +-- strategy_#/
+        |
+        +-- experiment.sh: runs # iteration of each BoT
+        +-- runner.sh: execute swift with each BoT and the corresponding conf file
+        +-- raw_data/
+        |    |
+        |    +-- stampede/
+        |    |    |
+        |    |    +-- stampede.tar.bz2: tarred/compressed raw data (exp-###)
+        |    +-- stampede_gordon/
+        |         |
+        |         +-- stampede_gordon.tar.bz2: tarred/compressed raw data (exp-###)
+        +-- analysis/
+             |
+             +-- stampede/
+             |    |
+             |    +-- exp-###-timings.json: file with the timestamps of all the states of tasks, pilots, workers
+             |    +-- P<initial>-<description>-<host>.csv: property file
+             |    +-- T<initial>-<description>-<host>.csv: timing file
+             +-- stampede_gordon/
+                  |
+                  +-- exp-###-timings.json: file with the timestamps of all the states of tasks, pilots, workers
+                  +-- P<initial>-<description>-<host>.csv: property file
+                  +-- T<initial>-<description>-<host>.csv: timing file
+ ```
+
+
 ## Experimental Workflow
 
 1. Prerequisites:
@@ -36,9 +71,9 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
 
 1. Set up experiment environment: To run swift only experiments, ensure that you have ssh keys setup to allow for passwordless access to stampede and gordon. You should be able to ssh to ```stampede.tacc.utexas.edu``` and ```gordon.sdsc.edu```, without a password prompt.
 
-1. ```cd AIMES-Swift/Swift_Experiments``` and edit the following files:
+1. ```cd AIMES-Swift/Swift_Experiments/strategy_#``` and edit the following files:
 
-  * ```swift.conf``` and set the sites where you want to run your experiment(s). For example:
+  * ```swift-<BoT>.conf``` and set the sites where you want to run your experiment(s). For example:
     
     ```
     sites: [stampede, gordon]  # runs both sites
@@ -54,17 +89,28 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
   * ```runner.sh``` and set:
   
     ```
-    TESTLOG=test_$(date +%Y-%m-%d:%H:%M:%S).log # The name of the run log file
+    LOG=test_$(date +%Y-%m-%d:%H:%M:%S).log # The name of the run log file
     SLEEPDUR=900                                # Task duration
     EMAIL_TO="matteo.turilli@gmail.com"         # E-mail where to send exec report
     EMAIL_FROM="matteo.turilli@gmail.com"
+    
+    arg_generate_experiment()
+    {
+    cat <<EOF | shuf &> task.count
+    32
+    128
+    512
+    1024
+    2048
+    EOF
+    }
     ```
 
 1. Run the experiments:
 
   ```
   export GLOBUS_HOSTNAME="YOUR_IP"
-  ./test_runner_runner.sh
+  ./runner.sh
   ```
 
 ## Data Analysis Workflow
@@ -247,40 +293,6 @@ Data wrangling. Raw data are recorded in ```swift.log```. Here a cleaned up samp
 ### Data Filtering ###
 
 1. Prerequisites: python and Bash on Linux or OSX.
-
-1. Directory structure:
-  ```
-  ./
-   |
-   +-- plots/
-   |    |
-   |    +-- <timing>_<host(s)>.pdf: plot of a timing measured across BoTs.
-   |    +-- <...>_paper.pdf: plot used in the paper.
-   +-- strategy_#/
-        |
-        +-- experiment.sh: runs # iteration of each BoT
-        +-- runner.sh: execute swift with each BoT and the corresponding conf file
-        +-- raw_data/
-        |    |
-        |    +-- stampede/
-        |    |    |
-        |    |    +-- stampede.tar.bz2: tarred/compressed raw data (exp-###)
-        |    +-- stampede_gordon/
-        |         |
-        |         +-- stampede_gordon.tar.bz2: tarred/compressed raw data (exp-###)
-        +-- analysis/
-             |
-             +-- stampede/
-             |    |
-             |    +-- exp-###-timings.json: file with the timestamps of all the states of tasks, pilots, workers
-             |    +-- P<initial>-<description>-<host>.csv: property file
-             |    +-- T<initial>-<description>-<host>.csv: timing file
-             +-- stampede_gordon/
-                  |
-                  +-- exp-###-timings.json: file with the timestamps of all the states of tasks, pilots, workers
-                  +-- P<initial>-<description>-<host>.csv: property file
-                  +-- T<initial>-<description>-<host>.csv: timing file
- ```
 
 1. Raw data are kept in the directory ```raw_data/name_of_resource(s)/exp-xxx```. Raw data are **NOT** uploaded to git due to space limitations. Raw data are tarred and b2zipped into a single file for archive purposes.
 
