@@ -103,45 +103,46 @@ foreach i in [1:N] {
 # Stage 3
 #
 app (file[] output_3_1) stage_3 (file   input_shared_1_3, 
-                               file[] output_2_2)
+                                 file[] output_2_2)
 {
     # N cores
     stage_3_exe filename(input_shared_1_3) 
-                filename(output_2_2);
+                @output_2_2;
 }
 
-file output_3_1[];  # N output files
-foreach i in [1:1] { 
+string[] output_3_1_s;
+foreach i in [1:N] {
+    output_3_1_s[i] = strcat("output_3_1_",i,".txt");
+}
+file[] output_3_1 <array_mapper; files=output_3_1_s>;
 
-    foreach j in [1:N] { 
-        file output_3_1_i <single_file_mapper; file=strcat("output_3_1_",j,".txt")>;
-    }
+output_3_1 = stage_3(input_shared_1_3,
+                     output_2_2);
+
+
+# -----------------------------------------------------------------------------
+#
+# Stage 4
+#
+app (file output_4_1_i) stage_4 (int    i, 
+                                 file   input_shared_1_5, 
+                                 file[] output_3_1)
+{
+    # 1 core
+    stage_4_exe i filename(input_shared_1_5) 
+                  @output_3_1;
+}
+file output_4_1[];  # N output files
+foreach i in [1:N] {
+
+    file output_4_1_i  <single_file_mapper; file=strcat("output_4_1_",i,".txt")>;
     
-    output_3_1 = stage_3(input_shared_1_3,
-                         output_2_2);
+    output_4_1_i  = stage_4(i, 
+                            input_shared_1_5,
+                            output_3_1);
+    output_4_1[i] = output_4_1_i;
 }
 
 
-# # -----------------------------------------------------------------------------
-# #
-# # Stage 4
-# #
-# app (file output_4_1_i) stage_4 (file input_shared_1_5, 
-#                                  file output_3_1_i)
-# {
-#     # 1 core
-#     stage_4_exe filename(input_shared_1_5) 
-#                 filename(output_3_1_i);
-# }
-# file output_4_1[];  # N output files
-# foreach i in [1:1] {
-# 
-#     file output_4_1  <single_file_mapper; file=strcat("output_4_1_",i,".txt")>;
-#     
-#     output_4_1      = stage_2(input_shared_1_5,
-#                               output_3_1);
-# }
-# 
-# 
-# # -----------------------------------------------------------------------------
-# 
+# -----------------------------------------------------------------------------
+
