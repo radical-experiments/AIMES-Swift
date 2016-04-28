@@ -21,9 +21,11 @@ foreach i in [1:count] {
     file sorted     <single_file_mapper; file=strcat("sorted.",i,".txt")>;
     sorted          = sort(unsorted);
     sorted_all[i]   = sorted;
+
 }
 
 foreach i in [1:count] {
+
     file reversed   <single_file_mapper; file=strcat("reversed.",i,".txt")>;
     
     reversed        = reverse(sorted_all[i]);
