@@ -70,11 +70,7 @@ done
 
 # ------------------------------------------------------------------------------
 # STAGE 3
-IDX=0
-while test $IDX -lt 1
-do
-    IDX=$((IDX+1))
-    
+{
     OUTPUT_2_2=""
     J=1
     while test $J -le $N
@@ -85,8 +81,8 @@ do
 
     OUTPUT_3_1="output_3_1.txt"
 
-    ./stage_3.sh $IDX $INPUT_SHARED_1_3 \
-                      $OUTPUT_2_2
+    ./stage_3.sh $INPUT_SHARED_1_3 \
+                 $OUTPUT_2_2
 
     J=1
     while test $J -le $N
@@ -96,6 +92,6 @@ do
         J=$((J+1))
     done
 
-    echo "stage 3 done $IDX"
-done
+    echo "stage 3 done 1"
+}
 
