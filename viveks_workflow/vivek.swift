@@ -102,8 +102,8 @@ foreach i in [1:N] {
 #
 # Stage 3
 #
-app (file output_3_1_i) stage_3 (file   input_shared_1_3, 
-                                 file[] output_2_2)
+app (file[] output_3_1) stage_3 (file   input_shared_1_3, 
+                               file[] output_2_2)
 {
     # N cores
     stage_3_exe filename(input_shared_1_3) 
