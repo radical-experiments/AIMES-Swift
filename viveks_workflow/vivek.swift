@@ -24,33 +24,33 @@ app (file output_1_1_i,
                   filename(input_shared_1_5);
 }
 
-file input_shared_1_1  <"input_shared_1_1.txt">;
-file input_shared_1_2  <"input_shared_1_2.txt">;
-file input_shared_1_3  <"input_shared_1_3.txt">;
-file input_shared_1_4  <"input_shared_1_4.txt">;
-file input_shared_1_5  <"input_shared_1_5.txt">;
+file input_shared_1_1 <"input_shared_1_1.txt">;
+file input_shared_1_2 <"input_shared_1_2.txt">;
+file input_shared_1_3 <"input_shared_1_3.txt">;
+file input_shared_1_4 <"input_shared_1_4.txt">;
+file input_shared_1_5 <"input_shared_1_5.txt">;
 
 file output_1_1[];
 file output_1_2[];
 file output_1_3[];
 
 foreach i in [1:N] {
-    file output_1_1_i      <single_file_mapper; file=strcat("output_1_1_",i,".txt")>;
-    file output_1_2_i      <single_file_mapper; file=strcat("output_1_2_",i,".txt")>;
-    file output_1_3_i      <single_file_mapper; file=strcat("output_1_3_",i,".txt")>;
+    file output_1_1_i <single_file_mapper; file=strcat("output_1_1_",i,".txt")>;
+    file output_1_2_i <single_file_mapper; file=strcat("output_1_2_",i,".txt")>;
+    file output_1_3_i <single_file_mapper; file=strcat("output_1_3_",i,".txt")>;
 
     (output_1_1_i, 
      output_1_2_i, 
-     output_1_3_i)  = stage_1(i, 
-                              input_shared_1_1, 
-                              input_shared_1_2, 
-                              input_shared_1_3,
-                              input_shared_1_4,
-                              input_shared_1_5);
+     output_1_3_i) = stage_1(i, 
+                             input_shared_1_1, 
+                             input_shared_1_2, 
+                             input_shared_1_3,
+                             input_shared_1_4,
+                             input_shared_1_5);
 
-    output_1_1[i]   = output_1_1_i;
-    output_1_2[i]   = output_1_2_i;
-    output_1_3[i]   = output_1_3_i;
+    output_1_1[i] = output_1_1_i;
+    output_1_2[i] = output_1_2_i;
+    output_1_3[i] = output_1_3_i;
 }
 
 
@@ -86,15 +86,15 @@ foreach i in [1:N] {
     (output_2_1_i, 
      output_2_2_i, 
      output_2_3_i, 
-     output_2_4_i)  = stage_2(i,
-                              input_shared_1_3,
-                              input_shared_1_4,
-                              output_1_1[i]);
+     output_2_4_i) = stage_2(i,
+                             input_shared_1_3,
+                             input_shared_1_4,
+                             output_1_1[i]);
 
-    output_2_1[i]   = output_2_1_i;
-    output_2_2[i]   = output_2_2_i;
-    output_2_3[i]   = output_2_3_i;
-    output_2_4[i]   = output_2_4_i;
+    output_2_1[i] = output_2_1_i;
+    output_2_2[i] = output_2_2_i;
+    output_2_3[i] = output_2_3_i;
+    output_2_4[i] = output_2_4_i;
 }
 
 
@@ -135,7 +135,7 @@ app (file output_4_1_i) stage_4 (int    i,
 file output_4_1[];  # N output files
 foreach i in [1:N] {
 
-    file output_4_1_i  <single_file_mapper; file=strcat("output_4_1_",i,".txt")>;
+    file output_4_1_i <single_file_mapper; file=strcat("output_4_1_",i,".txt")>;
     
     output_4_1_i  = stage_4(i, 
                             input_shared_1_5,
