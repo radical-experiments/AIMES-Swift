@@ -1,11 +1,6 @@
 #!/bin/sh
 
-set -x
-echo "args: $*"
-
 INPUT_SHARED_1_3=$1; shift
-
-echo " === $INPUT_SHARED_1_3"
 
 IDX=0
 while ! test -z "$1"
