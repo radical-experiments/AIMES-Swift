@@ -95,3 +95,23 @@ done
     echo "stage 3 done 1"
 }
 
+# ------------------------------------------------------------------------------
+# STAGE 4
+IDX=0
+while test $IDX -lt $N
+do
+    IDX=$((IDX+1))
+
+    OUTPUT_3_1_I="output_3_1_$IDX.txt"
+    OUTPUT_2_1_I="output_4_1_$IDX.txt"
+
+    ./stage_4.sh $IDX $INPUT_SHARED_1_5 \
+                      $OUTPUT_3_1_I
+
+    test -f $OUTPUT_4_1_I || error 'OUTPUT_4_1_I missing'
+
+    echo "stage 4 done $IDX"
+done
+
+# ------------------------------------------------------------------------------
+

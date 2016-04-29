@@ -17,7 +17,6 @@ do
         OUTPUT_3_1_I="output_3_1_$IDX.txt"
 
         cat $OUTPUT_2_2_I >> "$OUTPUT_3_1_I"; echo "3:1,$IDX" >> "$OUTPUT_3_1_I"
-        echo "$OUTPUT_2_2_I---------- $OUTPUT_3_1_I"
     done
     shift
 done
