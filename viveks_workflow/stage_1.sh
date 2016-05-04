@@ -11,9 +11,11 @@ OUTPUT_1_1_I="output_1_1_$IDX.txt"
 OUTPUT_1_2_I="output_1_2_$IDX.txt"
 OUTPUT_1_3_I="output_1_3_$IDX.txt"
 
-cp "$INPUT_SHARED_1_1" "$OUTPUT_1_1_I"; echo "1:$IDX" >> "$OUTPUT_1_1_I"
-cp "$INPUT_SHARED_1_2" "$OUTPUT_1_2_I"; echo "1:$IDX" >> "$OUTPUT_1_2_I"
-cp "$INPUT_SHARED_1_3" "$OUTPUT_1_3_I"; echo "1:$IDX" >> "$OUTPUT_1_3_I"
+cat $INPUT_SHARED_1_1 >> $OUTPUT_1_1_I; echo "1:$IDX" >> $OUTPUT_1_1_I
+cat $INPUT_SHARED_1_2 >> $OUTPUT_1_2_I; echo "1:$IDX" >> $OUTPUT_1_2_I
+cat $INPUT_SHARED_1_3 >> $OUTPUT_1_3_I; echo "1:$IDX" >> $OUTPUT_1_3_I
 
-# sleep 2
+. $HOME/bin.rp/ve/bin/activate
+
+radical-synapse-sample -f 10000000000
 
