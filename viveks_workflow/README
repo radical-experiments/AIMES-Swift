@@ -1,0 +1,13 @@
+
+execution toward stampede:
+
+  - ssh stampede
+  - mkdir $HOME/bin.rp/
+  - virtualenv $HOME/bin.rp/ve
+  - source !$/ve/bin/activate
+  - pip install radical.synapse
+  - exit
+  - scp stage*.sh @stampede:bin.rp/
+  - (second terminal) aimes-emgr-rest experiment.json
+  - swift vivek.swift
+
