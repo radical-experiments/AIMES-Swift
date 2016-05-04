@@ -7,7 +7,9 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
 * [Data Analysis Workflow](#data-analysis-workflow)
 
 ## Experimental Workflow
-1. Prerequisites: Python 2.7; ant; pip; git
+1. Prerequisites: 
+    - Python 2.7; ant; pip; git
+    - OSX: brew install pkg-config libffi openssl
 1. Clone this repository:
 
   ```
@@ -28,7 +30,7 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
   virtualenv ~/ve/aimes-swift-experiments
   . ~/ve/aimes-swift-experiments/bin/activate
   cd aimes.emgr; git checkout devel; pip install -U .; cd -
-  cd aimes.bundle; pip install -U .; cd -
+  cd aimes.bundle; env LDFLAGS="-L$(brew --prefix openssl)/lib" CFLAGS="-I$(brew --prefix openssl)/include" pip install -U .; cd -
   pip install pandas
   ```
 
