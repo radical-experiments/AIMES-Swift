@@ -9,14 +9,14 @@
     "cores"        : [1],
     "overlay_reuse": "True",
     "project_ids": {
-        "xsede.stampede"  : "TG-MCB090174",
-        "ncsa.bw"         : "gkd"
+       #"xsede.stampede"  : "TG-MCB090174"
+       #"ncsa.bw"         : "gkd",
        #"xsede.trestles"  : "unc100",
        #"xsede.gordon"    : "unc101",
        #"xsede.blacklight": "unc101",
        #"xsede.supermic"  : "TG-CCR140028",
        #"xsede.comet"     : "unc100",
-       #"local.localhost" : ""
+        "local.localhost" : ""
     },
     "log": {
         "media": ["file"],
@@ -49,17 +49,17 @@
               #     "sched": "pbs",
               #     "fconf": "conf/xsede.gordon.json"
               # },
-                "stampede.tacc.xsede.org": {
-                    "sched": "slurm",
-                    "fconf": "conf/xsede.stampede.json"
-                },
-                "bw.ncsa.illinois.edu": {
-                    "sched": "torque",
-                    "fconf": "conf/bw.ncsa.json"
+              # "stampede.tacc.xsede.org": {
+              #     "sched": "slurm",
+              #     "fconf": "conf/xsede.stampede.json"
               # },
-              # "localhost": {
-              #     "sched": "",
-              #     "fconf": "conf/localhost.json"
+              # "bw.ncsa.illinois.edu": {
+              #     "sched": "torque",
+              #     "fconf": "conf/bw.ncsa.json"
+              # },
+                "localhost": {
+                    "sched": "",
+                    "fconf": "conf/localhost.json"
                 }
             }
         }

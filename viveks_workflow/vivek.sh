@@ -19,7 +19,7 @@ test -f $INPPUT_SHARED_1_5 || error 'INPUT_1_5 missing'
 
 # ------------------------------------------------------------------------------
 # STAGE 1
-N=4
+N=128
 IDX=0
 while test $IDX -lt $N
 do
