@@ -19,6 +19,6 @@ done
 
 . $HOME/bin.rp/ve/bin/activate
 
-radical-synapse-sample -f 10000000000
+radical-synapse-sample -f 1000000000000
 
 

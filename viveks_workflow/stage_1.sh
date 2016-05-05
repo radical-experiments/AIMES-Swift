@@ -17,5 +17,5 @@ cat $INPUT_SHARED_1_3 >> $OUTPUT_1_3_I; echo "1:$IDX" >> $OUTPUT_1_3_I
 
 . $HOME/bin.rp/ve/bin/activate
 
-radical-synapse-sample -f 10000000000
+radical-synapse-sample -f 1000000000000
 
