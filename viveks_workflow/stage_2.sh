@@ -17,6 +17,6 @@ cat $OUTPUT_1_1_I     >> $OUTPUT_2_4_I; echo "2:$IDX" >> $OUTPUT_2_4_I
 
 . $HOME/bin.rp/ve/bin/activate
 
-radical-synapse-sample -f 10000000000
+radical-synapse-sample -f 1000000000000
 
 
