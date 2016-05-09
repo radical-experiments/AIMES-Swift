@@ -1,16 +1,20 @@
 #!/bin/sh
 
-IDX=$1
-INPUT_SHARED_1_5=$2
-OUTPUT_3_1_I=$3
+INPUT_SHARED_1_5=$1
+OUTPUT_4_1="output_4_1.txt"
 
-OUTPUT_4_1_I="output_4_1_$IDX.txt"
-
-cat  $INPUT_SHARED_1_5 >> $OUTPUT_4_1_I
-cat  $OUTPUT_3_1_I     >> $OUTPUT_4_1_I
-echo "4:$IDX"          >> $OUTPUT_4_1_I
+IDX=0
+while ! test -z "$1"
+do
+    for f in $1
+    do
+        cat  $f         >> $OUTPUT_4_1
+        echo "4:1,$IDX" >> $OUTPUT_4_1
+    done
+    shift
+done
 
 . $HOME/bin.rp/ve/bin/activate
 
-radical-synapse-sample -f 1000000000000
+radical-synapse-sample -f 10000000000
 

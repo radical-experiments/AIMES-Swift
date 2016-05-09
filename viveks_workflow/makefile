@@ -1,4 +1,4 @@
 
 clean:
-	-@rm -rfv output* rp.session.* run*/ stdout.txt stderr.txt wrapper.log radical.log vivek.swiftx vivek.kml runtime.log
+	-@rm -rfv output* rp.session.* run*/ stdout.txt stderr.txt vivek.swiftx vivek.kml *.log
 
