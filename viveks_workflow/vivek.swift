@@ -124,25 +124,16 @@ output_3_1 = stage_3(input_shared_1_3,
 #
 # Stage 4
 #
-app (file output_4_1_i) stage_4 (int    i, 
-                                 file   input_shared_1_5, 
-                                 file[] output_3_1)
+app (file output_4_1) stage_4 (file   input_shared_1_5, 
+                               file[] output_3_1)
 {
     # 1 core
-    stage_4_exe i filename(input_shared_1_5) 
-                  @output_3_1;
+    stage_4_exe filename(input_shared_1_5) 
+                @output_3_1;
 }
-file output_4_1[];  # N output files
-foreach i in [1:N] {
-
-    file output_4_1_i <single_file_mapper; file=strcat("output_4_1_",i,".txt")>;
-    
-    output_4_1_i  = stage_4(i, 
-                            input_shared_1_5,
-                            output_3_1);
-    output_4_1[i] = output_4_1_i;
-}
-
+file output_4_1  <"output_4_1.txt">;
+output_4_1  = stage_4(input_shared_1_5,
+                      output_3_1);
 
 # -----------------------------------------------------------------------------
 

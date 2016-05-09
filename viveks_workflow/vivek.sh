@@ -79,7 +79,7 @@ done
         J=$((J+1))
     done
 
-    OUTPUT_3_1="output_3_1.txt"
+    OUTPUT_3_1=""
 
     ./stage_3.sh $INPUT_SHARED_1_3 \
                  $OUTPUT_2_2
@@ -90,6 +90,7 @@ done
         OUTPUT_3_1_I="output_3_1_$J.txt"
         test -f $OUTPUT_3_1_I || error 'OUTPUT_3_1_I missing'
         J=$((J+1))
+        OUTPUT_3_1="$OUTPUT_3_1 $OUTPUT_3_1_I"
     done
 
     echo "stage 3 done 1"
@@ -97,21 +98,12 @@ done
 
 # ------------------------------------------------------------------------------
 # STAGE 4
-IDX=0
-while test $IDX -lt $N
-do
-    IDX=$((IDX+1))
+./stage_4.sh $INPUT_SHARED_1_5 \
+             $OUTPUT_3_1
 
-    OUTPUT_3_1_I="output_3_1_$IDX.txt"
-    OUTPUT_2_1_I="output_4_1_$IDX.txt"
+test -f $OUTPUT_4_1 || error 'OUTPUT_4_1 missing'
 
-    ./stage_4.sh $IDX $INPUT_SHARED_1_5 \
-                      $OUTPUT_3_1_I
-
-    test -f $OUTPUT_4_1_I || error 'OUTPUT_4_1_I missing'
-
-    echo "stage 4 done $IDX"
-done
+echo "stage 4 done"
 
 # ------------------------------------------------------------------------------
 
