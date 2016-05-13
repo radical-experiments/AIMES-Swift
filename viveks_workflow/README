@@ -1,16 +1,18 @@
 
 execution toward stampede:
 
- 1. ssh stampede.tacc.xsede.org
- 2. mkdir $HOME/bin.rp/
- 3. module load python
- 4. virtualenv $HOME/bin.rp/ve
- 5. source !$/bin/activate
- 6. pip install radical.synapse
- 7. exit
- 8. scp stage*.sh @stampede.tacc.xsede.org:bin.rp/
- 9. (second terminal) aimes-emgr-rest experiment.json
- 10. swift vivek.swift
+  1. ssh stampede.tacc.xsede.org
+  2. mkdir $HOME/bin.rp/
+  3. module load python
+  4. virtualenv $HOME/bin.rp/ve
+  5. mkdir $HOME/bin.rp/samples
+  6. source !$/bin/activate
+  7. pip install radical.synapse
+  8. exit
+  9. scp stage*.sh @stampede.tacc.xsede.org:bin.rp/
+ 10. scp profiles/* @stampede.tacc.xsede.org:bin.rp/samples/
+ 11. (second terminal) aimes-emgr-rest experiment.json
+ 12. swift vivek.swift
 
 Multi-resource executions:
 
