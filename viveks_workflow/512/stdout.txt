@@ -1,0 +1,36 @@
+samples:
+---
+[['time', 1.0, [0.0]],
+ ['cpu', 1.0, [10000000000.0, 1]],
+ ['sto', 1.0, [0.0, 0.0]],
+ ['mem', 1.0, [0.0]]]
+---
+
+-------------------------
+
+
+emulating 4 samples
+time: [0.0]
+pre 0 : time
+cpu: [10000000000.0, 1]
+ emulate time.0000           : (0.0,)
+pre 1 : cpu
+emulate compute_asm.0000    : (6000000000,)
+ pre 2 : sto
+pre 3 : mememulate storage.0000        : ('/tmp/synapse_storage.in', 0, '/tmp/synapse_storage.11806.out', 0)
+ emulate memory.0000         : (0,)
+
+wai 3 : mem
+idx 3 : mem
+wai   : mem
+emulate memory.0000         : (0,)
+wai   : sto
+wai   : cpu
+wai   : time
+
+-------------------------
+
+
+{'cmd': 'synapse_sampling',
+ 'time': {'real': 1.1215519905090332, 'start': 1462970512.983488}}
+warning: need dburl to store profiles

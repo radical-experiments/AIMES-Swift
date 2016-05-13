@@ -1,0 +1,42 @@
+{
+    "arguments": [
+        "207", 
+        "input_shared_1_1.txt", 
+        "input_shared_1_2.txt", 
+        "input_shared_1_3.txt", 
+        "input_shared_1_4.txt", 
+        "input_shared_1_5.txt"
+    ], 
+    "cores": 1, 
+    "duration": 60, 
+    "executable": "~/bin.rp/stage_1.sh", 
+    "input_staging": [
+        "/Users/mturilli/Projects/RADICAL/github/aimes.swift.experiments/viveks_workflow/512/./input_shared_1_4.txt", 
+        "/Users/mturilli/Projects/RADICAL/github/aimes.swift.experiments/viveks_workflow/512/./input_shared_1_1.txt", 
+        "/Users/mturilli/Projects/RADICAL/github/aimes.swift.experiments/viveks_workflow/512/./input_shared_1_2.txt", 
+        "/Users/mturilli/Projects/RADICAL/github/aimes.swift.experiments/viveks_workflow/512/./input_shared_1_3.txt", 
+        "/Users/mturilli/Projects/RADICAL/github/aimes.swift.experiments/viveks_workflow/512/./input_shared_1_5.txt", 
+        "/Users/mturilli/Projects/RADICAL/github/aimes.swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+        "/Users/mturilli/Projects/RADICAL/github/aimes.swift-k/dist/swift-svn/libexec/_swiftwrap_pre", 
+        "/Users/mturilli/Projects/RADICAL/github/aimes.swift-k/dist/swift-svn/libexec/_swiftwrap_post"
+    ], 
+    "mpi": false, 
+    "name": "emgr.016932.0004:task.000203", 
+    "output_staging": [
+        "wrapper.log", 
+        "output_1_3_207.txt", 
+        "stdout.txt", 
+        "stderr.txt", 
+        "output_1_1_207.txt", 
+        "output_1_2_207.txt"
+    ], 
+    "post_exec": [
+        "bash _swiftwrap_post \"-of\" \"output_1_2_207.txt|output_1_1_207.txt|output_1_3_207.txt\""
+    ], 
+    "pre_exec": [
+        "bash _swiftwrap_pre \"-d\" \"\" \"-if\" \"input_shared_1_5.txt|input_shared_1_4.txt|input_shared_1_1.txt|input_shared_1_2.txt|input_shared_1_3.txt\""
+    ], 
+    "stderr": "stderr.txt", 
+    "stdout": "stdout.txt", 
+    "swift_tid": "stage_1_exe-ol9bhtpm"
+}
