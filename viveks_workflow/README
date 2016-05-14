@@ -1,5 +1,5 @@
 
-execution toward stampede:
+setup execution toward stampede:
 
   1. ssh stampede.tacc.xsede.org
   2. mkdir $HOME/bin.rp/
@@ -11,8 +11,15 @@ execution toward stampede:
   8. exit
   9. scp stage*.sh @stampede.tacc.xsede.org:bin.rp/
  10. scp profiles/* @stampede.tacc.xsede.org:bin.rp/samples/
+ 
+execution toward stampede:
+
  11. (second terminal) aimes-emgr-rest experiment.json
- 12. swift vivek.swift
+ 12. (second terminal) export SAGA_PTY_SSH_TIMEOUT=1000
+ 13. (second terminal) export RADICAL_LOG_TGT=$PWD/rp.log
+ 14. export AIMES_SWIFT_VERBOSE=debug
+ 15. export AIMES_SWIFT_LOG_TGT=$PWDaimes_swift.log
+ 14. swift vivek.swift
 
 Multi-resource executions:
 
