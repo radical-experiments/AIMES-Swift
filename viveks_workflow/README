@@ -1,29 +1,54 @@
 
-execution toward stampede:
+setup execution toward stampede:
 
-  1. ssh stampede.tacc.xsede.org
-  2. mkdir $HOME/bin.rp/
-  3. module load python
-  4. virtualenv $HOME/bin.rp/ve
-  5. mkdir $HOME/bin.rp/samples
-  6. source !$/bin/activate
-  7. pip install radical.synapse
-  8. exit
-  9. scp stage*.sh @stampede.tacc.xsede.org:bin.rp/
- 10. scp profiles/* @stampede.tacc.xsede.org:bin.rp/samples/
- 11. (second terminal) aimes-emgr-rest experiment.json
- 12. swift vivek.swift
+   1.   ssh stampede.tacc.xsede.org
+   2.   mkdir $HOME/bin.rp/
+   3.   module load python
+   4.   virtualenv $HOME/bin.rp/ve
+   5.   mkdir $HOME/bin.rp/samples
+   6.   source !$/bin/activate
+   7.   pip install radical.synapse
+   8.   exit
+   9.   scp stage*.sh @stampede.tacc.xsede.org:bin.rp/
+  10.   scp profiles/* @stampede.tacc.xsede.org:bin.rp/samples/
+ 
+execution emgr (dedicated terminal):
+
+   1.   git clone git@github.com:radical-cybertools/aimes.emgr.git
+   2.   git checkout feature/ovrlay_reuse
+   3.   pip install .
+   3.   git clone git@github.com:radical-cybertools/aimes.bundle.git
+   4.   pip install . (careful for paramiko failure. It needs openssl.h)
+   5.   git clone git@github.com:radical-cybertools/radical.utils.git
+   6.   git checkout devel
+   7.   pip install .
+   8.   Set appropriate queue time editing src/aimes/emgr/strategy.py#L199
+   9.   pip install --upgrade .
+  10.   export SAGA_PTY_SSH_TIMEOUT=1000
+  11.   export RADICAL_LOG_TGT=$PWD/rp.log
+  12.   aimes-emgr-rest experiment.json
+ 
+execution swift (dedicated terminal):
+
+   1.   git clone git@github.com:andre-merzky/swift-k.git aimes.swift
+   3.   git checkout cleanup_am
+   4.   ant redist
+   5.   export PATH=$PWD/dist/swift-svn/bin:$PATH
+   6.   cd to this experiment repository
+   7.   export AIMES_SWIFT_VERBOSE=debug
+   8.   export AIMES_SWIFT_LOG_TGT=$PWDaimes_swift.log
+   9.   swift vivek.swift
 
 Multi-resource executions:
 
- 8.1. Repeat 1-8 for: 
-  - supermic.cct-lsu.xsede.org
-  - comet.sdsc.xsede.org
-  - gordon.sdsc.xsede.org
- 8.2. Uncomment all the resources in experiment.json
+   8.1. Repeat 1-8 for: 
+        - supermic.cct-lsu.xsede.org
+        - comet.sdsc.xsede.org
+        - gordon.sdsc.xsede.org
+   8.2. Uncomment all the resources in experiment.json
 
 When virtualenv is not available on the remote resource:
 
- 3.1. wget https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.9.tar.gz
- 3.2. tar zxvf virtualenv-1.9.tar.gz
- 4. python virtualenv-1.9/virtualenv.py $HOME/bin.rp/ve
+   3.1. wget https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.9.tar.gz
+   3.2. tar zxvf virtualenv-1.9.tar.gz
+   4.   python virtualenv-1.9/virtualenv.py $HOME/bin.rp/ve
