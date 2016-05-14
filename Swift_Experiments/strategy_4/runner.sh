@@ -2,8 +2,8 @@
 
 LOG=experiment_$(date +%Y-%m-%d:%H:%M:%S).log
 SLEEPDUR=1800
-EMAIL_TO="matteo.turilli@gmail.com"
-EMAIL_FROM="matteo.turilli@gmail.com"
+EMAIL_TO="yadudoc1729@gmail.com"
+EMAIL_FROM="yadudoc1729@gmail.com"
 
 arg_generate_full()
 {
@@ -23,9 +23,10 @@ EOF
 arg_generate_experiment()
 {
 cat <<EOF | shuf &> task.count
-8
 32
-256
+128
+512
+1024
 2048
 EOF
 }
@@ -79,7 +80,6 @@ do
     execute_swift "swift.conf" "bag_of_tasks.swift" $task_count $SLEEPDUR | tee -a $LOG
 done
 
-
 #export PATH=$HOME/notify:$PATH
 
-#mailx -s "Test results from $HOSTNAME" -r $EMAIL_FROM $EMAIL_TO < message.txt
+mailx -s "Test results from $HOSTNAME" -r $EMAIL_FROM $EMAIL_TO < message.txt

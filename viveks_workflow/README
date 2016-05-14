@@ -1,0 +1,29 @@
+
+execution toward stampede:
+
+  1. ssh stampede.tacc.xsede.org
+  2. mkdir $HOME/bin.rp/
+  3. module load python
+  4. virtualenv $HOME/bin.rp/ve
+  5. mkdir $HOME/bin.rp/samples
+  6. source !$/bin/activate
+  7. pip install radical.synapse
+  8. exit
+  9. scp stage*.sh @stampede.tacc.xsede.org:bin.rp/
+ 10. scp profiles/* @stampede.tacc.xsede.org:bin.rp/samples/
+ 11. (second terminal) aimes-emgr-rest experiment.json
+ 12. swift vivek.swift
+
+Multi-resource executions:
+
+ 8.1. Repeat 1-8 for: 
+  - supermic.cct-lsu.xsede.org
+  - comet.sdsc.xsede.org
+  - gordon.sdsc.xsede.org
+ 8.2. Uncomment all the resources in experiment.json
+
+When virtualenv is not available on the remote resource:
+
+ 3.1. wget https://pypi.python.org/packages/source/v/virtualenv/virtualenv-1.9.tar.gz
+ 3.2. tar zxvf virtualenv-1.9.tar.gz
+ 4. python virtualenv-1.9/virtualenv.py $HOME/bin.rp/ve
