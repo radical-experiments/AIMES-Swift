@@ -1,0 +1,64 @@
+{
+    "mongodb"      : "mongodb://mingtaiha:mingtaiha@ds053838.mongolab.com:53838/hicomb",
+    "workload_type": "skeleton",
+    "scales"       : [8, 32],
+    "bindings"     : ["late"],
+    "time_distribs": ["uniform"],
+    "iterations"   : 1,
+    "cores"        : [1],
+    "reruns"       : 0,
+    "project_ids": {
+        "xsede.stampede"  : "TG-MCB090174",
+        "xsede.gordon"    : "TG-MCB090174",
+        "xsede.supermic"  : "TG-MCB090174",
+        "xsede.comet"     : "TG-MCB090174"
+    },
+    "log": {
+        "media": ["file"],
+        "file": "runtime.log",
+        "email": {
+            "template": "./conf/email.template",
+            "recipients": ["ming.tai.ha@gmail.com"]
+        }
+    },
+    "strategy": {
+        "pct_concurrency": 100,
+        "pct_resources": 100
+    },
+    "bundle": {
+        "template" : "./conf/bundle.template",
+        "resources": {
+            "unsupported": {
+                "stampede.tacc.xsede.org": {
+                    "sched": "slurm",
+                    "fconf": "conf/xsede.stampede.json"
+                },
+                "comet.sdsc.xsede.org": {
+                    "sched": "slurm",
+                    "fconf": "conf/xsede.comet.json"
+                },
+                "supermic.cct-lsu.xsede.org": {
+                    "sched": "pbs",
+                    "fconf": "conf/xsede.supermic.json"
+                },
+                "gordon.sdsc.xsede.org": {
+                    "sched": "pbs",
+                    "fconf": "conf/xsede.gordon.json"
+                },
+                "bw.ncsa.illinois.edu": {
+                    "sched": "torque",
+                    "fconf": "conf/ncsa.bw.json"
+                }
+            }
+        }
+    },
+    "skeleton": {
+        "template": "./conf/skeleton.template",
+        "tasks": {
+            "duration": {
+                "max" : 900,
+                "min" : 900
+            }
+        }
+    }
+}
