@@ -1,0 +1,197 @@
+=======================================================================
+Run - scale 8; binding late; distribution uniform; iteration 2; rerun 0
+=======================================================================
+
+
+========
+Skeleton
+========
+
+
+Totals:
+	Number of stages             : 1
+	Number of tasks              : 8
+	Input data                   : 0.00 MB
+	Output data                  : 0.00 MB
+	Longest task execution time  : 900.0 seconds
+	Shortest task execution time : 900.0 seconds
+	Largest compute task         : 1 core(s)
+	Smallest compute task        : 1 core(s)
+
+Stage_1:
+	Number of tasks   : 8
+	Time distribution : uniform
+	Input files       : 0 for a total of 0.00 MB
+	Output files      : 0 for a total of 0.00 MB
+
+Execution boundaries:
+	Lowest number of cores  : 1
+	longest execution time  : 7200.0 seconds
+	Highest number of cores : 8.0
+	shortest execution time : 900.0 seconds
+
+
+==================
+Execution Strategy
+==================
+
+
+Configurations:
+	Type of task-to-resource binding  : late
+
+Heuristics:
+	Degree of concurrency for task execution : 100%
+	Percentage of bundle resources targeted  : 100%
+
+Inferences:
+	Number of target resources      : 1
+	Target resource(s) for pilot(s) : xsede.stampede
+	Number of pilots                : 1
+	Total workflow number of cores  : 8.0
+	Type of scheduler for RP        : SCHED_DIRECT_SUBMISSION
+	Total workflow compute time     : 900.0 seconds
+	Total workflow staging time     : 0 seconds
+	Total RP overhead time          : 632 seconds
+
+
+==================
+Pilot Descriptions
+==================
+
+
+xsede.stampede:
+	Allocation; None -> RP default : TG-MCB090174
+	Queue; None -> RP default      : None
+	Number of cores                : 8
+	Walltime in minutes            : 25
+	Stop once the workflow is done : True
+
+
+
+=========================
+Compute Unit Descriptions
+=========================
+
+
+Total tasks submitted  : 8
+Total CU translated    : 8
+Total CU with 1 cores : 0
+
+Print the first units for reference:
+Stage_1_Stage_1_0:
+	Executable           : task
+	Arguments executable : ['serial', '1', '900', '65536', '65536', '0', '0', '0']
+	Number of cores      : 1
+	Pre-execution        : []
+	Input staging        : None
+	Output staging       : None
+	Cleanup              : True
+
+Stage_1_Stage_1_1:
+	Executable           : task
+	Arguments executable : ['serial', '1', '900', '65536', '65536', '0', '0', '0']
+	Number of cores      : 1
+	Pre-execution        : []
+	Input staging        : None
+	Output staging       : None
+	Cleanup              : True
+
+Stage_1_Stage_1_2:
+	Executable           : task
+	Arguments executable : ['serial', '1', '900', '65536', '65536', '0', '0', '0']
+	Number of cores      : 1
+	Pre-execution        : []
+	Input staging        : None
+	Output staging       : None
+	Cleanup              : True
+
+Stage_1_Stage_1_3:
+	Executable           : task
+	Arguments executable : ['serial', '1', '900', '65536', '65536', '0', '0', '0']
+	Number of cores      : 1
+	Pre-execution        : []
+	Input staging        : None
+	Output staging       : None
+	Cleanup              : True
+
+Stage_1_Stage_1_4:
+	Executable           : task
+	Arguments executable : ['serial', '1', '900', '65536', '65536', '0', '0', '0']
+	Number of cores      : 1
+	Pre-execution        : []
+	Input staging        : None
+	Output staging       : None
+	Cleanup              : True
+
+Stage_1_Stage_1_5:
+	Executable           : task
+	Arguments executable : ['serial', '1', '900', '65536', '65536', '0', '0', '0']
+	Number of cores      : 1
+	Pre-execution        : []
+	Input staging        : None
+	Output staging       : None
+	Cleanup              : True
+
+Stage_1_Stage_1_6:
+	Executable           : task
+	Arguments executable : ['serial', '1', '900', '65536', '65536', '0', '0', '0']
+	Number of cores      : 1
+	Pre-execution        : []
+	Input staging        : None
+	Output staging       : None
+	Cleanup              : True
+
+Stage_1_Stage_1_7:
+	Executable           : task
+	Arguments executable : ['serial', '1', '900', '65536', '65536', '0', '0', '0']
+	Number of cores      : 1
+	Pre-execution        : []
+	Input staging        : None
+	Output staging       : None
+	Cleanup              : True
+
+
+
+2016-03-30 16:37:05 Pilot pilot.0000                         is PendingLaunch             on xsede.stampede
+2016-03-30 16:37:08 Pilot pilot.0000                         is Launching                 on xsede.stampede
+=================
+Radical Pilot IDs
+=================
+
+
+Session ID              : rp.session.radical.mingtha.016890.0007
+Pilot manager ID        : pmgr.0000
+Unit manager ID         : umgr.0000
+Pilot ID/resource : pilot.0000 xsede.stampede
+2016-03-30 16:37:09 CU    Stage_1_Stage_1_7    (unit.000015) is PendingInputStaging       on xsede.stampede (pilot.0000)
+2016-03-30 16:37:13 CU    Stage_1_Stage_1_1    (unit.000009) is AgentStagingInputPending  on xsede.stampede (pilot.0000)
+2016-03-30 16:37:13 CU    Stage_1_Stage_1_0    (unit.000008) is AgentStagingInputPending  on xsede.stampede (pilot.0000)
+2016-03-30 16:37:13 CU    Stage_1_Stage_1_2    (unit.000010) is AgentStagingInputPending  on xsede.stampede (pilot.0000)
+2016-03-30 16:37:13 CU    Stage_1_Stage_1_3    (unit.000011) is AgentStagingInputPending  on xsede.stampede (pilot.0000)
+2016-03-30 16:37:13 CU    Stage_1_Stage_1_4    (unit.000012) is AgentStagingInputPending  on xsede.stampede (pilot.0000)
+2016-03-30 16:37:13 CU    Stage_1_Stage_1_5    (unit.000013) is AgentStagingInputPending  on xsede.stampede (pilot.0000)
+2016-03-30 16:37:13 CU    Stage_1_Stage_1_6    (unit.000014) is AgentStagingInputPending  on xsede.stampede (pilot.0000)
+2016-03-30 16:37:13 CU    Stage_1_Stage_1_7    (unit.000015) is AgentStagingInputPending  on xsede.stampede (pilot.0000)
+2016-03-30 16:37:41 Pilot pilot.0000                         is PendingActive             on xsede.stampede
+2016-03-30 16:39:06 Pilot pilot.0000                         is Active                    on xsede.stampede
+2016-03-30 16:39:21 CU    Stage_1_Stage_1_1    (unit.000009) is Executing                 on xsede.stampede (pilot.0000)
+2016-03-30 16:39:21 CU    Stage_1_Stage_1_0    (unit.000008) is Executing                 on xsede.stampede (pilot.0000)
+2016-03-30 16:39:21 CU    Stage_1_Stage_1_2    (unit.000010) is Executing                 on xsede.stampede (pilot.0000)
+2016-03-30 16:39:21 CU    Stage_1_Stage_1_3    (unit.000011) is Executing                 on xsede.stampede (pilot.0000)
+2016-03-30 16:39:21 CU    Stage_1_Stage_1_4    (unit.000012) is Executing                 on xsede.stampede (pilot.0000)
+2016-03-30 16:39:21 CU    Stage_1_Stage_1_5    (unit.000013) is Executing                 on xsede.stampede (pilot.0000)
+2016-03-30 16:39:21 CU    Stage_1_Stage_1_6    (unit.000014) is Executing                 on xsede.stampede (pilot.0000)
+2016-03-30 16:39:21 CU    Stage_1_Stage_1_7    (unit.000015) is Executing                 on xsede.stampede (pilot.0000)
+2016-03-30 16:54:20 CU    Stage_1_Stage_1_7    (unit.000015) is AgentStagingOutputPending on xsede.stampede (pilot.0000)
+2016-03-30 16:54:30 CU    Stage_1_Stage_1_1    (unit.000009) is Done                      on xsede.stampede (pilot.0000)
+2016-03-30 16:54:30 CU    Stage_1_Stage_1_0    (unit.000008) is PendingOutputStaging      on xsede.stampede (pilot.0000)
+2016-03-30 16:54:30 CU    Stage_1_Stage_1_2    (unit.000010) is PendingOutputStaging      on xsede.stampede (pilot.0000)
+2016-03-30 16:54:30 CU    Stage_1_Stage_1_3    (unit.000011) is Done                      on xsede.stampede (pilot.0000)
+2016-03-30 16:54:30 CU    Stage_1_Stage_1_4    (unit.000012) is StagingOutput             on xsede.stampede (pilot.0000)
+2016-03-30 16:54:30 CU    Stage_1_Stage_1_5    (unit.000013) is Done                      on xsede.stampede (pilot.0000)
+2016-03-30 16:54:30 CU    Stage_1_Stage_1_6    (unit.000014) is Done                      on xsede.stampede (pilot.0000)
+2016-03-30 16:54:30 CU    Stage_1_Stage_1_7    (unit.000015) is Done                      on xsede.stampede (pilot.0000)
+2016-03-30 16:54:36 CU    Stage_1_Stage_1_0    (unit.000008) is Done                      on xsede.stampede (pilot.0000)
+2016-03-30 16:54:36 CU    Stage_1_Stage_1_2    (unit.000010) is Done                      on xsede.stampede (pilot.0000)
+2016-03-30 16:54:36 CU    Stage_1_Stage_1_4    (unit.000012) is Done                      on xsede.stampede (pilot.0000)
+2016-03-30 16:54:52 Pilot pilot.0000                         is Canceled                  on xsede.stampede
