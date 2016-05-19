@@ -1,0 +1,2279 @@
+{
+    "pilot": [
+        {
+            "_id": "pilot.0000", 
+            "agent_config": {
+                "agent_launch_method": "SSH", 
+                "agent_layout": {
+                    "agent_0": {
+                        "bridges": [
+                            "agent_staging_input_queue", 
+                            "agent_scheduling_queue", 
+                            "agent_executing_queue", 
+                            "agent_staging_output_queue", 
+                            "agent_unschedule_pubsub", 
+                            "agent_reschedule_pubsub", 
+                            "agent_command_pubsub", 
+                            "agent_state_pubsub"
+                        ], 
+                        "components": {
+                            "AgentExecutingComponent": 1, 
+                            "AgentSchedulingComponent": 1, 
+                            "AgentStagingInputComponent": 1, 
+                            "AgentStagingOutputComponent": 1
+                        }, 
+                        "pull_units": true, 
+                        "sub_agents": [], 
+                        "target": "local"
+                    }
+                }, 
+                "bulk_collection_time": 1.0, 
+                "clone": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "cores": 2, 
+                "db_poll_sleeptime": 0.1, 
+                "debug": 10, 
+                "drop": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "heartbeat_interval": 10, 
+                "lrms": "SLURM", 
+                "max_io_loglength": 1024, 
+                "mongodb_url": "mongodb://mingtaiha:mingtaiha@ds053838.mongolab.com:53838/hicomb", 
+                "mpi_launch_method": "MPIRUN_RSH", 
+                "pilot_id": "pilot.0000", 
+                "runtime": 85, 
+                "scheduler": "CONTINUOUS", 
+                "session_id": "rp.session.radical.mingtha.016933.0000", 
+                "spawner": "POPEN", 
+                "staging_area": "staging_area", 
+                "staging_scheme": "staging", 
+                "task_launch_method": "SSH"
+            }, 
+            "callbackhistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1463088149.111783
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1463088149.946991
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1463088194.725578
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1463088275.664488
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1463090109.522525
+                }
+            ], 
+            "commands": [], 
+            "cores_per_node": null, 
+            "description": {
+                "_config": null, 
+                "access_schema": null, 
+                "candidate_hosts": null, 
+                "cleanup": true, 
+                "cores": 2, 
+                "exit_on_error": false, 
+                "memory": null, 
+                "project": "TG-MCB090174", 
+                "queue": null, 
+                "resource": "xsede.stampede", 
+                "runtime": 85, 
+                "sandbox": null
+            }, 
+            "finished": 1463090108.921689, 
+            "global_sandbox": "/work/03662/tg829619/radical.pilot.sandbox", 
+            "health_check_enabled": true, 
+            "heartbeat": null, 
+            "input_transfer_finished": null, 
+            "input_transfer_started": null, 
+            "log": [
+                {
+                    "message": "Using bootstrapper /home/mingtha/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/bootstrap_1.sh", 
+                    "timestamp": 1463088162.986735
+                }, 
+                {
+                    "message": "Copying bootstrapper 'file://localhost/home/mingtha/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/bootstrap_1.sh' to agent sandbox (<saga.filesystem.directory.Directory object at 0x7f89cc2fe850>).", 
+                    "timestamp": 1463088162.987161
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/utils/radical.utils-0.40.tar.gz' to sandbox (sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0000/).", 
+                    "timestamp": 1463088165.206648
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/saga/saga-python-0.40.1.tar.gz' to sandbox (sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0000/).", 
+                    "timestamp": 1463088166.456448
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/pilot/controller/..//radical.pilot-v0.40.1-23-gd5f53a4-feature-darter.tar.gz' to sandbox (sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0000/).", 
+                    "timestamp": 1463088168.006508
+                }, 
+                {
+                    "message": "Writing agent configuration to file '/tmp/rp_agent_cfg_dirITc9OX/agent_0.cfg'.", 
+                    "timestamp": 1463088169.138285
+                }, 
+                {
+                    "message": "Copying agent configuration file 'file://localhost/tmp/rp_agent_cfg_dirITc9OX/agent_0.cfg' to sandbox (sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0000/).", 
+                    "timestamp": 1463088169.139616
+                }, 
+                {
+                    "message": "Submitting SAGA job with description: {'Project': 'TG-MCB090174', 'Executable': '/bin/bash', 'TotalPhysicalMemory': None, 'WorkingDirectory': '/work/03662/tg829619/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0000/', 'Queue': 'normal', 'Environment': {'RADICAL_PILOT_PROFILE': 'TRUE'}, 'WallTimeLimit': 85, 'Arguments': ['-l bootstrap_1.sh', \" -d 'radical.utils-0.40.tar.gz:saga-python-0.40.1.tar.gz:radical.pilot-v0.40.1-23-gd5f53a4-feature-darter.tar.gz' -m 'create' -p 'pilot.0000' -r 'local' -s 'rp.session.radical.mingtha.016933.0000' -v '/work/03662/tg829619/radical.pilot.sandbox/ve_stampede' -b 'default' -a 'multicore' -e 'module purge' -e 'module load TACC' -e 'module load intel/15.0.2' -e 'module load python/2.7.9' -e 'module unload xalt' -e 'source ~train00/ssi_sourceme' -e 'export TACC_DELETE_FILES=TRUE' -w 'export PATH=$PATH' -w 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH' -x 'lue'\"], 'ProcessesPerHost': None, 'Error': 'bootstrap_1.err', 'Output': 'bootstrap_1.out', 'CandidateHosts': None, 'TotalCPUCount': 2}", 
+                    "timestamp": 1463088181.350228
+                }, 
+                {
+                    "message": "SAGA job submitted with job id [slurm+ssh://stampede.tacc.utexas.edu/]-[7040304]", 
+                    "timestamp": 1463088194.279912
+                }, 
+                {
+                    "message": "CANCEL received. Terminating.", 
+                    "timestamp": 1463090108.921689
+                }, 
+                {
+                    "message": "real 1463090108.943306 sec | user 8.140 sec | system 1.731 sec | mem 60508.00 kB", 
+                    "timestamp": 1463090108.921689
+                }
+            ], 
+            "logfile": null, 
+            "nodes": null, 
+            "output_transfer_finished": null, 
+            "output_transfer_started": null, 
+            "pilotmanager": "pmgr.0000", 
+            "saga_job_id": "[slurm+ssh://stampede.tacc.utexas.edu/]-[7040304]", 
+            "sagajobid": null, 
+            "sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0000/", 
+            "started": 1463088274.528598, 
+            "state": "Canceled", 
+            "statehistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1463088148.917281
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1463088149.201666
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1463088194.280076
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1463088274.528598
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1463090108.921689
+                }
+            ], 
+            "stderr": null, 
+            "stdout": null, 
+            "submitted": 1463088148.917281, 
+            "unit_ids": [
+                "unit.000002", 
+                "unit.000003"
+            ], 
+            "unitmanager": "umgr.0000"
+        }, 
+        {
+            "_id": "pilot.0001", 
+            "agent_config": {
+                "agent_launch_method": "SSH", 
+                "agent_layout": {
+                    "agent_0": {
+                        "bridges": [
+                            "agent_staging_input_queue", 
+                            "agent_scheduling_queue", 
+                            "agent_executing_queue", 
+                            "agent_staging_output_queue", 
+                            "agent_unschedule_pubsub", 
+                            "agent_reschedule_pubsub", 
+                            "agent_command_pubsub", 
+                            "agent_state_pubsub"
+                        ], 
+                        "components": {
+                            "AgentExecutingComponent": 1, 
+                            "AgentSchedulingComponent": 1, 
+                            "AgentStagingInputComponent": 1, 
+                            "AgentStagingOutputComponent": 1
+                        }, 
+                        "pull_units": true, 
+                        "sub_agents": [], 
+                        "target": "local"
+                    }
+                }, 
+                "bulk_collection_time": 1.0, 
+                "clone": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "cores": 20, 
+                "cores_per_node": 20, 
+                "db_poll_sleeptime": 0.1, 
+                "debug": 10, 
+                "drop": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "heartbeat_interval": 10, 
+                "lrms": "TORQUE", 
+                "max_io_loglength": 1024, 
+                "mongodb_url": "mongodb://mingtaiha:mingtaiha@ds053838.mongolab.com:53838/hicomb", 
+                "mpi_launch_method": "MPIEXEC", 
+                "pilot_id": "pilot.0001", 
+                "runtime": 85, 
+                "scheduler": "CONTINUOUS", 
+                "session_id": "rp.session.radical.mingtha.016933.0000", 
+                "spawner": "POPEN", 
+                "staging_area": "staging_area", 
+                "staging_scheme": "staging", 
+                "task_launch_method": "SSH"
+            }, 
+            "callbackhistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1463088155.723806
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1463088194.725042
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1463088207.986684
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1463089922.762968
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1463090110.080732
+                }
+            ], 
+            "commands": [], 
+            "cores_per_node": null, 
+            "description": {
+                "_config": null, 
+                "access_schema": null, 
+                "candidate_hosts": null, 
+                "cleanup": true, 
+                "cores": 2, 
+                "exit_on_error": false, 
+                "memory": null, 
+                "project": "TG-MCB090174", 
+                "queue": null, 
+                "resource": "xsede.supermic", 
+                "runtime": 85, 
+                "sandbox": null
+            }, 
+            "finished": 1463090109.31077, 
+            "global_sandbox": "/work/mha/radical.pilot.sandbox", 
+            "health_check_enabled": true, 
+            "heartbeat": null, 
+            "input_transfer_finished": null, 
+            "input_transfer_started": null, 
+            "log": [
+                {
+                    "message": "Using bootstrapper /home/mingtha/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/bootstrap_1.sh", 
+                    "timestamp": 1463088196.305679
+                }, 
+                {
+                    "message": "Copying bootstrapper 'file://localhost/home/mingtha/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/bootstrap_1.sh' to agent sandbox (<saga.filesystem.directory.Directory object at 0x7f89cac30750>).", 
+                    "timestamp": 1463088196.306039
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/utils/radical.utils-0.40.tar.gz' to sandbox (sftp://supermic.cct-lsu.xsede.org/work/mha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0001/).", 
+                    "timestamp": 1463088198.533589
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/saga/saga-python-0.40.1.tar.gz' to sandbox (sftp://supermic.cct-lsu.xsede.org/work/mha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0001/).", 
+                    "timestamp": 1463088199.791496
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/pilot/controller/..//radical.pilot-v0.40.1-23-gd5f53a4-feature-darter.tar.gz' to sandbox (sftp://supermic.cct-lsu.xsede.org/work/mha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0001/).", 
+                    "timestamp": 1463088201.350441
+                }, 
+                {
+                    "message": "Writing agent configuration to file '/tmp/rp_agent_cfg_dirQz1pS3/agent_0.cfg'.", 
+                    "timestamp": 1463088202.492057
+                }, 
+                {
+                    "message": "Copying agent configuration file 'file://localhost/tmp/rp_agent_cfg_dirQz1pS3/agent_0.cfg' to sandbox (sftp://supermic.cct-lsu.xsede.org/work/mha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0001/).", 
+                    "timestamp": 1463088202.493324
+                }, 
+                {
+                    "message": "Submitting SAGA job with description: {'Project': 'TG-MCB090174', 'Executable': '/bin/bash', 'TotalPhysicalMemory': None, 'WorkingDirectory': '/work/mha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0001/', 'Queue': 'workq', 'Environment': {'RADICAL_PILOT_PROFILE': 'TRUE'}, 'WallTimeLimit': 85, 'Arguments': ['-l bootstrap_1.sh', \" -d 'radical.utils-0.40.tar.gz:saga-python-0.40.1.tar.gz:radical.pilot-v0.40.1-23-gd5f53a4-feature-darter.tar.gz' -m 'create' -p 'pilot.0001' -r 'local' -s 'rp.session.radical.mingtha.016933.0000' -v '/work/mha/radical.pilot.sandbox/ve_supermic' -b 'default' -a 'multicore' -e 'module load python' -x 'lue'\"], 'ProcessesPerHost': 20, 'Error': 'bootstrap_1.err', 'Output': 'bootstrap_1.out', 'CandidateHosts': None, 'TotalCPUCount': 20}", 
+                    "timestamp": 1463088206.630128
+                }, 
+                {
+                    "message": "SAGA job submitted with job id [torque+ssh://supermic.cct-lsu.xsede.org]-[123653]", 
+                    "timestamp": 1463088207.440107
+                }, 
+                {
+                    "message": "CANCEL received. Terminating.", 
+                    "timestamp": 1463090109.31077
+                }, 
+                {
+                    "message": "real 1463090109.317921 sec | user 1.263 sec | system 0.570 sec | mem 57560.00 kB", 
+                    "timestamp": 1463090109.31077
+                }
+            ], 
+            "logfile": null, 
+            "nodes": null, 
+            "output_transfer_finished": null, 
+            "output_transfer_started": null, 
+            "pilotmanager": "pmgr.0000", 
+            "saga_job_id": "[torque+ssh://supermic.cct-lsu.xsede.org]-[123653]", 
+            "sagajobid": null, 
+            "sandbox": "sftp://supermic.cct-lsu.xsede.org/work/mha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0001/", 
+            "started": 1463089922.419265, 
+            "state": "Canceled", 
+            "statehistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1463088155.526648
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1463088194.558799
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1463088207.440247
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1463089922.419265
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1463090109.31077
+                }
+            ], 
+            "stderr": null, 
+            "stdout": null, 
+            "submitted": 1463088155.526648, 
+            "unit_ids": [], 
+            "unitmanager": "umgr.0000"
+        }, 
+        {
+            "_id": "pilot.0002", 
+            "agent_config": {
+                "agent_launch_method": "SSH", 
+                "agent_layout": {
+                    "agent_0": {
+                        "bridges": [
+                            "agent_staging_input_queue", 
+                            "agent_scheduling_queue", 
+                            "agent_executing_queue", 
+                            "agent_staging_output_queue", 
+                            "agent_unschedule_pubsub", 
+                            "agent_reschedule_pubsub", 
+                            "agent_command_pubsub", 
+                            "agent_state_pubsub"
+                        ], 
+                        "components": {
+                            "AgentExecutingComponent": 1, 
+                            "AgentSchedulingComponent": 1, 
+                            "AgentStagingInputComponent": 1, 
+                            "AgentStagingOutputComponent": 1
+                        }, 
+                        "pull_units": true, 
+                        "sub_agents": [], 
+                        "target": "local"
+                    }
+                }, 
+                "bulk_collection_time": 1.0, 
+                "clone": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "cores": 2, 
+                "db_poll_sleeptime": 0.1, 
+                "debug": 10, 
+                "drop": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "heartbeat_interval": 10, 
+                "lrms": "TORQUE", 
+                "max_io_loglength": 1024, 
+                "mongodb_url": "mongodb://mingtaiha:mingtaiha@ds053838.mongolab.com:53838/hicomb", 
+                "mpi_launch_method": "MPIRUN_RSH", 
+                "pilot_id": "pilot.0002", 
+                "runtime": 85, 
+                "scheduler": "CONTINUOUS", 
+                "session_id": "rp.session.radical.mingtha.016933.0000", 
+                "spawner": "POPEN", 
+                "staging_area": "staging_area", 
+                "staging_scheme": "staging", 
+                "task_launch_method": "SSH"
+            }, 
+            "callbackhistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1463088163.671513
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1463088214.657391
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1463088232.366751
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1463088880.252932
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1463090105.74332
+                }
+            ], 
+            "commands": [], 
+            "cores_per_node": null, 
+            "description": {
+                "_config": null, 
+                "access_schema": null, 
+                "candidate_hosts": null, 
+                "cleanup": true, 
+                "cores": 2, 
+                "exit_on_error": false, 
+                "memory": null, 
+                "project": "TG-MCB090174", 
+                "queue": null, 
+                "resource": "xsede.gordon", 
+                "runtime": 85, 
+                "sandbox": null
+            }, 
+            "finished": 1463090105.377215, 
+            "global_sandbox": "/home/mingtha/radical.pilot.sandbox", 
+            "health_check_enabled": true, 
+            "heartbeat": null, 
+            "input_transfer_finished": null, 
+            "input_transfer_started": null, 
+            "log": [
+                {
+                    "message": "Using bootstrapper /home/mingtha/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/bootstrap_1.sh", 
+                    "timestamp": 1463088216.139409
+                }, 
+                {
+                    "message": "Copying bootstrapper 'file://localhost/home/mingtha/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/bootstrap_1.sh' to agent sandbox (<saga.filesystem.directory.Directory object at 0x7f89cac30e90>).", 
+                    "timestamp": 1463088216.139779
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/utils/radical.utils-0.40.tar.gz' to sandbox (sftp://gordon.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0002/).", 
+                    "timestamp": 1463088218.074684
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/saga/saga-python-0.40.1.tar.gz' to sandbox (sftp://gordon.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0002/).", 
+                    "timestamp": 1463088219.519228
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/pilot/controller/..//radical.pilot-v0.40.1-23-gd5f53a4-feature-darter.tar.gz' to sandbox (sftp://gordon.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0002/).", 
+                    "timestamp": 1463088221.470973
+                }, 
+                {
+                    "message": "Writing agent configuration to file '/tmp/rp_agent_cfg_dirQwzOtE/agent_0.cfg'.", 
+                    "timestamp": 1463088222.793777
+                }, 
+                {
+                    "message": "Copying agent configuration file 'file://localhost/tmp/rp_agent_cfg_dirQwzOtE/agent_0.cfg' to sandbox (sftp://gordon.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0002/).", 
+                    "timestamp": 1463088222.795028
+                }, 
+                {
+                    "message": "Submitting SAGA job with description: {'Project': 'TG-MCB090174', 'Executable': '/bin/bash', 'TotalPhysicalMemory': None, 'WorkingDirectory': '/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0002/', 'Queue': 'normal', 'Environment': {'RADICAL_PILOT_PROFILE': 'TRUE'}, 'WallTimeLimit': 85, 'Arguments': ['-l bootstrap_1.sh', \" -d 'radical.utils-0.40.tar.gz:saga-python-0.40.1.tar.gz:radical.pilot-v0.40.1-23-gd5f53a4-feature-darter.tar.gz' -m 'create' -p 'pilot.0002' -r 'debug' -s 'rp.session.radical.mingtha.016933.0000' -v '/home/mingtha/radical.pilot.sandbox/ve_gordon' -b 'default' -a 'multicore' -e 'module purge' -e 'module load python intel mvapich2_ib gnubase' -x 'lue'\"], 'ProcessesPerHost': None, 'Error': 'bootstrap_1.err', 'Output': 'bootstrap_1.out', 'CandidateHosts': None, 'TotalCPUCount': 2}", 
+                    "timestamp": 1463088227.288204
+                }, 
+                {
+                    "message": "SAGA job submitted with job id [torque+ssh://gordon.sdsc.xsede.org/]-[2532219]", 
+                    "timestamp": 1463088231.125084
+                }, 
+                {
+                    "message": "CANCEL received. Terminating.", 
+                    "timestamp": 1463090105.377215
+                }, 
+                {
+                    "message": "real 1463090105.387846 sec | user 6.519 sec | system 1.467 sec | mem 50576.00 kB", 
+                    "timestamp": 1463090105.377215
+                }
+            ], 
+            "logfile": null, 
+            "nodes": null, 
+            "output_transfer_finished": null, 
+            "output_transfer_started": null, 
+            "pilotmanager": "pmgr.0000", 
+            "saga_job_id": "[torque+ssh://gordon.sdsc.xsede.org/]-[2532219]", 
+            "sagajobid": null, 
+            "sandbox": "sftp://gordon.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0002/", 
+            "started": 1463088879.896667, 
+            "state": "Canceled", 
+            "statehistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1463088163.474181
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1463088214.56516
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1463088231.125225
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1463088879.896667
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1463090105.377215
+                }
+            ], 
+            "stderr": null, 
+            "stdout": null, 
+            "submitted": 1463088163.474181, 
+            "unit_ids": [
+                "unit.000006", 
+                "unit.000007"
+            ], 
+            "unitmanager": "umgr.0000"
+        }, 
+        {
+            "_id": "pilot.0003", 
+            "agent_config": {
+                "agent_launch_method": "SSH", 
+                "agent_layout": {
+                    "agent_0": {
+                        "bridges": [
+                            "agent_staging_input_queue", 
+                            "agent_scheduling_queue", 
+                            "agent_executing_queue", 
+                            "agent_staging_output_queue", 
+                            "agent_unschedule_pubsub", 
+                            "agent_reschedule_pubsub", 
+                            "agent_command_pubsub", 
+                            "agent_state_pubsub"
+                        ], 
+                        "components": {
+                            "AgentExecutingComponent": 1, 
+                            "AgentSchedulingComponent": 1, 
+                            "AgentStagingInputComponent": 1, 
+                            "AgentStagingOutputComponent": 1
+                        }, 
+                        "pull_units": true, 
+                        "sub_agents": [], 
+                        "target": "local"
+                    }
+                }, 
+                "bulk_collection_time": 1.0, 
+                "clone": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "cores": 24, 
+                "cores_per_node": 24, 
+                "db_poll_sleeptime": 0.1, 
+                "debug": 10, 
+                "drop": {
+                    "AgentExecutingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentSchedulingComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingInputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentStagingOutputComponent": {
+                        "input": 1, 
+                        "output": 1
+                    }, 
+                    "AgentWorker": {
+                        "input": 1, 
+                        "output": 1
+                    }
+                }, 
+                "heartbeat_interval": 10, 
+                "lrms": "SLURM", 
+                "max_io_loglength": 1024, 
+                "mongodb_url": "mongodb://mingtaiha:mingtaiha@ds053838.mongolab.com:53838/hicomb", 
+                "mpi_launch_method": "MPIRUN_RSH", 
+                "pilot_id": "pilot.0003", 
+                "runtime": 85, 
+                "scheduler": "CONTINUOUS", 
+                "session_id": "rp.session.radical.mingtha.016933.0000", 
+                "spawner": "POPEN", 
+                "staging_area": "staging_area", 
+                "staging_scheme": "staging", 
+                "task_launch_method": "SSH"
+            }, 
+            "callbackhistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1463088169.253051
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1463088232.366118
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1463088265.976641
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1463088276.333801
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1463090112.106835
+                }
+            ], 
+            "commands": [], 
+            "cores_per_node": null, 
+            "description": {
+                "_config": null, 
+                "access_schema": null, 
+                "candidate_hosts": null, 
+                "cleanup": true, 
+                "cores": 2, 
+                "exit_on_error": false, 
+                "memory": null, 
+                "project": "TG-MCB090174", 
+                "queue": null, 
+                "resource": "xsede.comet", 
+                "runtime": 85, 
+                "sandbox": null
+            }, 
+            "finished": 1463090108.093187, 
+            "global_sandbox": "/home/mingtha/radical.pilot.sandbox", 
+            "health_check_enabled": true, 
+            "heartbeat": null, 
+            "input_transfer_finished": null, 
+            "input_transfer_started": null, 
+            "log": [
+                {
+                    "message": "Using bootstrapper /home/mingtha/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/bootstrap_1.sh", 
+                    "timestamp": 1463088233.100509
+                }, 
+                {
+                    "message": "Copying bootstrapper 'file://localhost/home/mingtha/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/bootstrap_1.sh' to agent sandbox (<saga.filesystem.directory.Directory object at 0x7f89cabde890>).", 
+                    "timestamp": 1463088233.10095
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/utils/radical.utils-0.40.tar.gz' to sandbox (sftp://comet.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0003/).", 
+                    "timestamp": 1463088235.310526
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/saga/saga-python-0.40.1.tar.gz' to sandbox (sftp://comet.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0003/).", 
+                    "timestamp": 1463088236.911228
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/pilot/controller/..//radical.pilot-v0.40.1-23-gd5f53a4-feature-darter.tar.gz' to sandbox (sftp://comet.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0003/).", 
+                    "timestamp": 1463088238.90304
+                }, 
+                {
+                    "message": "Writing agent configuration to file '/tmp/rp_agent_cfg_dirFaZzFG/agent_0.cfg'.", 
+                    "timestamp": 1463088240.339256
+                }, 
+                {
+                    "message": "Copying agent configuration file 'file://localhost/tmp/rp_agent_cfg_dirFaZzFG/agent_0.cfg' to sandbox (sftp://comet.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0003/).", 
+                    "timestamp": 1463088240.340465
+                }, 
+                {
+                    "message": "Submitting SAGA job with description: {'Project': 'TG-MCB090174', 'Executable': '/bin/bash', 'TotalPhysicalMemory': None, 'WorkingDirectory': '/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0003/', 'Queue': 'compute', 'Environment': {'RADICAL_PILOT_PROFILE': 'TRUE'}, 'WallTimeLimit': 85, 'Arguments': ['-l bootstrap_1.sh', \" -d 'radical.utils-0.40.tar.gz:saga-python-0.40.1.tar.gz:radical.pilot-v0.40.1-23-gd5f53a4-feature-darter.tar.gz' -m 'create' -p 'pilot.0003' -r 'local' -s 'rp.session.radical.mingtha.016933.0000' -v '/home/mingtha/radical.pilot.sandbox/ve_comet' -b 'default' -a 'multicore' -e 'module load python' -w 'export PATH=$PATH' -w 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH' -x 'lue'\"], 'ProcessesPerHost': 24, 'Error': 'bootstrap_1.err', 'Output': 'bootstrap_1.out', 'CandidateHosts': None, 'TotalCPUCount': 24}", 
+                    "timestamp": 1463088244.183404
+                }, 
+                {
+                    "message": "SAGA job submitted with job id [slurm+ssh://comet.sdsc.xsede.org/]-[2735741]", 
+                    "timestamp": 1463088264.86998
+                }, 
+                {
+                    "message": "CANCEL received. Terminating.", 
+                    "timestamp": 1463090108.093187
+                }, 
+                {
+                    "message": "real 1463090108.099191 sec | user 11.220 sec | system 2.014 sec | mem 49920.00 kB", 
+                    "timestamp": 1463090108.093187
+                }
+            ], 
+            "logfile": null, 
+            "nodes": null, 
+            "output_transfer_finished": null, 
+            "output_transfer_started": null, 
+            "pilotmanager": "pmgr.0000", 
+            "saga_job_id": "[slurm+ssh://comet.sdsc.xsede.org/]-[2735741]", 
+            "sagajobid": null, 
+            "sandbox": "sftp://comet.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0003/", 
+            "started": 1463088275.123412, 
+            "state": "Canceled", 
+            "statehistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1463088168.918648
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1463088231.219597
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1463088264.870138
+                }, 
+                {
+                    "state": "Active", 
+                    "timestamp": 1463088275.123412
+                }, 
+                {
+                    "state": "Canceled", 
+                    "timestamp": 1463090108.093187
+                }
+            ], 
+            "stderr": null, 
+            "stdout": null, 
+            "submitted": 1463088168.918648, 
+            "unit_ids": [
+                "unit.000001", 
+                "unit.000000", 
+                "unit.000005", 
+                "unit.000004"
+            ], 
+            "unitmanager": "umgr.0000"
+        }, 
+        {
+            "_id": "pilot.0004", 
+            "agent_config": {
+                "agent_launch_method": "ORTE", 
+                "agent_layout": {
+                    "agent_0": {
+                        "bridges": [
+                            "agent_staging_input_queue", 
+                            "agent_scheduling_queue", 
+                            "agent_executing_queue", 
+                            "agent_staging_output_queue", 
+                            "agent_unschedule_pubsub", 
+                            "agent_reschedule_pubsub", 
+                            "agent_command_pubsub", 
+                            "agent_state_pubsub"
+                        ], 
+                        "components": {
+                            "AgentStagingInputComponent": 1, 
+                            "AgentStagingOutputComponent": 1
+                        }, 
+                        "pull_units": true, 
+                        "sub_agents": [
+                            "agent_1"
+                        ], 
+                        "target": "local"
+                    }, 
+                    "agent_1": {
+                        "components": {
+                            "AgentExecutingComponent": 1, 
+                            "AgentSchedulingComponent": 1
+                        }, 
+                        "target": "node"
+                    }
+                }, 
+                "bulk_collection_time": 1.0, 
+                "cores": 2, 
+                "db_poll_sleeptime": 0.1, 
+                "debug": 10, 
+                "heartbeat_interval": 10, 
+                "lrms": "TORQUE", 
+                "max_io_loglength": 1024, 
+                "mongodb_url": "mongodb://mingtaiha:mingtaiha@ds053838.mongolab.com:53838/hicomb", 
+                "mpi_launch_method": "ORTE", 
+                "network_interface": "ipogif0", 
+                "pilot_id": "pilot.0004", 
+                "runtime": 85, 
+                "scheduler": "CONTINUOUS", 
+                "session_id": "rp.session.radical.mingtha.016933.0000", 
+                "spawner": "POPEN", 
+                "staging_area": "staging_area", 
+                "staging_scheme": "staging", 
+                "task_launch_method": "ORTE"
+            }, 
+            "callbackhistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1463088177.773367
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1463088265.975993
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1463088287.84513
+                }, 
+                {
+                    "state": "Failed", 
+                    "timestamp": 1463088609.976419
+                }
+            ], 
+            "commands": [
+                {
+                    "arg": null, 
+                    "time": 1463090096.711519, 
+                    "type": "Cancel_Pilot"
+                }
+            ], 
+            "cores_per_node": null, 
+            "description": {
+                "_config": null, 
+                "access_schema": null, 
+                "candidate_hosts": null, 
+                "cleanup": true, 
+                "cores": 2, 
+                "exit_on_error": false, 
+                "memory": null, 
+                "project": null, 
+                "queue": null, 
+                "resource": "ncsa.bw", 
+                "runtime": 85, 
+                "sandbox": null
+            }, 
+            "finished": 1463088608.664016, 
+            "global_sandbox": "/scratch/sciteam/ha1/radical.pilot.sandbox", 
+            "health_check_enabled": true, 
+            "heartbeat": null, 
+            "input_transfer_finished": null, 
+            "input_transfer_started": null, 
+            "log": [
+                {
+                    "message": "Using bootstrapper /home/mingtha/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/bootstrap_1.sh", 
+                    "timestamp": 1463088270.060338
+                }, 
+                {
+                    "message": "Copying bootstrapper 'file://localhost/home/mingtha/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/bootstrap_1.sh' to agent sandbox (<saga.filesystem.directory.Directory object at 0x7f89cac3d650>).", 
+                    "timestamp": 1463088270.060775
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/utils/radical.utils-0.40.tar.gz' to sandbox (gsisftp://bw.ncsa.illinois.edu/scratch/sciteam/ha1/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0004/).", 
+                    "timestamp": 1463088273.121514
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/saga/saga-python-0.40.1.tar.gz' to sandbox (gsisftp://bw.ncsa.illinois.edu/scratch/sciteam/ha1/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0004/).", 
+                    "timestamp": 1463088274.248351
+                }, 
+                {
+                    "message": "Copying sdist 'file://localhost/home/mingtha/ve/aimes-swift-experiments/local/lib/python2.7/site-packages/radical/pilot/controller/..//radical.pilot-v0.40.1-23-gd5f53a4-feature-darter.tar.gz' to sandbox (gsisftp://bw.ncsa.illinois.edu/scratch/sciteam/ha1/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0004/).", 
+                    "timestamp": 1463088275.667118
+                }, 
+                {
+                    "message": "Copying CA certificate bundle 'file://localhost//home/mingtha/ve/aimes-swift-experiments/lib/python2.7/site-packages/radical/pilot/bootstrapper/cacert.pem.gz' to sandbox (gsisftp://bw.ncsa.illinois.edu/scratch/sciteam/ha1/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0004/).", 
+                    "timestamp": 1463088276.700377
+                }, 
+                {
+                    "message": "Writing agent configuration to file '/tmp/rp_agent_cfg_dirMyHsX7/agent_0.cfg'.", 
+                    "timestamp": 1463088277.621778
+                }, 
+                {
+                    "message": "Copying agent configuration file 'file://localhost/tmp/rp_agent_cfg_dirMyHsX7/agent_0.cfg' to sandbox (gsisftp://bw.ncsa.illinois.edu/scratch/sciteam/ha1/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0004/).", 
+                    "timestamp": 1463088277.623287
+                }, 
+                {
+                    "message": "Submitting SAGA job with description: {'Project': None, 'Executable': '/bin/bash', 'TotalPhysicalMemory': None, 'WorkingDirectory': '/scratch/sciteam/ha1/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0004/', 'Queue': 'normal', 'Environment': {'RADICAL_PILOT_PROFILE': 'TRUE'}, 'WallTimeLimit': 85, 'Arguments': ['-l bootstrap_1.sh', \" -d 'radical.utils-0.40.tar.gz:saga-python-0.40.1.tar.gz:radical.pilot-v0.40.1-23-gd5f53a4-feature-darter.tar.gz' -m 'create' -p 'pilot.0004' -r 'local' -s 'rp.session.radical.mingtha.016933.0000' -v '/scratch/sciteam/ha1/radical.pilot.sandbox/ve_bw' -b 'default' -a 'multicore' -e 'module switch PrgEnv-cray PrgEnv-gnu' -e 'module load bwpy' -e 'module use --append /projects/sciteam/gkd/modules' -e 'module load openmpi' -w 'export HOME=$HOME' -w 'export PATH=$PATH' -w 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH' -f 'BIND_ADDRESS' -h 'ds053838.mongolab.com:53838' -t 'ipogif0' -x 'lue'\"], 'ProcessesPerHost': None, 'Error': 'bootstrap_1.err', 'Output': 'bootstrap_1.out', 'CandidateHosts': None, 'TotalCPUCount': 2}", 
+                    "timestamp": 1463088285.101924
+                }, 
+                {
+                    "message": "SAGA job submitted with job id [torque+gsissh://bw.ncsa.illinois.edu]-[4733411]", 
+                    "timestamp": 1463088286.498047
+                }, 
+                {
+                    "message": "FAILED startup", 
+                    "timestamp": 1463088608.664016
+                }, 
+                {
+                    "message": "real 1463088608.678407 sec | user 0.300 sec | system 1.124 sec | mem 30832.00 kB", 
+                    "timestamp": 1463088608.664016
+                }
+            ], 
+            "logfile": null, 
+            "nodes": null, 
+            "output_transfer_finished": null, 
+            "output_transfer_started": null, 
+            "pilotmanager": "pmgr.0000", 
+            "saga_job_id": "[torque+gsissh://bw.ncsa.illinois.edu]-[4733411]", 
+            "sagajobid": null, 
+            "sandbox": "gsisftp://bw.ncsa.illinois.edu/scratch/sciteam/ha1/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0004/", 
+            "started": null, 
+            "state": "Failed", 
+            "statehistory": [
+                {
+                    "state": "PendingLaunch", 
+                    "timestamp": 1463088177.580459
+                }, 
+                {
+                    "state": "Launching", 
+                    "timestamp": 1463088265.078327
+                }, 
+                {
+                    "state": "PendingActive", 
+                    "timestamp": 1463088286.49817
+                }, 
+                {
+                    "state": "Failed", 
+                    "timestamp": 1463088608.664016
+                }
+            ], 
+            "stderr": null, 
+            "stdout": null, 
+            "submitted": 1463088177.580459, 
+            "unit_ids": [], 
+            "unitmanager": "umgr.0000"
+        }
+    ], 
+    "pmgr": [
+        {
+            "_id": "pmgr.0000", 
+            "data": {}, 
+            "pilot_launcher_workers": 1
+        }
+    ], 
+    "session": {
+        "_id": "rp.session.radical.mingtha.016933.0000", 
+        "connected": 1463088137.825456, 
+        "created": 1463088137.825456, 
+        "name": null
+    }, 
+    "umgr": [
+        {
+            "_id": "umgr.0000", 
+            "input_transfer_workers": 2, 
+            "output_transfer_workers": 2, 
+            "scheduler": "backfilling"
+        }
+    ], 
+    "unit": [
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [], 
+            "FTW_Input_Status": null, 
+            "FTW_Output_Directives": [], 
+            "FTW_Output_Status": null, 
+            "_id": "unit.000001", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1463088183.188277
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1463088277.606773
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463088283.804107
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1463089182.113334
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463089185.208066
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900", 
+                    "65536", 
+                    "65536", 
+                    "0", 
+                    "0", 
+                    "0"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": null, 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_1", 
+                "output_staging": null, 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088181.37237
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088276.238956
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0003.", 
+                    "timestamp": 1463088276.709165
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1463088277.301418
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1463089182.550879
+                }
+            ], 
+            "pilot": "pilot.0003", 
+            "pilot_sandbox": "sftp://comet.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0003/", 
+            "restartable": false, 
+            "sandbox": "sftp://comet.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0003//unit.000001", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1463088181.172145
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1463088277.207043
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1463088277.207043
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1463088280.611506
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1463088280.612796
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1463088280.616307
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1463088280.616756
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463088280.61975
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1463089181.147976
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1463089181.153494
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1463089181.154469
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1463089182.459046
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463089182.550879
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "serial: 9\nsleep interval: 900.000000\n", 
+            "submitted": 1463088181.172145, 
+            "unitmanager": "umgr.0000"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [], 
+            "FTW_Input_Status": null, 
+            "FTW_Output_Directives": [], 
+            "FTW_Output_Status": null, 
+            "_id": "unit.000000", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1463088183.188627
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1463088277.607139
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463088283.804691
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463089185.872118
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900", 
+                    "65536", 
+                    "65536", 
+                    "0", 
+                    "0", 
+                    "0"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": null, 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_0", 
+                "output_staging": null, 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088181.37237
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088276.238956
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0003.", 
+                    "timestamp": 1463088276.803719
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1463088277.488616
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1463089182.574195
+                }
+            ], 
+            "pilot": "pilot.0003", 
+            "pilot_sandbox": "sftp://comet.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0003/", 
+            "restartable": false, 
+            "sandbox": "sftp://comet.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0003//unit.000000", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1463088181.171127
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1463088277.392441
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1463088277.392441
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1463088280.613978
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1463088280.614979
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1463088280.617825
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1463088280.618138
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463088280.63797
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1463089181.148944
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1463089181.155288
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1463089181.156169
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1463089182.473701
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463089182.574195
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "serial: 9\nsleep interval: 900.000000\n", 
+            "submitted": 1463088181.171127, 
+            "unitmanager": "umgr.0000"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [], 
+            "FTW_Input_Status": null, 
+            "FTW_Output_Directives": [], 
+            "FTW_Output_Status": null, 
+            "_id": "unit.000002", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1463088183.187912
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1463088277.606398
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463088289.996631
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1463089189.970027
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463089193.447823
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900", 
+                    "65536", 
+                    "65536", 
+                    "0", 
+                    "0", 
+                    "0"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": null, 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_2", 
+                "output_staging": null, 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088181.37237
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0000.", 
+                    "timestamp": 1463088276.052654
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1463088276.201653
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1463089192.064382
+                }
+            ], 
+            "pilot": "pilot.0000", 
+            "pilot_sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0000/", 
+            "restartable": false, 
+            "sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0000//unit.000002", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1463088181.173151
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1463088276.1104
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1463088276.1104
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1463088286.542193
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1463088286.543201
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1463088286.547246
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1463088286.547663
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463088286.551775
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1463089188.447322
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1463089188.451062
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1463089188.453908
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1463089191.972584
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463089192.064382
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "serial: 9\nsleep interval: 900.000000\n", 
+            "submitted": 1463088181.173151, 
+            "unitmanager": "umgr.0000"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [], 
+            "FTW_Input_Status": null, 
+            "FTW_Output_Directives": [], 
+            "FTW_Output_Status": null, 
+            "_id": "unit.000003", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1463088183.187336
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1463088277.605939
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463088289.996099
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463089193.163166
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900", 
+                    "65536", 
+                    "65536", 
+                    "0", 
+                    "0", 
+                    "0"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": null, 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_3", 
+                "output_staging": null, 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088181.37237
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0000.", 
+                    "timestamp": 1463088276.147294
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1463088276.389467
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1463089192.072777
+                }
+            ], 
+            "pilot": "pilot.0000", 
+            "pilot_sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0000/", 
+            "restartable": false, 
+            "sandbox": "sftp://stampede.tacc.utexas.edu/work/03662/tg829619/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0000//unit.000003", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1463088181.174152
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1463088276.295516
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1463088276.295516
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1463088286.544198
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1463088286.545001
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1463088286.548579
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1463088286.548872
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463088286.562718
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1463089188.448026
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1463089188.454574
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1463089188.45741
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1463089191.978167
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463089192.072777
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "serial: 9\nsleep interval: 900.000000\n", 
+            "submitted": 1463088181.174152, 
+            "unitmanager": "umgr.0000"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [], 
+            "FTW_Input_Status": null, 
+            "FTW_Output_Directives": [], 
+            "FTW_Output_Status": null, 
+            "_id": "unit.000006", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1463088183.189289
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1463088882.110151
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463088888.304714
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463089789.116105
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900", 
+                    "65536", 
+                    "65536", 
+                    "0", 
+                    "0", 
+                    "0"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": null, 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_6", 
+                "output_staging": null, 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088181.37237
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088276.238956
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088276.895188
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0002.", 
+                    "timestamp": 1463088880.64514
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1463088881.755001
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1463089788.049864
+                }
+            ], 
+            "pilot": "pilot.0002", 
+            "pilot_sandbox": "sftp://gordon.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0002/", 
+            "restartable": false, 
+            "sandbox": "sftp://gordon.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0002//unit.000006", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1463088181.177206
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1463088881.66372
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1463088881.66372
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1463088885.446186
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1463088885.447456
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1463088885.45555
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1463088885.455933
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463088885.459018
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1463089785.924955
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1463089785.935077
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1463089785.936574
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1463089787.95793
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463089788.049864
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "serial: 9\nsleep interval: 900.000000\n", 
+            "submitted": 1463088181.177206, 
+            "unitmanager": "umgr.0000"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [], 
+            "FTW_Input_Status": null, 
+            "FTW_Output_Directives": [], 
+            "FTW_Output_Status": null, 
+            "_id": "unit.000007", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1463088183.188961
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1463088882.109657
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463088888.3042
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463089788.831394
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900", 
+                    "65536", 
+                    "65536", 
+                    "0", 
+                    "0", 
+                    "0"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": null, 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_7", 
+                "output_staging": null, 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088181.37237
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088276.238956
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088276.895188
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0002.", 
+                    "timestamp": 1463088880.741907
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1463088881.761777
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1463089788.052427
+                }
+            ], 
+            "pilot": "pilot.0002", 
+            "pilot_sandbox": "sftp://gordon.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0002/", 
+            "restartable": false, 
+            "sandbox": "sftp://gordon.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0002//unit.000007", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1463088181.178246
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1463088881.667711
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1463088881.667711
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1463088885.449149
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1463088885.450421
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1463088885.45752
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1463088885.457807
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463088885.520391
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1463089785.925668
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1463089785.937379
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1463089785.938685
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1463089787.958306
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463089788.052427
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "serial: 9\nsleep interval: 900.000000\n", 
+            "submitted": 1463088181.178246, 
+            "unitmanager": "umgr.0000"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [], 
+            "FTW_Input_Status": null, 
+            "FTW_Output_Directives": [], 
+            "FTW_Output_Status": null, 
+            "_id": "unit.000005", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1463088183.189617
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463089189.970529
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1463090087.814463
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1463090092.688099
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463090096.063727
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900", 
+                    "65536", 
+                    "65536", 
+                    "0", 
+                    "0", 
+                    "0"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": null, 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_5", 
+                "output_staging": null, 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088181.37237
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088276.238956
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088276.895188
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088881.021215
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0003.", 
+                    "timestamp": 1463089185.586423
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1463089186.271231
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1463090092.596745
+                }
+            ], 
+            "pilot": "pilot.0003", 
+            "pilot_sandbox": "sftp://comet.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0003/", 
+            "restartable": false, 
+            "sandbox": "sftp://comet.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0003//unit.000005", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1463088181.17615
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1463089186.179284
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1463089186.179284
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1463089186.499212
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1463089186.500667
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1463089186.501937
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1463089186.502268
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463089186.503548
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1463090086.824118
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1463090086.825812
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1463090086.826958
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1463090088.635585
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463090092.596745
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "serial: 9\nsleep interval: 900.000000\n", 
+            "submitted": 1463088181.17615, 
+            "unitmanager": "umgr.0000"
+        }, 
+        {
+            "Agent_Input_Directives": [], 
+            "Agent_Input_Status": null, 
+            "Agent_Output_Directives": [], 
+            "Agent_Output_Status": null, 
+            "FTW_Input_Directives": [], 
+            "FTW_Input_Status": null, 
+            "FTW_Output_Directives": [], 
+            "FTW_Output_Status": null, 
+            "_id": "unit.000004", 
+            "callbackhistory": [
+                {
+                    "state": "Unscheduled", 
+                    "timestamp": 1463088183.189937
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463089189.9709
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463090096.157672
+                }
+            ], 
+            "control": "umgr", 
+            "description": {
+                "arguments": [
+                    "serial", 
+                    "1", 
+                    "900", 
+                    "65536", 
+                    "65536", 
+                    "0", 
+                    "0", 
+                    "0"
+                ], 
+                "cleanup": true, 
+                "cores": 1, 
+                "environment": null, 
+                "executable": "task", 
+                "input_staging": null, 
+                "kernel": null, 
+                "mpi": false, 
+                "name": "Stage_1_Stage_1_4", 
+                "output_staging": null, 
+                "post_exec": null, 
+                "pre_exec": [], 
+                "restartable": false, 
+                "stderr": null, 
+                "stdout": null
+            }, 
+            "exec_locs": null, 
+            "exit_code": 0, 
+            "finished": null, 
+            "log": [
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088181.37237
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088276.238956
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088276.895188
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463088881.021215
+                }, 
+                {
+                    "message": "unit remains unscheduled", 
+                    "timestamp": 1463089185.686596
+                }, 
+                {
+                    "message": "Scheduled for data transfer to ComputePilot pilot.0003.", 
+                    "timestamp": 1463089186.248278
+                }, 
+                {
+                    "message": "push unit to agent after ftw staging", 
+                    "timestamp": 1463089186.466805
+                }, 
+                {
+                    "message": "Output transfer completed.", 
+                    "timestamp": 1463090092.782766
+                }
+            ], 
+            "pilot": "pilot.0003", 
+            "pilot_sandbox": "sftp://comet.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0003/", 
+            "restartable": false, 
+            "sandbox": "sftp://comet.sdsc.xsede.org/home/mingtha/radical.pilot.sandbox/rp.session.radical.mingtha.016933.0000-pilot.0003//unit.000004", 
+            "started": null, 
+            "state": "Done", 
+            "statehistory": [
+                {
+                    "state": "Scheduling", 
+                    "timestamp": 1463088181.17515
+                }, 
+                {
+                    "state": "StagingInput", 
+                    "timestamp": 1463089186.366665
+                }, 
+                {
+                    "state": "AgentStagingInputPending", 
+                    "timestamp": 1463089186.366665
+                }, 
+                {
+                    "state": "AgentStagingInput", 
+                    "timestamp": 1463089186.70555
+                }, 
+                {
+                    "state": "AllocatingPending", 
+                    "timestamp": 1463089186.706664
+                }, 
+                {
+                    "state": "Allocating", 
+                    "timestamp": 1463089186.707727
+                }, 
+                {
+                    "state": "ExecutingPending", 
+                    "timestamp": 1463089186.708046
+                }, 
+                {
+                    "state": "Executing", 
+                    "timestamp": 1463089186.709328
+                }, 
+                {
+                    "state": "AgentStagingOutputPending", 
+                    "timestamp": 1463090087.02561
+                }, 
+                {
+                    "state": "AgentStagingOutput", 
+                    "timestamp": 1463090087.026641
+                }, 
+                {
+                    "state": "PendingOutputStaging", 
+                    "timestamp": 1463090087.02763
+                }, 
+                {
+                    "state": "StagingOutput", 
+                    "timestamp": 1463090092.690517
+                }, 
+                {
+                    "state": "Done", 
+                    "timestamp": 1463090092.782766
+                }
+            ], 
+            "stderr": "", 
+            "stdout": "serial: 9\nsleep interval: 900.000000\n", 
+            "submitted": 1463088181.17515, 
+            "unitmanager": "umgr.0000"
+        }
+    ]
+}
