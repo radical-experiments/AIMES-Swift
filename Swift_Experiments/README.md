@@ -73,7 +73,7 @@ Directory structure:
 
 1. ```cd AIMES-Swift/Swift_Experiments/strategy_#``` and edit the following files:
 
-  * ```swift-<BoT>.conf``` and set the sites where you want to run your experiment(s). For example:
+  * ```swift.conf``` and set the sites where you want to run your experiment(s). For example:
     
     ```
     sites: [stampede, gordon]  # runs both sites
