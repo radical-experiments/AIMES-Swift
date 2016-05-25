@@ -4,7 +4,7 @@
     "scales"       : [8, 32, 256, 2048],
     "bindings"     : ["late"],
     "time_distribs": ["uniform"],
-    "iterations"   : 4,
+    "iterations"   : 2,
     "cores"        : [1],
     "reruns"       : 0,
     "project_ids": {
@@ -44,10 +44,6 @@
                 "gordon.sdsc.xsede.org": {
                     "sched": "pbs",
                     "fconf": "conf/xsede.gordon.json"
-                },
-                "bw.ncsa.illinois.edu": {
-                    "sched": "torque",
-                    "fconf": "conf/ncsa.bw.json"
                 }
             }
         }
