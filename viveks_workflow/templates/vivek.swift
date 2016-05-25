@@ -1,9 +1,9 @@
 
 type file;
 
-int N = toInt(arg("N", "4")); # 64 ... 2048
-int chunk_size = 2; # chunksize for stage 3
-int n_chunks   = 2; # number of chunks
+int N = ###size###;
+int chunk_size = ###chunk_size###; # chunksize for stage 3
+int n_chunks   = ###n_chunks###;   # number of chunks
 
 int verb = 1;
 

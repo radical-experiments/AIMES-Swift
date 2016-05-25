@@ -1,7 +1,7 @@
 
 {
     "path"         : "data/",
-    "mongodb"      : "mongodb://am:am@ds019101.mlab.com:19101/swift_aimes",
+    "mongodb"      : "mongodb://144.76.72.175/swift_aimes",
     "workload_type": "swift",
     "bindings"     : ["late"],
     "time_distribs": ["uniform"],
@@ -9,14 +9,12 @@
     "cores"        : [1],
     "overlay_reuse": "True",
     "project_ids": {
+      # "xsede.supermic"  : "TG-CCR140028",
+        "xsede.comet"     : "unc100",
+        "xsede.gordon"    : "unc101",
         "xsede.stampede"  : "TG-MCB090174",
-        "ncsa.bw"         : "gkd",
-       #"xsede.trestles"  : "unc100",
-       "xsede.gordon"    : "unc101",
-       #"xsede.blacklight": "unc101",
-       "xsede.supermic"  : "TG-CCR140028",
-       "xsede.comet"     : "unc100",
-        "local.localhost" : ""
+        "ncsa.bw"         : "gkd"
+      # "local.localhost" : ""
     },
     "log": {
         "media": ["file"],
@@ -31,7 +29,7 @@
         "pct_resources"  : 100
     },
     "bundle": {
-        "mongodb"  : "mongodb://am:am@ds019101.mlab.com:19101/swift_aimes_bundle",
+        "mongodb"  : "mongodb://144.76.72.175/swift_aimes",
         "template" : "./conf/bundle.template",
         "origin"   : "107.21.218.167",
         "username" : "mturilli",
@@ -45,17 +43,17 @@
                    "sched": "slurm",
                    "fconf": "conf/xsede.comet.json"
                },
-              #"gordon.sdsc.xsede.org": {
-              #    "sched": "pbs",
-              #    "fconf": "conf/xsede.gordon.json"
-              #},
-                "stampede.tacc.xsede.org": {
-                    "sched": "slurm",
-                    "fconf": "conf/xsede.stampede.json"
-              # },
-              # "bw.ncsa.illinois.edu": {
-              #     "sched": "torque",
-              #     "fconf": "conf/bw.ncsa.json"
+               "gordon.sdsc.xsede.org": {
+                   "sched": "pbs",
+                   "fconf": "conf/xsede.gordon.json"
+               },
+               "stampede.tacc.xsede.org": {
+                   "sched": "slurm",
+                   "fconf": "conf/xsede.stampede.json"
+               },
+               "bw.ncsa.illinois.edu": {
+                   "sched": "torque",
+                   "fconf": "conf/bw.ncsa.json"
               # },
               # "localhost": {
               #     "sched": "",
