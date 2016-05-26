@@ -1,9 +1,9 @@
 
 type file;
 
-int N = toInt(arg("N", "512")); # 64 ... 2048
-int chunk_size = 64; # chunksize for stage 3
-int n_chunks   = 8; # number of chunks
+int N = toInt(arg("N", "4")); # 64 ... 2048
+int chunk_size = 2; # chunksize for stage 3
+int n_chunks   = 2; # number of chunks
 
 int verb = 1;
 
@@ -43,12 +43,15 @@ foreach i in [1:N] {
     file output_1_3_i <single_file_mapper; file=strcat("output_1_3_",i,".txt")>;
 
     if (verb == 1) {
-      # trace("stage 1");
-      # trace(filename(input_shared_1_1));
-      # trace(filename(input_shared_1_2));
-      # trace(filename(input_shared_1_3));
-      # trace(filename(input_shared_1_4));
-      # trace(filename(input_shared_1_5));
+        tracef("trace stage 1: %d : %s : %s : %s : %s : %s -> %s : %s : %s\n", i,
+                filename(input_shared_1_1),
+                filename(input_shared_1_2),
+                filename(input_shared_1_3),
+                filename(input_shared_1_4),
+                filename(input_shared_1_5),
+                filename(output_1_1_i),
+                filename(output_1_2_i),
+                filename(output_1_3_i));
     }
 
     (output_1_1_i, 
@@ -97,10 +100,14 @@ foreach i in [1:N] {
     file output_2_4_i <single_file_mapper; file=strcat("output_2_4_",i,".txt")>;
     
     if (verb == 1) {
-      # trace("stage 2");
-      # trace(filename(input_shared_1_3));
-      # trace(filename(input_shared_1_4));
-      # trace(filename(output_1_1[i]));
+        tracef("trace stage 2: %d : %s : %s : %s -> %s : %s : %s : %s\n", i, 
+               filename(input_shared_1_3), 
+               filename(input_shared_1_4), 
+               filename(output_1_1[i]),
+               filename(output_2_1_i), 
+               filename(output_2_2_i), 
+               filename(output_2_3_i), 
+               filename(output_2_4_i));
     }
     (output_2_1_i, 
      output_2_2_i, 
@@ -163,11 +170,10 @@ foreach c in [0:(n_chunks-1)] {
 
     # run this chunk
     if (verb == 1) {
-        string tmp = sprintf("stage 3: %s : %s : %s -> %s", c, 
+        tracef("stage 3: %d : %s : %s -> %s", c, 
                              filename(input_shared_1_3), 
                              strjoin(output_2_2_c, " "), 
                              strjoin(output_3_1_c_s, " "));
-        trace(tmp);
 
     }
     output_3_1_c = stage_3(c, chunk_size, 
@@ -199,13 +205,15 @@ app (file output_4_1) stage_4 (file   input_shared_1_5,
 
 if (1 == 1) {
 
+    file output_4_1  <"output_4_1.txt">;
+
     if (verb == 1) {
-        trace("stage 4");
-        trace(filename(input_shared_1_5));
-        trace(@output_3_1);
+        tracef("stage 4: %s : %s -> %s", 
+               filename(input_shared_1_5), 
+               @output_3_1,
+               filename(output_4_1));
     }
 
-    file output_4_1  <"output_4_1.txt">;
     output_4_1  = stage_4(input_shared_1_5,
                           output_3_1);
 }

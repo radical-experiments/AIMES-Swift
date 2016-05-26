@@ -14,7 +14,6 @@ do
     shift
 done
 
-
 # pattern to select suitable profiles
 regex_1='.*sander.MPI -O -i mdshort.in'
 regex_2='.*sander.MPI -O -i min.in'
@@ -39,5 +38,5 @@ echo "sampling $samples"
 
 . $HOME/bin.rp/ve/bin/activate
 
-radical-synapse-emulate -i "$samples"
+radical-synapse-emulate -i "$samples" || true
 
