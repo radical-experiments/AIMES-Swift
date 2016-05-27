@@ -1,0 +1,63 @@
+{
+    "arguments": [
+        "-O", 
+        "-i", 
+        "min.in", 
+        "-o", 
+        "min1.out", 
+        "-inf", 
+        "min1.inf", 
+        "-r", 
+        "md1.crd", 
+        "-p", 
+        "ace_ala_nme.top", 
+        "-c", 
+        "ace_ala_nme.crd", 
+        "-ref", 
+        "min1.crd"
+    ], 
+    "cleanup": false, 
+    "cores": 1, 
+    "environment": null, 
+    "executable": "/opt/apps/intel13/mvapich2_1_9/amber/12.0/bin/sander", 
+    "input_staging": [
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/min.in", 
+            "target": "min.in"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/ace_ala_nme.top", 
+            "target": "ace_ala_nme.top"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/ace_ala_nme.crd", 
+            "target": "ace_ala_nme.crd"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/ace_ala_nme.crd", 
+            "target": "min1.crd"
+        }
+    ], 
+    "kernel": null, 
+    "mpi": false, 
+    "name": "sim ;1 ;22", 
+    "output_staging": [
+        {
+            "action": "Copy", 
+            "source": "md1.crd", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/md_1_22.crd"
+        }
+    ], 
+    "post_exec": null, 
+    "pre_exec": [
+        "module load TACC", 
+        "module load amber/12.0"
+    ], 
+    "restartable": false, 
+    "stderr": null, 
+    "stdout": null
+}
