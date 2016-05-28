@@ -1,0 +1,452 @@
+========================================================================
+Run - scale 32; binding late; distribution uniform; iteration 1; rerun 1
+========================================================================
+
+
+==================
+Execution Strategy
+==================
+
+
+Configurations:
+	Type of task-to-resource binding  : late
+
+Heuristics:
+	Degree of concurrency for task execution : 100%
+	Percentage of bundle resources targeted  : 100%
+
+Inferences:
+	Number of target resources      : 1
+	Target resource(s) for pilot(s) : local.localhost
+	Number of pilots                : 1
+	Total workflow number of cores  : 64.0
+	Type of scheduler for RP        : SCHED_DIRECT_SUBMISSION
+	Total workflow compute time     : 60.0 seconds
+	Total workflow staging time     : 60.0 seconds
+	Total RP overhead time          : 28928 seconds
+
+
+==================
+Pilot Descriptions
+==================
+
+
+local.localhost:
+	Allocation; None -> RP default : 
+	Queue; None -> RP default      : None
+	Number of cores                : 64
+	Walltime in minutes            : 484
+	Stop once the workflow is done : True
+
+
+
+2016-05-28 10:07:41 Pilot pilot.0000                         is PendingLaunch             on local.localhost
+=================
+Radical Pilot IDs
+=================
+
+
+Session ID              : rp.session.radical.merzky.016949.0008
+Pilot manager ID        : pmgr.0000
+Unit manager ID         : umgr.0000
+Pilot ID/resource : pilot.0000 local.localhost
+=========================
+Compute Unit Descriptions
+=========================
+
+
+Total CU translated    : 32
+Total CU with 1 cores : 0
+
+Print the first units for reference:
+2016-05-28 10:07:42 Pilot pilot.0000                         is Launching                 on local.localhost
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000008 (unit.000018) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000021 (unit.000019) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000026 (unit.000030) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000029 (unit.000031) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000019 (unit.000010) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000013 (unit.000011) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000006 (unit.000012) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000028 (unit.000013) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000002 (unit.000014) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000014 (unit.000015) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000018 (unit.000016) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000010 (unit.000017) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000011 (unit.000021) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000000 (unit.000020) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000004 (unit.000025) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000016 (unit.000024) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000001 (unit.000027) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000030 (unit.000000) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000023 (unit.000009) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000024 (unit.000008) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000031 (unit.000029) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000022 (unit.000028) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000003 (unit.000003) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000025 (unit.000002) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000012 (unit.000001) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000005 (unit.000026) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000007 (unit.000007) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000015 (unit.000006) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000027 (unit.000023) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000020 (unit.000022) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000009 (unit.000005) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:44 CU    emgr.016949.0007:task.000017 (unit.000004) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:07:46 Pilot pilot.0000                         is PendingActive             on local.localhost
+2016-05-28 10:07:47 CU    emgr.016949.0007:task.000008 (unit.000018) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:47 CU    emgr.016949.0007:task.000026 (unit.000030) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:47 CU    emgr.016949.0007:task.000029 (unit.000031) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:47 CU    emgr.016949.0007:task.000013 (unit.000011) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:47 CU    emgr.016949.0007:task.000024 (unit.000008) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:47 CU    emgr.016949.0007:task.000022 (unit.000028) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:47 CU    emgr.016949.0007:task.000012 (unit.000001) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:47 CU    emgr.016949.0007:task.000020 (unit.000022) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:47 CU    emgr.016949.0007:task.000007 (unit.000007) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:50 CU    emgr.016949.0007:task.000026 (unit.000030) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:50 CU    emgr.016949.0007:task.000029 (unit.000031) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:50 CU    emgr.016949.0007:task.000018 (unit.000016) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:50 CU    emgr.016949.0007:task.000010 (unit.000017) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:50 CU    emgr.016949.0007:task.000024 (unit.000008) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:50 CU    emgr.016949.0007:task.000004 (unit.000025) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:50 CU    emgr.016949.0007:task.000012 (unit.000001) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:50 CU    emgr.016949.0007:task.000023 (unit.000009) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:50 CU    emgr.016949.0007:task.000005 (unit.000026) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:50 CU    emgr.016949.0007:task.000025 (unit.000002) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:50 CU    emgr.016949.0007:task.000027 (unit.000023) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:50 Pilot pilot.0000                         is Active                    on local.localhost
+2016-05-28 10:07:53 CU    emgr.016949.0007:task.000021 (unit.000019) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:53 CU    emgr.016949.0007:task.000019 (unit.000010) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:53 CU    emgr.016949.0007:task.000014 (unit.000015) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:53 CU    emgr.016949.0007:task.000010 (unit.000017) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:53 CU    emgr.016949.0007:task.000003 (unit.000003) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:53 CU    emgr.016949.0007:task.000025 (unit.000002) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:53 CU    emgr.016949.0007:task.000023 (unit.000009) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:53 CU    emgr.016949.0007:task.000001 (unit.000027) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:53 CU    emgr.016949.0007:task.000030 (unit.000000) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:53 CU    emgr.016949.0007:task.000000 (unit.000020) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:53 CU    emgr.016949.0007:task.000005 (unit.000026) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:53 CU    emgr.016949.0007:task.000015 (unit.000006) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000008 (unit.000018) is Executing                 on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000021 (unit.000019) is ExecutingPending          on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000026 (unit.000030) is Executing                 on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000029 (unit.000031) is Executing                 on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000019 (unit.000010) is ExecutingPending          on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000013 (unit.000011) is Executing                 on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000006 (unit.000012) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000028 (unit.000013) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000002 (unit.000014) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000014 (unit.000015) is ExecutingPending          on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000018 (unit.000016) is Executing                 on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000010 (unit.000017) is ExecutingPending          on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000011 (unit.000021) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000000 (unit.000020) is ExecutingPending          on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000003 (unit.000003) is ExecutingPending          on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000016 (unit.000024) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000001 (unit.000027) is ExecutingPending          on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000030 (unit.000000) is ExecutingPending          on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000023 (unit.000009) is Executing                 on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000024 (unit.000008) is Executing                 on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000031 (unit.000029) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000022 (unit.000028) is Executing                 on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000004 (unit.000025) is Executing                 on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000025 (unit.000002) is ExecutingPending          on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000012 (unit.000001) is Executing                 on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000005 (unit.000026) is ExecutingPending          on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000007 (unit.000007) is Executing                 on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000015 (unit.000006) is ExecutingPending          on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000027 (unit.000023) is Executing                 on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000020 (unit.000022) is Executing                 on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000009 (unit.000005) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:56 CU    emgr.016949.0007:task.000017 (unit.000004) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000008 (unit.000018) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000021 (unit.000019) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000026 (unit.000030) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000029 (unit.000031) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000019 (unit.000010) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000013 (unit.000011) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000006 (unit.000012) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000028 (unit.000013) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000002 (unit.000014) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000014 (unit.000015) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000018 (unit.000016) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000010 (unit.000017) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000011 (unit.000021) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000000 (unit.000020) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000003 (unit.000003) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000016 (unit.000024) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000001 (unit.000027) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000023 (unit.000009) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000024 (unit.000008) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000031 (unit.000029) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000022 (unit.000028) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000004 (unit.000025) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000025 (unit.000002) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000012 (unit.000001) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000030 (unit.000000) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000007 (unit.000007) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000015 (unit.000006) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000027 (unit.000023) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000020 (unit.000022) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000009 (unit.000005) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000017 (unit.000004) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:07:59 CU    emgr.016949.0007:task.000005 (unit.000026) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:08:02 CU    emgr.016949.0007:task.000008 (unit.000018) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:02 CU    emgr.016949.0007:task.000026 (unit.000030) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:02 CU    emgr.016949.0007:task.000013 (unit.000011) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:02 CU    emgr.016949.0007:task.000018 (unit.000016) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:02 CU    emgr.016949.0007:task.000022 (unit.000028) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:02 CU    emgr.016949.0007:task.000012 (unit.000001) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:02 CU    emgr.016949.0007:task.000020 (unit.000022) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:02 CU    emgr.016949.0007:task.000007 (unit.000007) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:05 CU    emgr.016949.0007:task.000026 (unit.000030) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:05 CU    emgr.016949.0007:task.000029 (unit.000031) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:05 CU    emgr.016949.0007:task.000019 (unit.000010) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:05 CU    emgr.016949.0007:task.000018 (unit.000016) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:05 CU    emgr.016949.0007:task.000010 (unit.000017) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:05 CU    emgr.016949.0007:task.000004 (unit.000025) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:05 CU    emgr.016949.0007:task.000025 (unit.000002) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:05 CU    emgr.016949.0007:task.000012 (unit.000001) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:05 CU    emgr.016949.0007:task.000023 (unit.000009) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:05 CU    emgr.016949.0007:task.000024 (unit.000008) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:05 CU    emgr.016949.0007:task.000027 (unit.000023) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:05 CU    emgr.016949.0007:task.000020 (unit.000022) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:08 CU    emgr.016949.0007:task.000014 (unit.000015) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:08 CU    emgr.016949.0007:task.000010 (unit.000017) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:08 CU    emgr.016949.0007:task.000024 (unit.000008) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:08 CU    emgr.016949.0007:task.000023 (unit.000009) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:08 CU    emgr.016949.0007:task.000030 (unit.000000) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:08 CU    emgr.016949.0007:task.000000 (unit.000020) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:08 CU    emgr.016949.0007:task.000027 (unit.000023) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:08 CU    emgr.016949.0007:task.000015 (unit.000006) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:11 CU    emgr.016949.0007:task.000021 (unit.000019) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:11 CU    emgr.016949.0007:task.000006 (unit.000012) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:11 CU    emgr.016949.0007:task.000014 (unit.000015) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:11 CU    emgr.016949.0007:task.000000 (unit.000020) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:11 CU    emgr.016949.0007:task.000003 (unit.000003) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:11 CU    emgr.016949.0007:task.000016 (unit.000024) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:11 CU    emgr.016949.0007:task.000001 (unit.000027) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:11 CU    emgr.016949.0007:task.000030 (unit.000000) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:11 CU    emgr.016949.0007:task.000015 (unit.000006) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:11 CU    emgr.016949.0007:task.000009 (unit.000005) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:11 CU    emgr.016949.0007:task.000017 (unit.000004) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:11 CU    emgr.016949.0007:task.000005 (unit.000026) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:14 CU    emgr.016949.0007:task.000006 (unit.000012) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:14 CU    emgr.016949.0007:task.000028 (unit.000013) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:14 CU    emgr.016949.0007:task.000002 (unit.000014) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:14 CU    emgr.016949.0007:task.000011 (unit.000021) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:14 CU    emgr.016949.0007:task.000001 (unit.000027) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:14 CU    emgr.016949.0007:task.000031 (unit.000029) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:14 CU    emgr.016949.0007:task.000009 (unit.000005) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:14 CU    emgr.016949.0007:task.000017 (unit.000004) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:17 CU    emgr.016949.0007:task.000002 (unit.000014) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:17 CU    emgr.016949.0007:task.000011 (unit.000021) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:17 CU    emgr.016949.0007:task.000031 (unit.000029) is Done                      on local.localhost (pilot.0000)
+=================
+Radical Pilot IDs
+=================
+
+
+Session ID              : rp.session.radical.merzky.016949.0008
+Pilot manager ID        : pmgr.0000
+Unit manager ID         : umgr.0000
+Pilot ID/resource : pilot.0000 local.localhost
+=========================
+Compute Unit Descriptions
+=========================
+
+
+Total CU translated    : 32
+Total CU with 1 cores : 0
+
+Print the first units for reference:
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000039 (unit.000050) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000045 (unit.000037) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000040 (unit.000034) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000047 (unit.000033) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000060 (unit.000054) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000051 (unit.000044) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000037 (unit.000042) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000056 (unit.000036) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000041 (unit.000052) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000044 (unit.000057) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000055 (unit.000032) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000059 (unit.000053) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000035 (unit.000043) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000054 (unit.000058) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000048 (unit.000061) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000046 (unit.000060) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000053 (unit.000063) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000043 (unit.000062) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000049 (unit.000047) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000061 (unit.000046) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000057 (unit.000041) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000033 (unit.000040) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000063 (unit.000059) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000062 (unit.000038) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000050 (unit.000049) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000038 (unit.000051) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000036 (unit.000055) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000042 (unit.000039) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000052 (unit.000045) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000034 (unit.000056) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000058 (unit.000035) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:53 CU    emgr.016949.0007:task.000032 (unit.000048) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-28 10:08:56 CU    emgr.016949.0007:task.000060 (unit.000054) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:56 CU    emgr.016949.0007:task.000039 (unit.000050) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:08:56 CU    emgr.016949.0007:task.000045 (unit.000037) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:56 CU    emgr.016949.0007:task.000054 (unit.000058) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:08:56 CU    emgr.016949.0007:task.000037 (unit.000042) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:08:56 CU    emgr.016949.0007:task.000055 (unit.000032) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:08:56 CU    emgr.016949.0007:task.000059 (unit.000053) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:08:56 CU    emgr.016949.0007:task.000035 (unit.000043) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:08:56 CU    emgr.016949.0007:task.000048 (unit.000061) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:08:56 CU    emgr.016949.0007:task.000043 (unit.000062) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:08:56 CU    emgr.016949.0007:task.000050 (unit.000049) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:56 CU    emgr.016949.0007:task.000047 (unit.000033) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000060 (unit.000054) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000047 (unit.000033) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000039 (unit.000050) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000045 (unit.000037) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000059 (unit.000053) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000054 (unit.000058) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000037 (unit.000042) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000056 (unit.000036) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000055 (unit.000032) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000048 (unit.000061) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000053 (unit.000063) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000043 (unit.000062) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000061 (unit.000046) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000035 (unit.000043) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000057 (unit.000041) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000038 (unit.000051) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000042 (unit.000039) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:08:59 CU    emgr.016949.0007:task.000034 (unit.000056) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000055 (unit.000032) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000047 (unit.000033) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000034 (unit.000056) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000044 (unit.000057) is ExecutingPending          on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000056 (unit.000036) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000038 (unit.000051) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000059 (unit.000053) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000042 (unit.000039) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000054 (unit.000058) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000039 (unit.000050) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000040 (unit.000034) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000058 (unit.000035) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000048 (unit.000061) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000046 (unit.000060) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000053 (unit.000063) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000043 (unit.000062) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000049 (unit.000047) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000061 (unit.000046) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000051 (unit.000044) is Executing                 on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000035 (unit.000043) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000037 (unit.000042) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000057 (unit.000041) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000033 (unit.000040) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000050 (unit.000049) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000036 (unit.000055) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:09:02 CU    emgr.016949.0007:task.000052 (unit.000045) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000055 (unit.000032) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000036 (unit.000055) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000044 (unit.000057) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000039 (unit.000050) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000038 (unit.000051) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000059 (unit.000053) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000062 (unit.000038) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000041 (unit.000052) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000056 (unit.000036) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000058 (unit.000035) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000049 (unit.000047) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000061 (unit.000046) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000052 (unit.000045) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000051 (unit.000044) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000035 (unit.000043) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000057 (unit.000041) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000033 (unit.000040) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000063 (unit.000059) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:05 CU    emgr.016949.0007:task.000032 (unit.000048) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:09:08 CU    emgr.016949.0007:task.000034 (unit.000056) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:08 CU    emgr.016949.0007:task.000044 (unit.000057) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:08 CU    emgr.016949.0007:task.000056 (unit.000036) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:08 CU    emgr.016949.0007:task.000038 (unit.000051) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:08 CU    emgr.016949.0007:task.000040 (unit.000034) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:08 CU    emgr.016949.0007:task.000042 (unit.000039) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:08 CU    emgr.016949.0007:task.000046 (unit.000060) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:08 CU    emgr.016949.0007:task.000053 (unit.000063) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:08 CU    emgr.016949.0007:task.000049 (unit.000047) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:08 CU    emgr.016949.0007:task.000061 (unit.000046) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:08 CU    emgr.016949.0007:task.000051 (unit.000044) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:08 CU    emgr.016949.0007:task.000057 (unit.000041) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:11 CU    emgr.016949.0007:task.000036 (unit.000055) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:11 CU    emgr.016949.0007:task.000044 (unit.000057) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:11 CU    emgr.016949.0007:task.000062 (unit.000038) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:11 CU    emgr.016949.0007:task.000046 (unit.000060) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:11 CU    emgr.016949.0007:task.000049 (unit.000047) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:11 CU    emgr.016949.0007:task.000052 (unit.000045) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:11 CU    emgr.016949.0007:task.000051 (unit.000044) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:11 CU    emgr.016949.0007:task.000033 (unit.000040) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:14 CU    emgr.016949.0007:task.000036 (unit.000055) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:14 CU    emgr.016949.0007:task.000041 (unit.000052) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:14 CU    emgr.016949.0007:task.000062 (unit.000038) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:14 CU    emgr.016949.0007:task.000058 (unit.000035) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:14 CU    emgr.016949.0007:task.000052 (unit.000045) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:14 CU    emgr.016949.0007:task.000033 (unit.000040) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:14 CU    emgr.016949.0007:task.000063 (unit.000059) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:14 CU    emgr.016949.0007:task.000032 (unit.000048) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:09:17 CU    emgr.016949.0007:task.000041 (unit.000052) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:17 CU    emgr.016949.0007:task.000058 (unit.000035) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:17 CU    emgr.016949.0007:task.000063 (unit.000059) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:09:17 CU    emgr.016949.0007:task.000032 (unit.000048) is Done                      on local.localhost (pilot.0000)
+=================
+Radical Pilot IDs
+=================
+
+
+Session ID              : rp.session.radical.merzky.016949.0008
+Pilot manager ID        : pmgr.0000
+Unit manager ID         : umgr.0000
+Pilot ID/resource : pilot.0000 local.localhost
+=========================
+Compute Unit Descriptions
+=========================
+
+
+Total CU translated    : 4
+Total CU with 1 cores : 0
+
+Print the first units for reference:
+2016-05-28 10:09:57 CU    emgr.016949.0007:task.000065 (unit.000065) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:09:57 CU    emgr.016949.0007:task.000064 (unit.000067) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:09:57 CU    emgr.016949.0007:task.000066 (unit.000066) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:09:57 CU    emgr.016949.0007:task.000067 (unit.000064) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:10:00 CU    emgr.016949.0007:task.000065 (unit.000065) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:10:00 CU    emgr.016949.0007:task.000064 (unit.000067) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:10:00 CU    emgr.016949.0007:task.000066 (unit.000066) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:10:00 CU    emgr.016949.0007:task.000067 (unit.000064) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:10:03 CU    emgr.016949.0007:task.000065 (unit.000065) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:10:03 CU    emgr.016949.0007:task.000064 (unit.000067) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:10:03 CU    emgr.016949.0007:task.000066 (unit.000066) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-28 10:10:03 CU    emgr.016949.0007:task.000067 (unit.000064) is Done                      on local.localhost (pilot.0000)
+2016-05-28 10:10:06 CU    emgr.016949.0007:task.000066 (unit.000066) is Done                      on local.localhost (pilot.0000)
+=================
+Radical Pilot IDs
+=================
+
+
+Session ID              : rp.session.radical.merzky.016949.0008
+Pilot manager ID        : pmgr.0000
+Unit manager ID         : umgr.0000
+Pilot ID/resource : pilot.0000 local.localhost
+=========================
+Compute Unit Descriptions
+=========================
+
+
+Total CU translated    : 1
+Total CU with 1 cores : 0
+
+Print the first units for reference:
+2016-05-28 10:10:39 CU    emgr.016949.0007:task.000068 (unit.000068) is StagingInput              on local.localhost (pilot.0000)
+2016-05-28 10:10:48 CU    emgr.016949.0007:task.000068 (unit.000068) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-28 10:10:51 CU    emgr.016949.0007:task.000068 (unit.000068) is Done                      on local.localhost (pilot.0000)

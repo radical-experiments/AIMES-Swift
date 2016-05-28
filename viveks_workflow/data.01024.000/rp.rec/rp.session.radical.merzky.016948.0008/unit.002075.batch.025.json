@@ -1,0 +1,51 @@
+{
+    "arguments": [
+        "100", 
+        "8", 
+        "input_shared_1_3.txt", 
+        "output_2_2_801.txt output_2_2_802.txt output_2_2_803.txt output_2_2_804.txt output_2_2_805.txt output_2_2_806.txt output_2_2_807.txt output_2_2_808.txt"
+    ], 
+    "cleanup": false, 
+    "cores": 8, 
+    "environment": null, 
+    "executable": "~/bin.rp/stage_3.sh", 
+    "input_staging": [
+        "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.01024.000/./output_2_2_804.txt", 
+        "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+        "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.01024.000/./output_2_2_806.txt", 
+        "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.01024.000/./output_2_2_802.txt", 
+        "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.01024.000/./output_2_2_803.txt", 
+        "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.01024.000/./output_2_2_807.txt", 
+        "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.01024.000/./output_2_2_805.txt", 
+        "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.01024.000/./output_2_2_801.txt", 
+        "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.01024.000/./input_shared_1_3.txt", 
+        "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.01024.000/./output_2_2_808.txt", 
+        "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_pre", 
+        "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_post"
+    ], 
+    "kernel": null, 
+    "mpi": false, 
+    "name": "emgr.016948.0007:task.002072", 
+    "output_staging": [
+        "stdout.txt", 
+        "output_3_1_804.txt", 
+        "output_3_1_802.txt", 
+        "output_3_1_808.txt", 
+        "output_3_1_805.txt", 
+        "output_3_1_807.txt", 
+        "output_3_1_806.txt", 
+        "wrapper.log", 
+        "stderr.txt", 
+        "output_3_1_803.txt", 
+        "output_3_1_801.txt"
+    ], 
+    "post_exec": [
+        "bash _swiftwrap_post \"-of\" \"output_3_1_807.txt|output_3_1_801.txt|output_3_1_804.txt|output_3_1_808.txt|output_3_1_806.txt|output_3_1_802.txt|output_3_1_805.txt|output_3_1_803.txt\""
+    ], 
+    "pre_exec": [
+        "bash _swiftwrap_pre \"-d\" \"\" \"-if\" \"output_2_2_807.txt|output_2_2_805.txt|output_2_2_804.txt|output_2_2_802.txt|output_2_2_806.txt|input_shared_1_3.txt|output_2_2_801.txt|output_2_2_808.txt|output_2_2_803.txt\""
+    ], 
+    "restartable": false, 
+    "stderr": "stderr.txt", 
+    "stdout": "stdout.txt"
+}
