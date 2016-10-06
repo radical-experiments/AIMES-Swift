@@ -9,12 +9,12 @@
     "cores"        : [1],
     "overlay_reuse": "True",
     "project_ids": {
-      # "xsede.supermic"  : "TG-CCR140028",
-        "xsede.comet"     : "unc100",
+      # "ncsa.bw"         : "gkd",
+      # "local.localhost" : "",
+        "xsede.supermic"  : "TG-CCR140028",
+        "xsede.comet"     : "TG-MCB090174",
         "xsede.gordon"    : "unc100",
-        "xsede.stampede"  : "TG-MCB090174",
-        "ncsa.bw"         : "gkd"
-      # "local.localhost" : ""
+        "xsede.stampede"  : "TG-MCB090174"
     },
     "log": {
         "media": ["file"],
@@ -35,10 +35,18 @@
         "username" : "mturilli",
         "resources": {
             "unsupported": {
-              # "supermic.cct-lsu.xsede.org": {
-              #     "sched": "pbs",
-              #     "fconf": "conf/xsede.supermic.json"
+              # "bw.ncsa.illinois.edu": {
+              #     "sched": "torque",
+              #     "fconf": "conf/bw.ncsa.json"
               # },
+              # "localhost": {
+              #     "sched": "",
+              #     "fconf": "conf/localhost.json"
+              # },
+                "supermic.cct-lsu.xsede.org": {
+                    "sched": "pbs",
+                    "fconf": "conf/xsede.supermic.json"
+                },
                 "comet.sdsc.xsede.org": {
                     "sched": "slurm",
                     "fconf": "conf/xsede.comet.json"
@@ -50,14 +58,6 @@
                 "stampede.tacc.xsede.org": {
                     "sched": "slurm",
                     "fconf": "conf/xsede.stampede.json"
-                },
-                "bw.ncsa.illinois.edu": {
-                    "sched": "torque",
-                    "fconf": "conf/bw.ncsa.json"
-              # },
-              # "localhost": {
-              #     "sched": "",
-              #     "fconf": "conf/localhost.json"
                 }
             }
         }
