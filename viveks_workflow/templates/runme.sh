@@ -23,6 +23,9 @@ echo "waiting on $SWIFT_PID"
 wait $SWIFT_PID
 tail swift.log
 
+echo "cancel rp sessions"
+curl -X PUT 'http://localhost:8090/emgr/stop'
+
 echo 'fetching profiles'
 SESSION_IDS=`grep 'new session' rest.log | cut -f 5 -d '[' | cut -f 1 -d ']'`
 for sid in $SESSION_IDS

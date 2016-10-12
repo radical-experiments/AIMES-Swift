@@ -30,15 +30,21 @@ with open('experiments.ctrl', 'r') as ctrl:
         n_chunks   = int(size / chunk_size)
         e_name     = 'data.%05d.%03d' % (size, num)
 
-        if os.path.isdir(e_name):
-            print 'skip   %s' % e_name
+        if os.path.isdir('%s/run001' % e_name):
+            print 'skip       %s' % e_name
             continue
+
+        if os.path.isdir(e_name):
+            print 'refresh    %s' % e_name
+            os.system('rm -rf %s' % e_name)
+
+        else:
+            print 'create     %s' % e_name
 
         sed = 'sed -e "s/###size###/%s/g; s/###chunk_size###/%s/g; s/###n_chunks###/%s/g"' \
               % (size, chunk_size, n_chunks)
 
         # prepare experiment
-        print 'create %s' % e_name
         os.system('mkdir -p %s' % e_name)
         os.system('cp  %s %s/' % (input_names, e_name))
         os.system('cd  %s ; ln -s ../conf .' % (e_name))
