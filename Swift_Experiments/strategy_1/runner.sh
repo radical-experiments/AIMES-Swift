@@ -23,9 +23,11 @@ EOF
 arg_generate_experiment()
 {
 cat <<EOF | shuf &> task.count
-8
 32
+128
 256
+512
+1024
 2048
 EOF
 }
@@ -82,4 +84,4 @@ done
 
 export PATH=$HOME/notify:$PATH
 
-mailx -s "Test results from $HOSTNAME" -r $EMAIL_FROM $EMAIL_TO < message.txt
+#mailx -s "Test results from $HOSTNAME" -r $EMAIL_FROM $EMAIL_TO < message.txt
