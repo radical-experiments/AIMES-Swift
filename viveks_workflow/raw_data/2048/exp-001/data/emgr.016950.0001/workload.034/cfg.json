@@ -1,0 +1,71 @@
+{
+    "bindings": [
+        "late"
+    ], 
+    "bundle": {
+        "mongodb": "mongodb://144.76.72.175/swift_aimes", 
+        "origin": "107.21.218.167", 
+        "resources": {
+            "unsupported": {
+                "bw.ncsa.illinois.edu": {
+                    "fconf": "conf/bw.ncsa.json", 
+                    "sched": "torque"
+                }, 
+                "comet.sdsc.xsede.org": {
+                    "fconf": "conf/xsede.comet.json", 
+                    "sched": "slurm"
+                }, 
+                "gordon.sdsc.xsede.org": {
+                    "fconf": "conf/xsede.gordon.json", 
+                    "sched": "pbs"
+                }, 
+                "stampede.tacc.xsede.org": {
+                    "fconf": "conf/xsede.stampede.json", 
+                    "sched": "slurm"
+                }
+            }
+        }, 
+        "template": "./conf/bundle.template", 
+        "username": "mturilli"
+    }, 
+    "cores": [
+        1
+    ], 
+    "iterations": [
+        1
+    ], 
+    "log": {
+        "email": {
+            "recipients": [
+                "matteo.turilli@gmail.com", 
+                "andre@merzky.net"
+            ], 
+            "template": "./conf/email.template"
+        }, 
+        "file": "runtime.log", 
+        "media": [
+            "file"
+        ]
+    }, 
+    "mongodb": "mongodb://144.76.72.175/swift_aimes", 
+    "overlay_reuse": "True", 
+    "path": "data/", 
+    "project_ids": {
+        "ncsa.bw": "gkd", 
+        "xsede.comet": "unc100", 
+        "xsede.gordon": "unc100", 
+        "xsede.stampede": "TG-MCB090174"
+    }, 
+    "rerun_attempts": 1, 
+    "scales": [
+        88
+    ], 
+    "strategy": {
+        "pct_concurrency": 100, 
+        "pct_resources": 100
+    }, 
+    "time_distribs": [
+        "uniform"
+    ], 
+    "workload_type": "swift"
+}

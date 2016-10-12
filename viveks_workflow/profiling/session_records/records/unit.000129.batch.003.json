@@ -1,0 +1,690 @@
+{
+    "arguments": [
+        "--grid", 
+        "5", 
+        "--dims", 
+        "3", 
+        "--frontpoints", 
+        "64", 
+        "--topfile", 
+        "ace_ala_nme.top", 
+        "--mdfile", 
+        "*.ncdf", 
+        "--output", 
+        "pdbs", 
+        "--logfile", 
+        "coco.log", 
+        "--mpi", 
+        "--selection", 
+        "protein"
+    ], 
+    "cleanup": false, 
+    "cores": 64, 
+    "environment": null, 
+    "executable": "pyCoCo", 
+    "input_staging": [
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/ace_ala_nme.top", 
+            "target": "ace_ala_nme.top"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000065/md1.ncdf", 
+            "target": "md_1_1.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000066/md1.ncdf", 
+            "target": "md_1_2.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000067/md1.ncdf", 
+            "target": "md_1_3.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000068/md1.ncdf", 
+            "target": "md_1_4.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000069/md1.ncdf", 
+            "target": "md_1_5.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000070/md1.ncdf", 
+            "target": "md_1_6.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000071/md1.ncdf", 
+            "target": "md_1_7.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000072/md1.ncdf", 
+            "target": "md_1_8.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000073/md1.ncdf", 
+            "target": "md_1_9.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000074/md1.ncdf", 
+            "target": "md_1_10.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000075/md1.ncdf", 
+            "target": "md_1_11.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000076/md1.ncdf", 
+            "target": "md_1_12.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000077/md1.ncdf", 
+            "target": "md_1_13.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000078/md1.ncdf", 
+            "target": "md_1_14.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000079/md1.ncdf", 
+            "target": "md_1_15.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000080/md1.ncdf", 
+            "target": "md_1_16.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000081/md1.ncdf", 
+            "target": "md_1_17.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000082/md1.ncdf", 
+            "target": "md_1_18.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000083/md1.ncdf", 
+            "target": "md_1_19.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000084/md1.ncdf", 
+            "target": "md_1_20.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000085/md1.ncdf", 
+            "target": "md_1_21.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000086/md1.ncdf", 
+            "target": "md_1_22.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000087/md1.ncdf", 
+            "target": "md_1_23.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000088/md1.ncdf", 
+            "target": "md_1_24.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000089/md1.ncdf", 
+            "target": "md_1_25.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000090/md1.ncdf", 
+            "target": "md_1_26.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000091/md1.ncdf", 
+            "target": "md_1_27.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000092/md1.ncdf", 
+            "target": "md_1_28.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000093/md1.ncdf", 
+            "target": "md_1_29.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000094/md1.ncdf", 
+            "target": "md_1_30.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000095/md1.ncdf", 
+            "target": "md_1_31.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000096/md1.ncdf", 
+            "target": "md_1_32.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000097/md1.ncdf", 
+            "target": "md_1_33.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000098/md1.ncdf", 
+            "target": "md_1_34.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000099/md1.ncdf", 
+            "target": "md_1_35.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000100/md1.ncdf", 
+            "target": "md_1_36.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000101/md1.ncdf", 
+            "target": "md_1_37.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000102/md1.ncdf", 
+            "target": "md_1_38.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000103/md1.ncdf", 
+            "target": "md_1_39.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000104/md1.ncdf", 
+            "target": "md_1_40.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000105/md1.ncdf", 
+            "target": "md_1_41.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000106/md1.ncdf", 
+            "target": "md_1_42.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000107/md1.ncdf", 
+            "target": "md_1_43.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000108/md1.ncdf", 
+            "target": "md_1_44.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000109/md1.ncdf", 
+            "target": "md_1_45.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000110/md1.ncdf", 
+            "target": "md_1_46.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000111/md1.ncdf", 
+            "target": "md_1_47.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000112/md1.ncdf", 
+            "target": "md_1_48.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000113/md1.ncdf", 
+            "target": "md_1_49.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000114/md1.ncdf", 
+            "target": "md_1_50.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000115/md1.ncdf", 
+            "target": "md_1_51.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000116/md1.ncdf", 
+            "target": "md_1_52.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000117/md1.ncdf", 
+            "target": "md_1_53.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000118/md1.ncdf", 
+            "target": "md_1_54.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000119/md1.ncdf", 
+            "target": "md_1_55.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000120/md1.ncdf", 
+            "target": "md_1_56.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000121/md1.ncdf", 
+            "target": "md_1_57.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000122/md1.ncdf", 
+            "target": "md_1_58.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000123/md1.ncdf", 
+            "target": "md_1_59.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000124/md1.ncdf", 
+            "target": "md_1_60.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000125/md1.ncdf", 
+            "target": "md_1_61.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000126/md1.ncdf", 
+            "target": "md_1_62.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000127/md1.ncdf", 
+            "target": "md_1_63.ncdf"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000128/md1.ncdf", 
+            "target": "md_1_64.ncdf"
+        }
+    ], 
+    "kernel": null, 
+    "mpi": true, 
+    "name": "ana ; 1; 1", 
+    "output_staging": [
+        {
+            "action": "Copy", 
+            "source": "pdbs0.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt10.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs1.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt11.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs2.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt12.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs3.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt13.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs4.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt14.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs5.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt15.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs6.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt16.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs7.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt17.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs8.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt18.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs9.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt19.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs10.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt110.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs11.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt111.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs12.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt112.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs13.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt113.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs14.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt114.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs15.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt115.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs16.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt116.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs17.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt117.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs18.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt118.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs19.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt119.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs20.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt120.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs21.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt121.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs22.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt122.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs23.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt123.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs24.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt124.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs25.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt125.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs26.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt126.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs27.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt127.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs28.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt128.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs29.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt129.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs30.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt130.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs31.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt131.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs32.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt132.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs33.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt133.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs34.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt134.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs35.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt135.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs36.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt136.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs37.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt137.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs38.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt138.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs39.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt139.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs40.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt140.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs41.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt141.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs42.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt142.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs43.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt143.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs44.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt144.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs45.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt145.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs46.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt146.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs47.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt147.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs48.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt148.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs49.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt149.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs50.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt150.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs51.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt151.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs52.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt152.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs53.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt153.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs54.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt154.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs55.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt155.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs56.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt156.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs57.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt157.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs58.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt158.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs59.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt159.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs60.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt160.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs61.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt161.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs62.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt162.pdb"
+        }, 
+        {
+            "action": "Copy", 
+            "source": "pdbs63.pdb", 
+            "target": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/pentaopt163.pdb"
+        }
+    ], 
+    "post_exec": null, 
+    "pre_exec": [
+        "module load TACC", 
+        "module load intel/13.0.2.146", 
+        "module load python/2.7.9", 
+        "module load netcdf/4.3.2", 
+        "module load hdf5/1.8.13", 
+        "export PYTHONPATH=/opt/apps/intel13/mvapich2_1_9/python/2.7.9/lib/python2.7/site-packages:/work/02998/ardi/coco_installation/lib/python2.7/site-packages:$PYTHONPATH", 
+        "export PATH=/work/02998/ardi/coco_installation/bin:$PATH"
+    ], 
+    "restartable": false, 
+    "stderr": null, 
+    "stdout": null
+}

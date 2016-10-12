@@ -1,0 +1,463 @@
+{
+    "cuds": [
+        {
+            "arguments": [
+                "485", 
+                "input_shared_1_3.txt", 
+                "input_shared_1_4.txt", 
+                "output_1_1_485.txt"
+            ], 
+            "cores": 2, 
+            "duration": 60, 
+            "executable": "~/bin.rp/stage_2.sh", 
+            "input_staging": [
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_3.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_4.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_1_1_485.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_pre", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_post"
+            ], 
+            "mpi": false, 
+            "name": "emgr.016951.0008:task.001033", 
+            "output_staging": [
+                "output_2_1_485.txt", 
+                "output_2_2_485.txt", 
+                "output_2_4_485.txt", 
+                "stdout.txt", 
+                "wrapper.log", 
+                "stderr.txt", 
+                "output_2_3_485.txt"
+            ], 
+            "post_exec": [
+                "bash _swiftwrap_post \"-of\" \"output_2_4_485.txt|output_2_2_485.txt|output_2_1_485.txt|output_2_3_485.txt\""
+            ], 
+            "pre_exec": [
+                "bash _swiftwrap_pre \"-d\" \"\" \"-if\" \"input_shared_1_3.txt|output_1_1_485.txt|input_shared_1_4.txt\""
+            ], 
+            "stderr": "stderr.txt", 
+            "stdout": "stdout.txt", 
+            "swift_tid": "stage_2_exe-qreggqqm"
+        }, 
+        {
+            "arguments": [
+                "57", 
+                "8", 
+                "input_shared_1_3.txt", 
+                "output_2_2_457.txt output_2_2_458.txt output_2_2_459.txt output_2_2_460.txt output_2_2_461.txt output_2_2_462.txt output_2_2_463.txt output_2_2_464.txt"
+            ], 
+            "cores": 8, 
+            "duration": 60, 
+            "executable": "~/bin.rp/stage_3.sh", 
+            "input_staging": [
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_459.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_462.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_464.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_457.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_460.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_458.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_463.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_3.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_461.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_pre", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_post"
+            ], 
+            "mpi": false, 
+            "name": "emgr.016951.0008:task.001028", 
+            "output_staging": [
+                "output_3_1_464.txt", 
+                "output_3_1_457.txt", 
+                "stderr.txt", 
+                "output_3_1_458.txt", 
+                "output_3_1_461.txt", 
+                "wrapper.log", 
+                "output_3_1_462.txt", 
+                "output_3_1_460.txt", 
+                "output_3_1_459.txt", 
+                "output_3_1_463.txt", 
+                "stdout.txt"
+            ], 
+            "post_exec": [
+                "bash _swiftwrap_post \"-of\" \"output_3_1_461.txt|output_3_1_462.txt|output_3_1_458.txt|output_3_1_463.txt|output_3_1_464.txt|output_3_1_459.txt|output_3_1_460.txt|output_3_1_457.txt\""
+            ], 
+            "pre_exec": [
+                "bash _swiftwrap_pre \"-d\" \"\" \"-if\" \"output_2_2_461.txt|output_2_2_463.txt|output_2_2_464.txt|output_2_2_458.txt|input_shared_1_3.txt|output_2_2_462.txt|output_2_2_460.txt|output_2_2_459.txt|output_2_2_457.txt\""
+            ], 
+            "stderr": "stderr.txt", 
+            "stdout": "stdout.txt", 
+            "swift_tid": "stage_3_exe-lreggqqm"
+        }, 
+        {
+            "arguments": [
+                "139", 
+                "input_shared_1_3.txt", 
+                "input_shared_1_4.txt", 
+                "output_1_1_139.txt"
+            ], 
+            "cores": 2, 
+            "duration": 60, 
+            "executable": "~/bin.rp/stage_2.sh", 
+            "input_staging": [
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_1_1_139.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_3.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_4.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_pre", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_post"
+            ], 
+            "mpi": false, 
+            "name": "emgr.016951.0008:task.001027", 
+            "output_staging": [
+                "output_2_1_139.txt", 
+                "wrapper.log", 
+                "stderr.txt", 
+                "stdout.txt", 
+                "output_2_2_139.txt", 
+                "output_2_3_139.txt", 
+                "output_2_4_139.txt"
+            ], 
+            "post_exec": [
+                "bash _swiftwrap_post \"-of\" \"output_2_1_139.txt|output_2_4_139.txt|output_2_3_139.txt|output_2_2_139.txt\""
+            ], 
+            "pre_exec": [
+                "bash _swiftwrap_pre \"-d\" \"\" \"-if\" \"input_shared_1_3.txt|output_1_1_139.txt|input_shared_1_4.txt\""
+            ], 
+            "stderr": "stderr.txt", 
+            "stdout": "stdout.txt", 
+            "swift_tid": "stage_2_exe-kreggqqm"
+        }, 
+        {
+            "arguments": [
+                "279", 
+                "input_shared_1_3.txt", 
+                "input_shared_1_4.txt", 
+                "output_1_1_279.txt"
+            ], 
+            "cores": 2, 
+            "duration": 60, 
+            "executable": "~/bin.rp/stage_2.sh", 
+            "input_staging": [
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_3.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_4.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_1_1_279.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_pre", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_post"
+            ], 
+            "mpi": false, 
+            "name": "emgr.016951.0008:task.001031", 
+            "output_staging": [
+                "output_2_3_279.txt", 
+                "stdout.txt", 
+                "wrapper.log", 
+                "output_2_2_279.txt", 
+                "stderr.txt", 
+                "output_2_4_279.txt", 
+                "output_2_1_279.txt"
+            ], 
+            "post_exec": [
+                "bash _swiftwrap_post \"-of\" \"output_2_4_279.txt|output_2_1_279.txt|output_2_2_279.txt|output_2_3_279.txt\""
+            ], 
+            "pre_exec": [
+                "bash _swiftwrap_pre \"-d\" \"\" \"-if\" \"output_1_1_279.txt|input_shared_1_3.txt|input_shared_1_4.txt\""
+            ], 
+            "stderr": "stderr.txt", 
+            "stdout": "stdout.txt", 
+            "swift_tid": "stage_2_exe-oreggqqm"
+        }, 
+        {
+            "arguments": [
+                "168", 
+                "input_shared_1_3.txt", 
+                "input_shared_1_4.txt", 
+                "output_1_1_168.txt"
+            ], 
+            "cores": 2, 
+            "duration": 60, 
+            "executable": "~/bin.rp/stage_2.sh", 
+            "input_staging": [
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_1_1_168.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_3.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_4.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_pre", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_post"
+            ], 
+            "mpi": false, 
+            "name": "emgr.016951.0008:task.001023", 
+            "output_staging": [
+                "output_2_4_168.txt", 
+                "output_2_3_168.txt", 
+                "stderr.txt", 
+                "output_2_2_168.txt", 
+                "wrapper.log", 
+                "stdout.txt", 
+                "output_2_1_168.txt"
+            ], 
+            "post_exec": [
+                "bash _swiftwrap_post \"-of\" \"output_2_1_168.txt|output_2_4_168.txt|output_2_3_168.txt|output_2_2_168.txt\""
+            ], 
+            "pre_exec": [
+                "bash _swiftwrap_pre \"-d\" \"\" \"-if\" \"input_shared_1_3.txt|input_shared_1_4.txt|output_1_1_168.txt\""
+            ], 
+            "stderr": "stderr.txt", 
+            "stdout": "stdout.txt", 
+            "swift_tid": "stage_2_exe-greggqqm"
+        }, 
+        {
+            "arguments": [
+                "346", 
+                "input_shared_1_3.txt", 
+                "input_shared_1_4.txt", 
+                "output_1_1_346.txt"
+            ], 
+            "cores": 2, 
+            "duration": 60, 
+            "executable": "~/bin.rp/stage_2.sh", 
+            "input_staging": [
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_3.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_4.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_1_1_346.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_pre", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_post"
+            ], 
+            "mpi": false, 
+            "name": "emgr.016951.0008:task.001026", 
+            "output_staging": [
+                "output_2_3_346.txt", 
+                "wrapper.log", 
+                "output_2_4_346.txt", 
+                "stderr.txt", 
+                "output_2_2_346.txt", 
+                "output_2_1_346.txt", 
+                "stdout.txt"
+            ], 
+            "post_exec": [
+                "bash _swiftwrap_post \"-of\" \"output_2_1_346.txt|output_2_3_346.txt|output_2_2_346.txt|output_2_4_346.txt\""
+            ], 
+            "pre_exec": [
+                "bash _swiftwrap_pre \"-d\" \"\" \"-if\" \"output_1_1_346.txt|input_shared_1_3.txt|input_shared_1_4.txt\""
+            ], 
+            "stderr": "stderr.txt", 
+            "stdout": "stdout.txt", 
+            "swift_tid": "stage_2_exe-jreggqqm"
+        }, 
+        {
+            "arguments": [
+                "39", 
+                "8", 
+                "input_shared_1_3.txt", 
+                "output_2_2_313.txt output_2_2_314.txt output_2_2_315.txt output_2_2_316.txt output_2_2_317.txt output_2_2_318.txt output_2_2_319.txt output_2_2_320.txt"
+            ], 
+            "cores": 8, 
+            "duration": 60, 
+            "executable": "~/bin.rp/stage_3.sh", 
+            "input_staging": [
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_313.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_314.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_315.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_3.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_316.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_318.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_317.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_320.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_319.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_pre", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_post"
+            ], 
+            "mpi": false, 
+            "name": "emgr.016951.0008:task.001032", 
+            "output_staging": [
+                "output_3_1_313.txt", 
+                "output_3_1_314.txt", 
+                "output_3_1_320.txt", 
+                "stderr.txt", 
+                "output_3_1_318.txt", 
+                "stdout.txt", 
+                "output_3_1_315.txt", 
+                "output_3_1_316.txt", 
+                "output_3_1_317.txt", 
+                "output_3_1_319.txt", 
+                "wrapper.log"
+            ], 
+            "post_exec": [
+                "bash _swiftwrap_post \"-of\" \"output_3_1_319.txt|output_3_1_317.txt|output_3_1_316.txt|output_3_1_320.txt|output_3_1_315.txt|output_3_1_313.txt|output_3_1_314.txt|output_3_1_318.txt\""
+            ], 
+            "pre_exec": [
+                "bash _swiftwrap_pre \"-d\" \"\" \"-if\" \"output_2_2_319.txt|output_2_2_320.txt|output_2_2_317.txt|output_2_2_314.txt|input_shared_1_3.txt|output_2_2_318.txt|output_2_2_315.txt|output_2_2_313.txt|output_2_2_316.txt\""
+            ], 
+            "stderr": "stderr.txt", 
+            "stdout": "stdout.txt", 
+            "swift_tid": "stage_3_exe-preggqqm"
+        }, 
+        {
+            "arguments": [
+                "55", 
+                "8", 
+                "input_shared_1_3.txt", 
+                "output_2_2_441.txt output_2_2_442.txt output_2_2_443.txt output_2_2_444.txt output_2_2_445.txt output_2_2_446.txt output_2_2_447.txt output_2_2_448.txt"
+            ], 
+            "cores": 8, 
+            "duration": 60, 
+            "executable": "~/bin.rp/stage_3.sh", 
+            "input_staging": [
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_448.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_444.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_443.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_446.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_447.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_442.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_445.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_3.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_441.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_pre", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_post"
+            ], 
+            "mpi": false, 
+            "name": "emgr.016951.0008:task.001029", 
+            "output_staging": [
+                "stderr.txt", 
+                "stdout.txt", 
+                "output_3_1_446.txt", 
+                "wrapper.log", 
+                "output_3_1_442.txt", 
+                "output_3_1_445.txt", 
+                "output_3_1_443.txt", 
+                "output_3_1_441.txt", 
+                "output_3_1_448.txt", 
+                "output_3_1_444.txt", 
+                "output_3_1_447.txt"
+            ], 
+            "post_exec": [
+                "bash _swiftwrap_post \"-of\" \"output_3_1_443.txt|output_3_1_447.txt|output_3_1_441.txt|output_3_1_448.txt|output_3_1_444.txt|output_3_1_446.txt|output_3_1_445.txt|output_3_1_442.txt\""
+            ], 
+            "pre_exec": [
+                "bash _swiftwrap_pre \"-d\" \"\" \"-if\" \"output_2_2_444.txt|output_2_2_442.txt|input_shared_1_3.txt|output_2_2_441.txt|output_2_2_447.txt|output_2_2_446.txt|output_2_2_448.txt|output_2_2_445.txt|output_2_2_443.txt\""
+            ], 
+            "stderr": "stderr.txt", 
+            "stdout": "stdout.txt", 
+            "swift_tid": "stage_3_exe-mreggqqm"
+        }, 
+        {
+            "arguments": [
+                "34", 
+                "input_shared_1_3.txt", 
+                "input_shared_1_4.txt", 
+                "output_1_1_34.txt"
+            ], 
+            "cores": 2, 
+            "duration": 60, 
+            "executable": "~/bin.rp/stage_2.sh", 
+            "input_staging": [
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_1_1_34.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_3.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_4.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_pre", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_post"
+            ], 
+            "mpi": false, 
+            "name": "emgr.016951.0008:task.001025", 
+            "output_staging": [
+                "wrapper.log", 
+                "stderr.txt", 
+                "output_2_3_34.txt", 
+                "output_2_4_34.txt", 
+                "output_2_1_34.txt", 
+                "stdout.txt", 
+                "output_2_2_34.txt"
+            ], 
+            "post_exec": [
+                "bash _swiftwrap_post \"-of\" \"output_2_4_34.txt|output_2_3_34.txt|output_2_2_34.txt|output_2_1_34.txt\""
+            ], 
+            "pre_exec": [
+                "bash _swiftwrap_pre \"-d\" \"\" \"-if\" \"input_shared_1_3.txt|output_1_1_34.txt|input_shared_1_4.txt\""
+            ], 
+            "stderr": "stderr.txt", 
+            "stdout": "stdout.txt", 
+            "swift_tid": "stage_2_exe-ireggqqm"
+        }, 
+        {
+            "arguments": [
+                "207", 
+                "input_shared_1_3.txt", 
+                "input_shared_1_4.txt", 
+                "output_1_1_207.txt"
+            ], 
+            "cores": 2, 
+            "duration": 60, 
+            "executable": "~/bin.rp/stage_2.sh", 
+            "input_staging": [
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_3.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_4.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_1_1_207.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_pre", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_post"
+            ], 
+            "mpi": false, 
+            "name": "emgr.016951.0008:task.001030", 
+            "output_staging": [
+                "output_2_3_207.txt", 
+                "stderr.txt", 
+                "stdout.txt", 
+                "wrapper.log", 
+                "output_2_1_207.txt", 
+                "output_2_4_207.txt", 
+                "output_2_2_207.txt"
+            ], 
+            "post_exec": [
+                "bash _swiftwrap_post \"-of\" \"output_2_3_207.txt|output_2_2_207.txt|output_2_4_207.txt|output_2_1_207.txt\""
+            ], 
+            "pre_exec": [
+                "bash _swiftwrap_pre \"-d\" \"\" \"-if\" \"output_1_1_207.txt|input_shared_1_3.txt|input_shared_1_4.txt\""
+            ], 
+            "stderr": "stderr.txt", 
+            "stdout": "stdout.txt", 
+            "swift_tid": "stage_2_exe-nreggqqm"
+        }, 
+        {
+            "arguments": [
+                "113", 
+                "input_shared_1_3.txt", 
+                "input_shared_1_4.txt", 
+                "output_1_1_113.txt"
+            ], 
+            "cores": 2, 
+            "duration": 60, 
+            "executable": "~/bin.rp/stage_2.sh", 
+            "input_staging": [
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./output_1_1_113.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_3.txt", 
+                "/home/merzky/aimes/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_4.txt", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_pre", 
+                "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_post"
+            ], 
+            "mpi": false, 
+            "name": "emgr.016951.0008:task.001024", 
+            "output_staging": [
+                "wrapper.log", 
+                "output_2_1_113.txt", 
+                "output_2_2_113.txt", 
+                "stderr.txt", 
+                "output_2_4_113.txt", 
+                "stdout.txt", 
+                "output_2_3_113.txt"
+            ], 
+            "post_exec": [
+                "bash _swiftwrap_post \"-of\" \"output_2_4_113.txt|output_2_2_113.txt|output_2_1_113.txt|output_2_3_113.txt\""
+            ], 
+            "pre_exec": [
+                "bash _swiftwrap_pre \"-d\" \"\" \"-if\" \"output_1_1_113.txt|input_shared_1_3.txt|input_shared_1_4.txt\""
+            ], 
+            "stderr": "stderr.txt", 
+            "stdout": "stdout.txt", 
+            "swift_tid": "stage_2_exe-hreggqqm"
+        }
+    ]
+}

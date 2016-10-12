@@ -1,0 +1,49 @@
+{
+    "arguments": [
+        "34", 
+        "8", 
+        "input_shared_1_3.txt", 
+        "output_2_2_273.txt output_2_2_274.txt output_2_2_275.txt output_2_2_276.txt output_2_2_277.txt output_2_2_278.txt output_2_2_279.txt output_2_2_280.txt"
+    ], 
+    "cores": 8, 
+    "duration": 60, 
+    "executable": "~/bin.rp/stage_3.sh", 
+    "input_staging": [
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.00512.003/./input_shared_1_3.txt", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_280.txt", 
+        "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_276.txt", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_279.txt", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_275.txt", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_278.txt", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_277.txt", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_274.txt", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.00512.003/./output_2_2_273.txt", 
+        "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_pre", 
+        "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_post"
+    ], 
+    "mpi": false, 
+    "name": "emgr.017084.0008:task.001087", 
+    "output_staging": [
+        "output_3_1_273.txt", 
+        "output_3_1_274.txt", 
+        "wrapper.log", 
+        "output_3_1_280.txt", 
+        "output_3_1_278.txt", 
+        "output_3_1_277.txt", 
+        "stdout.txt", 
+        "stderr.txt", 
+        "output_3_1_275.txt", 
+        "output_3_1_279.txt", 
+        "output_3_1_276.txt"
+    ], 
+    "post_exec": [
+        "bash _swiftwrap_post \"-of\" \"output_3_1_278.txt|output_3_1_276.txt|output_3_1_279.txt|output_3_1_277.txt|output_3_1_280.txt|output_3_1_275.txt|output_3_1_274.txt|output_3_1_273.txt\""
+    ], 
+    "pre_exec": [
+        "bash _swiftwrap_pre \"-d\" \"\" \"-if\" \"output_2_2_278.txt|output_2_2_275.txt|output_2_2_280.txt|output_2_2_274.txt|input_shared_1_3.txt|output_2_2_276.txt|output_2_2_279.txt|output_2_2_273.txt|output_2_2_277.txt\""
+    ], 
+    "stderr": "stderr.txt", 
+    "stdout": "stdout.txt", 
+    "swift_tid": "stage_3_exe-fdpi9zxm"
+}

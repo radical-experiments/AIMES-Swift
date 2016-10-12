@@ -1,0 +1,52 @@
+{
+    "arguments": [
+        "-O", 
+        "-i", 
+        "mdshort.in", 
+        "-o", 
+        "md1.out", 
+        "-inf", 
+        "md1.inf", 
+        "-x", 
+        "md1.ncdf", 
+        "-r", 
+        "md1.rst", 
+        "-p", 
+        "ace_ala_nme.top", 
+        "-c", 
+        "md1.crd"
+    ], 
+    "cleanup": false, 
+    "cores": 1, 
+    "environment": null, 
+    "executable": "/opt/apps/intel13/mvapich2_1_9/amber/12.0/bin/sander", 
+    "input_staging": [
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/mdshort.in", 
+            "target": "mdshort.in"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/ace_ala_nme.top", 
+            "target": "ace_ala_nme.top"
+        }, 
+        {
+            "action": "Link", 
+            "source": "/work/02734/vivek91/radical.pilot.sandbox/rp.session.radical.vivek.016920.0013-pilot.0000/unit.000000/md_1_36.crd", 
+            "target": "md1.crd"
+        }
+    ], 
+    "kernel": null, 
+    "mpi": false, 
+    "name": "sim ;1 ;36", 
+    "output_staging": [], 
+    "post_exec": null, 
+    "pre_exec": [
+        "module load TACC", 
+        "module load amber/12.0"
+    ], 
+    "restartable": false, 
+    "stderr": null, 
+    "stdout": null
+}

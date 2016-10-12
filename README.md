@@ -139,7 +139,7 @@ Related paper at: https://bitbucket.org/shantenujha/aimes
 
 ## Data Analysis Workflow
 
-The analysis wrokflow is designed to be automated, reusable, and extensible. It can be automated by running the following commands from a 'master' shell script (not provided). The wrokflow incrementally integrates new data to those previously collected. Raw, wrangled, and analysis data are all kept across runs preserving the reproducibility of the analysis and (to a certain extent) the provenance of the data. When needed, new analyses can be added to a single step of the workflow without altering the other steps.
+The analysis workflow is designed to be automated, reusable, and extensible. It can be automated by running the following commands from a 'master' shell script (not provided). The wrokflow incrementally integrates new data to those previously collected. Raw, wrangled, and analysis data are all kept across runs preserving the reproducibility of the analysis and (to a certain extent) the provenance of the data. When needed, new analyses can be added to a single step of the workflow without altering the other steps.
 
 1. Prerequisites: Bash on Linux. Bask on OSX requires GNU coreutils (brew install coreutils) and to export ```PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"```
 

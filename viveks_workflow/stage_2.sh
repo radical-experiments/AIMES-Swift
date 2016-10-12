@@ -15,7 +15,6 @@ cat $INPUT_SHARED_1_4 >> $OUTPUT_2_2_I; echo "2:$IDX" >> $OUTPUT_2_2_I
 cat $OUTPUT_1_1_I     >> $OUTPUT_2_3_I; echo "2:$IDX" >> $OUTPUT_2_3_I
 cat $OUTPUT_1_1_I     >> $OUTPUT_2_4_I; echo "2:$IDX" >> $OUTPUT_2_4_I
 
-
 # pattern to select suitable profiles
 regex_1='.*sander.MPI -O -i mdshort.in'
 regex_2='.*sander.MPI -O -i min.in'
@@ -40,5 +39,5 @@ echo "sampling $samples"
 
 . $HOME/bin.rp/ve/bin/activate
 
-radical-synapse-emulate -i "$samples"
+radical-synapse-emulate -i "$samples" || true
 
