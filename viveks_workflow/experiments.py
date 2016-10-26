@@ -22,13 +22,14 @@ with open('experiments.ctrl', 'r') as ctrl:
         if not line:
             continue
 
-        num, size = line.split()
+        num, res, size = line.split()
 
         num        = int(num)
         size       = int(size)
+        res        = int(res)
         chunk_size = 8
         n_chunks   = int(size / chunk_size)
-        e_name     = 'data.%05d.%03d' % (size, num)
+        e_name     = 'data.%02d.%05d.%03d' % (res, size, num)
 
         if os.path.isdir('%s/run001' % e_name):
             print 'skip       %s' % e_name
