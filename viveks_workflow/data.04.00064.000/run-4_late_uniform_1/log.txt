@@ -1,0 +1,166 @@
+=======================================================================
+Run - scale 4; binding late; distribution uniform; iteration 1; rerun 1
+=======================================================================
+
+
+==================
+Execution Strategy
+==================
+
+
+Configurations:
+	Type of task-to-resource binding  : late
+
+Heuristics:
+	Degree of concurrency for task execution : 100%
+	Percentage of bundle resources targeted  : 100%
+
+Inferences:
+	Number of target resources      : 1
+	Target resource(s) for pilot(s) : local.localhost
+	Number of pilots                : 1
+	Total workflow number of cores  : 4
+	Type of scheduler for RP        : SCHED_DIRECT_SUBMISSION
+	Total workflow compute time     : 60.0 seconds
+	Total workflow staging time     : 0.0 seconds
+	Total RP overhead time          : 14416 seconds
+
+
+==================
+Pilot Descriptions
+==================
+
+
+local.localhost:
+	Allocation; None -> RP default : None
+	Queue; None -> RP default      : None
+	Number of cores                : 4
+	Walltime in minutes            : 241
+	Stop once the workflow is done : True
+
+
+
+2016-05-27 10:56:48 Pilot pilot.0000                         is PendingLaunch             on local.localhost
+=================
+Radical Pilot IDs
+=================
+
+
+Session ID              : rp.session.thinkie.merzky.016948.0011
+Pilot manager ID        : pmgr.0000
+Unit manager ID         : umgr.0000
+Pilot ID/resource : pilot.0000 local.localhost
+=========================
+Compute Unit Descriptions
+=========================
+
+
+Total CU translated    : 4
+Total CU with 1 cores : 0
+
+Print the first units for reference:
+2016-05-27 10:56:49 Pilot pilot.0000                         is Launching                 on local.localhost
+2016-05-27 10:56:51 CU    emgr.016948.0010:task.000001 (unit.000003) is StagingInput              on local.localhost (pilot.0000)
+2016-05-27 10:56:51 CU    emgr.016948.0010:task.000003 (unit.000002) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-27 10:56:51 CU    emgr.016948.0010:task.000000 (unit.000001) is StagingInput              on local.localhost (pilot.0000)
+2016-05-27 10:56:51 CU    emgr.016948.0010:task.000002 (unit.000000) is PendingInputStaging       on local.localhost (pilot.0000)
+2016-05-27 10:56:58 CU    emgr.016948.0010:task.000001 (unit.000003) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-27 10:56:58 CU    emgr.016948.0010:task.000003 (unit.000002) is StagingInput              on local.localhost (pilot.0000)
+2016-05-27 10:56:58 CU    emgr.016948.0010:task.000000 (unit.000001) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-27 10:56:58 CU    emgr.016948.0010:task.000002 (unit.000000) is StagingInput              on local.localhost (pilot.0000)
+2016-05-27 10:56:58 Pilot pilot.0000                         is PendingActive             on local.localhost
+2016-05-27 10:57:01 CU    emgr.016948.0010:task.000003 (unit.000002) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-27 10:57:01 CU    emgr.016948.0010:task.000002 (unit.000000) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-27 10:57:15 Pilot pilot.0000                         is Active                    on local.localhost
+2016-05-27 10:57:23 CU    emgr.016948.0010:task.000001 (unit.000003) is Executing                 on local.localhost (pilot.0000)
+2016-05-27 10:57:23 CU    emgr.016948.0010:task.000003 (unit.000002) is Executing                 on local.localhost (pilot.0000)
+2016-05-27 10:57:23 CU    emgr.016948.0010:task.000000 (unit.000001) is Executing                 on local.localhost (pilot.0000)
+2016-05-27 10:57:23 CU    emgr.016948.0010:task.000002 (unit.000000) is Executing                 on local.localhost (pilot.0000)
+2016-05-27 12:07:43 CU    emgr.016948.0010:task.000000 (unit.000001) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-27 12:07:46 CU    emgr.016948.0010:task.000003 (unit.000002) is AgentStagingOutputPending on local.localhost (pilot.0000)
+2016-05-27 12:07:46 CU    emgr.016948.0010:task.000000 (unit.000001) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-27 12:07:49 CU    emgr.016948.0010:task.000003 (unit.000002) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-27 12:07:49 CU    emgr.016948.0010:task.000000 (unit.000001) is Done                      on local.localhost (pilot.0000)
+2016-05-27 12:07:52 CU    emgr.016948.0010:task.000001 (unit.000003) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-27 12:07:52 CU    emgr.016948.0010:task.000003 (unit.000002) is Done                      on local.localhost (pilot.0000)
+2016-05-27 12:07:52 CU    emgr.016948.0010:task.000002 (unit.000000) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-27 12:07:55 CU    emgr.016948.0010:task.000001 (unit.000003) is Done                      on local.localhost (pilot.0000)
+2016-05-27 12:07:56 CU    emgr.016948.0010:task.000002 (unit.000000) is Done                      on local.localhost (pilot.0000)
+=================
+Radical Pilot IDs
+=================
+
+
+Session ID              : rp.session.thinkie.merzky.016948.0011
+Pilot manager ID        : pmgr.0000
+Unit manager ID         : umgr.0000
+Pilot ID/resource : pilot.0000 local.localhost
+=========================
+Compute Unit Descriptions
+=========================
+
+
+Total CU translated    : 4
+Total CU with 1 cores : 0
+
+Print the first units for reference:
+2016-05-27 12:08:30 CU    emgr.016948.0010:task.000004 (unit.000007) is AgentStagingInputPending  on local.localhost (pilot.0000)
+2016-05-27 12:08:30 CU    emgr.016948.0010:task.000006 (unit.000006) is AgentStagingInput         on local.localhost (pilot.0000)
+2016-05-27 12:08:30 CU    emgr.016948.0010:task.000007 (unit.000005) is StagingInput              on local.localhost (pilot.0000)
+2016-05-27 12:08:30 CU    emgr.016948.0010:task.000005 (unit.000004) is StagingInput              on local.localhost (pilot.0000)
+2016-05-27 12:08:33 CU    emgr.016948.0010:task.000004 (unit.000007) is Executing                 on local.localhost (pilot.0000)
+2016-05-27 12:08:33 CU    emgr.016948.0010:task.000006 (unit.000006) is Executing                 on local.localhost (pilot.0000)
+2016-05-27 12:08:33 CU    emgr.016948.0010:task.000007 (unit.000005) is Executing                 on local.localhost (pilot.0000)
+2016-05-27 12:08:33 CU    emgr.016948.0010:task.000005 (unit.000004) is Executing                 on local.localhost (pilot.0000)
+2016-05-27 12:40:31 CU    emgr.016948.0010:task.000006 (unit.000006) is AgentStagingOutputPending on local.localhost (pilot.0000)
+2016-05-27 12:40:34 CU    emgr.016948.0010:task.000006 (unit.000006) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-27 12:40:37 CU    emgr.016948.0010:task.000006 (unit.000006) is Done                      on local.localhost (pilot.0000)
+2016-05-27 12:40:47 CU    emgr.016948.0010:task.000004 (unit.000007) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-27 12:40:50 CU    emgr.016948.0010:task.000004 (unit.000007) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-27 12:40:50 CU    emgr.016948.0010:task.000007 (unit.000005) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-27 12:40:50 CU    emgr.016948.0010:task.000005 (unit.000004) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-27 12:40:54 CU    emgr.016948.0010:task.000004 (unit.000007) is Done                      on local.localhost (pilot.0000)
+2016-05-27 12:40:54 CU    emgr.016948.0010:task.000007 (unit.000005) is Done                      on local.localhost (pilot.0000)
+2016-05-27 12:40:54 CU    emgr.016948.0010:task.000005 (unit.000004) is Done                      on local.localhost (pilot.0000)
+=================
+Radical Pilot IDs
+=================
+
+
+Session ID              : rp.session.thinkie.merzky.016948.0011
+Pilot manager ID        : pmgr.0000
+Unit manager ID         : umgr.0000
+Pilot ID/resource : pilot.0000 local.localhost
+=========================
+Compute Unit Descriptions
+=========================
+
+
+Total CU translated    : 1
+Total CU with 1 cores : 0
+
+Print the first units for reference:
+2016-05-27 12:41:32 CU    emgr.016948.0010:task.000008 (unit.000008) is StagingInput              on local.localhost (pilot.0000)
+2016-05-27 12:41:36 CU    emgr.016948.0010:task.000008 (unit.000008) is PendingOutputStaging      on local.localhost (pilot.0000)
+2016-05-27 12:41:39 CU    emgr.016948.0010:task.000008 (unit.000008) is Done                      on local.localhost (pilot.0000)
+=================
+Radical Pilot IDs
+=================
+
+
+Session ID              : rp.session.thinkie.merzky.016948.0011
+Pilot manager ID        : pmgr.0000
+Unit manager ID         : umgr.0000
+Pilot ID/resource : pilot.0000 local.localhost
+=========================
+Compute Unit Descriptions
+=========================
+
+
+Total CU translated    : 1
+Total CU with 1 cores : 0
+
+Print the first units for reference:
+2016-05-27 12:42:12 CU    emgr.016948.0010:task.000009 (unit.000009) is StagingInput              on local.localhost (pilot.0000)
+2016-05-27 12:42:15 CU    emgr.016948.0010:task.000009 (unit.000009) is StagingOutput             on local.localhost (pilot.0000)
+2016-05-27 12:42:18 CU    emgr.016948.0010:task.000009 (unit.000009) is Done                      on local.localhost (pilot.0000)

@@ -1,7 +1,7 @@
 {
     "mongodb"      : "mongodb://mingtaiha:mingtaiha@ds053838.mongolab.com:53838/hicomb",
     "workload_type": "skeleton",
-    "scales"       : [128, 512, 1024],
+    "scales"       : [8, 32, 256, 2048],
     "bindings"     : ["late"],
     "time_distribs": ["uniform"],
     "iterations"   : 4,
@@ -33,7 +33,7 @@
                     "sched": "slurm",
                     "fconf": "conf/xsede.stampede.json"
                 },
-                "gordon.sdsc.xsede.xsede.org": {
+                "gordon.sdsc.xsede.org": {
                     "sched": "pbs",
                     "fconf": "conf/xsede.gordon.json"
                 }   
@@ -44,8 +44,8 @@
         "template": "./conf/skeleton.template",
         "tasks": {
             "duration": {
-                "max" : 900,
-                "min" : 900
+                "max" : 1200,
+                "min" : 1200
             }
         }
     }

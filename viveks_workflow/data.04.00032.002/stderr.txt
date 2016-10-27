@@ -1,0 +1,93 @@
++ IDX=9
++ INPUT_SHARED_1_1=input_shared_1_1.txt
++ INPUT_SHARED_1_2=input_shared_1_2.txt
++ INPUT_SHARED_1_3=input_shared_1_3.txt
++ INPUT_SHARED_1_4=input_shared_1_4.txt
++ INPUT_SHARED_1_5=input_shared_1_5.txt
++ OUTPUT_1_1_I=output_1_1_9.txt
++ OUTPUT_1_2_I=output_1_2_9.txt
++ OUTPUT_1_3_I=output_1_3_9.txt
++ cat input_shared_1_1.txt
++ echo 1:9
++ cat input_shared_1_2.txt
++ echo 1:9
++ cat input_shared_1_3.txt
++ echo 1:9
++ regex_1='.*sander.MPI -O -i mdshort.in'
++ regex_2='.*sander.MPI -O -i min.in'
++ regex_3=pyCoCo
++ regex_4='python postexec.py .*'
++ regex='.*sander.MPI -O -i mdshort.in'
+++ grep -le '.*sander.MPI -O -i mdshort.in' /home/amerzky/bin.rp/samples/120.prof /home/amerzky/bin.rp/samples/121.prof /home/amerzky/bin.rp/samples/122.prof /home/amerzky/bin.rp/samples/123.prof /home/amerzky/bin.rp/samples/124.prof /home/amerzky/bin.rp/samples/125.prof /home/amerzky/bin.rp/samples/126.prof /home/amerzky/bin.rp/samples/127.prof /home/amerzky/bin.rp/samples/128.prof /home/amerzky/bin.rp/samples/129.prof /home/amerzky/bin.rp/samples/130.prof /home/amerzky/bin.rp/samples/13.prof /home/amerzky/bin.rp/samples/14.prof /home/amerzky/bin.rp/samples/15.prof /home/amerzky/bin.rp/samples/16.prof /home/amerzky/bin.rp/samples/17.prof /home/amerzky/bin.rp/samples/18.prof /home/amerzky/bin.rp/samples/19.prof /home/amerzky/bin.rp/samples/20.prof /home/amerzky/bin.rp/samples/21.prof /home/amerzky/bin.rp/samples/22.prof /home/amerzky/bin.rp/samples/23.prof /home/amerzky/bin.rp/samples/24.prof /home/amerzky/bin.rp/samples/25.prof /home/amerzky/bin.rp/samples/26.prof /home/amerzky/bin.rp/samples/27.prof /home/amerzky/bin.rp/samples/28.prof /home/amerzky/bin.rp/samples/29.prof /home/amerzky/bin.rp/samples/30.prof /home/amerzky/bin.rp/samples/31.prof /home/amerzky/bin.rp/samples/32.prof /home/amerzky/bin.rp/samples/33.prof /home/amerzky/bin.rp/samples/34.prof /home/amerzky/bin.rp/samples/35.prof /home/amerzky/bin.rp/samples/36.prof /home/amerzky/bin.rp/samples/37.prof /home/amerzky/bin.rp/samples/38.prof /home/amerzky/bin.rp/samples/7.prof /home/amerzky/bin.rp/samples/84.prof
++ profiles='/home/amerzky/bin.rp/samples/120.prof
+/home/amerzky/bin.rp/samples/121.prof
+/home/amerzky/bin.rp/samples/122.prof
+/home/amerzky/bin.rp/samples/123.prof
+/home/amerzky/bin.rp/samples/124.prof
+/home/amerzky/bin.rp/samples/125.prof
+/home/amerzky/bin.rp/samples/126.prof
+/home/amerzky/bin.rp/samples/127.prof
+/home/amerzky/bin.rp/samples/128.prof
+/home/amerzky/bin.rp/samples/84.prof'
+++ wc -w
+++ echo /home/amerzky/bin.rp/samples/120.prof /home/amerzky/bin.rp/samples/121.prof /home/amerzky/bin.rp/samples/122.prof /home/amerzky/bin.rp/samples/123.prof /home/amerzky/bin.rp/samples/124.prof /home/amerzky/bin.rp/samples/125.prof /home/amerzky/bin.rp/samples/126.prof /home/amerzky/bin.rp/samples/127.prof /home/amerzky/bin.rp/samples/128.prof /home/amerzky/bin.rp/samples/84.prof
++ n_profiles=10
+++ awk 'BEGIN{srand();print int(10 * rand()) + 1;}'
++ n_random=10
+++ head -n 10
+++ for profile in '$profiles'
+++ echo /home/amerzky/bin.rp/samples/120.prof
+++ for profile in '$profiles'
+++ echo /home/amerzky/bin.rp/samples/121.prof
+++ for profile in '$profiles'
+++ echo /home/amerzky/bin.rp/samples/122.prof
+++ for profile in '$profiles'
+++ echo /home/amerzky/bin.rp/samples/123.prof
+++ for profile in '$profiles'
+++ tail -n 1
+++ echo /home/amerzky/bin.rp/samples/124.prof
+++ for profile in '$profiles'
+++ echo /home/amerzky/bin.rp/samples/125.prof
+++ for profile in '$profiles'
+++ echo /home/amerzky/bin.rp/samples/126.prof
+++ for profile in '$profiles'
+++ echo /home/amerzky/bin.rp/samples/127.prof
+++ for profile in '$profiles'
+++ echo /home/amerzky/bin.rp/samples/128.prof
+++ for profile in '$profiles'
+++ echo /home/amerzky/bin.rp/samples/84.prof
++ profile=/home/amerzky/bin.rp/samples/84.prof
++ samples=/home/amerzky/bin.rp/samples/84.json
++ test -f /home/amerzky/bin.rp/samples/84.json
++ test -f /home/amerzky/bin.rp/samples/84.json
++ echo 'sampling /home/amerzky/bin.rp/samples/84.json'
++ . /home/amerzky/bin.rp/ve/bin/activate
+++ deactivate nondestructive
+++ unset pydoc
+++ '[' -n '' ']'
+++ '[' -n '' ']'
+++ '[' -n /bin/sh -o -n '' ']'
+++ hash -r
+++ '[' -n '' ']'
+++ unset VIRTUAL_ENV
+++ '[' '!' nondestructive = nondestructive ']'
+++ VIRTUAL_ENV=/home/amerzky/bin.rp/ve
+++ export VIRTUAL_ENV
+++ _OLD_VIRTUAL_PATH=/usr/lib64/qt-3.3/bin:/usr/local/packages/mvapich2/2.0/INTEL-14.0.2/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/bin:/usr/local/compilers/pgi/linux86-64/6.1/bin:/usr/local/compilers/Intel/cluster_studio_xe_2013.1.046/composer_xe_2013_sp1.2.144/bin/intel64:/opt/ibutils/bin
+++ PATH=/home/amerzky/bin.rp/ve/bin:/usr/lib64/qt-3.3/bin:/usr/local/packages/mvapich2/2.0/INTEL-14.0.2/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/bin:/usr/local/compilers/pgi/linux86-64/6.1/bin:/usr/local/compilers/Intel/cluster_studio_xe_2013.1.046/composer_xe_2013_sp1.2.144/bin/intel64:/opt/ibutils/bin
+++ export PATH
+++ '[' -n '' ']'
+++ '[' -z '' ']'
+++ _OLD_VIRTUAL_PS1=
+++ '[' x '!=' x ']'
++++ basename /home/amerzky/bin.rp/ve
+++ '[' ve = __ ']'
++++ basename /home/amerzky/bin.rp/ve
+++ PS1='(ve)'
+++ export PS1
+++ alias 'pydoc=python -m pydoc'
+++ '[' -n /bin/sh -o -n '' ']'
+++ hash -r
++ radical-synapse-emulate -i /home/amerzky/bin.rp/samples/84.json
+/home/amerzky/bin.rp/ve/bin/python: error while loading shared libraries: libpython2.7.so.1.0: cannot open shared object file: No such file or directory
++ true
