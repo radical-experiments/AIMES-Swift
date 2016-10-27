@@ -22,7 +22,7 @@ with open('experiments.ctrl', 'r') as ctrl:
         if not line:
             continue
 
-        num, res, size = line.split()
+        res, num, size = line.split()
 
         num        = int(num)
         size       = int(size)
@@ -31,7 +31,7 @@ with open('experiments.ctrl', 'r') as ctrl:
         n_chunks   = int(size / chunk_size)
         e_name     = 'data.%02d.%05d.%03d' % (res, size, num)
 
-        if os.path.isdir('%s/run001' % e_name):
+        if os.path.exists('%s/rest.log.gz' % e_name):
             print 'skip       %s' % e_name
             continue
 
@@ -49,7 +49,7 @@ with open('experiments.ctrl', 'r') as ctrl:
         os.system('mkdir -p %s' % e_name)
         os.system('cp  %s %s/' % (input_names, e_name))
         os.system('cd  %s ; ln -s ../conf .' % (e_name))
-        os.system('cat templates/%s | %s > %s/%s' % (runme_name    , sed, e_name, runme_name    ))
+        os.system('cat templates/%s | %s > %s/%s' % (runme_name,     sed, e_name, runme_name    ))
         os.system('cat templates/%s | %s > %s/%s' % (config_name,    sed, e_name, config_name   ))
         os.system('cat templates/%s | %s > %s/%s' % (workload_name,  sed, e_name, workload_name ))
         os.system('cat templates/%s | %s > %s/%s' % (swift_cfg_name, sed, e_name, swift_cfg_name))

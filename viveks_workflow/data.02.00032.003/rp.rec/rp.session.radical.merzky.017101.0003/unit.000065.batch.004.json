@@ -1,0 +1,51 @@
+{
+    "arguments": [
+        "2", 
+        "8", 
+        "input_shared_1_3.txt", 
+        "output_2_2_17.txt output_2_2_18.txt output_2_2_19.txt output_2_2_20.txt output_2_2_21.txt output_2_2_22.txt output_2_2_23.txt output_2_2_24.txt"
+    ], 
+    "cleanup": false, 
+    "cores": 8, 
+    "environment": null, 
+    "executable": "~/bin.rp/stage_3.sh", 
+    "input_staging": [
+        "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap.staging", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.02.00032.003/./output_2_2_22.txt", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.02.00032.003/./input_shared_1_3.txt", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.02.00032.003/./output_2_2_23.txt", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.02.00032.003/./output_2_2_21.txt", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.02.00032.003/./output_2_2_18.txt", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.02.00032.003/./output_2_2_24.txt", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.02.00032.003/./output_2_2_19.txt", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.02.00032.003/./output_2_2_17.txt", 
+        "/home/merzky/AIMES-Swift/viveks_workflow/data.02.00032.003/./output_2_2_20.txt", 
+        "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_pre", 
+        "/home/merzky/aimes/swift-k/dist/swift-svn/libexec/_swiftwrap_post"
+    ], 
+    "kernel": null, 
+    "mpi": false, 
+    "name": "emgr.017101.0002:task.000067", 
+    "output_staging": [
+        "stdout.txt", 
+        "output_3_1_20.txt", 
+        "output_3_1_21.txt", 
+        "output_3_1_22.txt", 
+        "output_3_1_18.txt", 
+        "wrapper.log", 
+        "output_3_1_19.txt", 
+        "output_3_1_24.txt", 
+        "stderr.txt", 
+        "output_3_1_17.txt", 
+        "output_3_1_23.txt"
+    ], 
+    "post_exec": [
+        "bash _swiftwrap_post \"-of\" \"output_3_1_23.txt|output_3_1_18.txt|output_3_1_24.txt|output_3_1_19.txt|output_3_1_21.txt|output_3_1_22.txt|output_3_1_20.txt|output_3_1_17.txt\""
+    ], 
+    "pre_exec": [
+        "bash _swiftwrap_pre \"-d\" \"\" \"-if\" \"output_2_2_23.txt|input_shared_1_3.txt|output_2_2_24.txt|output_2_2_20.txt|output_2_2_18.txt|output_2_2_22.txt|output_2_2_17.txt|output_2_2_21.txt|output_2_2_19.txt\""
+    ], 
+    "restartable": false, 
+    "stderr": "stderr.txt", 
+    "stdout": "stdout.txt"
+}
